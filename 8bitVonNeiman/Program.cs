@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using _8bitVonNeiman.Core;
 
 namespace _8bitVonNeiman {
     static class Program {
@@ -13,7 +14,8 @@ namespace _8bitVonNeiman {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            CentralController system = new CentralController();
+            Application.Run(system);
         }
     }
 }
