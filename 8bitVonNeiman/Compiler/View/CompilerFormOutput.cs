@@ -6,5 +6,6 @@ using System.Threading.Tasks;
 
 namespace _8bitVonNeiman.Compiler.View {
     public interface CompilerFormOutput {
+        void FormClosed();
     }
 }
