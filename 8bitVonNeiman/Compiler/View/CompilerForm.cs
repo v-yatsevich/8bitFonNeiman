@@ -21,5 +21,9 @@ namespace _8bitVonNeiman.Compiler.View {
         private void CompilerForm_FormClosed(object sender, FormClosedEventArgs e) {
             _output.FormClosed();
         }
+
+        private void compileButton_Click(object sender, EventArgs e) {
+            _output.Compile(codeRichTextBox.Text);
+        }
     }
 }

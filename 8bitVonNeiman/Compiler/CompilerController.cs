@@ -29,5 +29,9 @@ namespace _8bitVonNeiman.Compiler {
         public void FormClosed() {
             _form = null;
         }
+
+        public void Compile(string code) {
+            _compilerModel.Compile(code);
+        }
     }
 }

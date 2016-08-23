@@ -46,9 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compiler\CompilerModel.cs" />
+    <Compile Include="Compiler\CompileErrorExcepton.cs" />
+    <Compile Include="Compiler\Model\CommandProcessordFactory.cs" />
+    <Compile Include="Compiler\Model\CompilerModel.cs" />
     <Compile Include="Compiler\CompilerController.cs" />
-    <Compile Include="Compiler\CompilerModelOutput.cs" />
+    <Compile Include="Compiler\Model\CompilerModelOutput.cs" />
     <Compile Include="Compiler\View\CompilerForm.cs">
       <SubType>Form</SubType>
     </Compile>
