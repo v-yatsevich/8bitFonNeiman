@@ -46,6 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\Compiler.cs" />
+    <Compile Include="Compiler\CompilerController.cs" />
+    <Compile Include="Compiler\View\CompilerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Compiler\View\CompilerForm.Designer.cs">
+      <DependentUpon>CompilerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Compiler\View\CompilerFormOutput.cs" />
     <Compile Include="Core\CentralController.cs" />
     <Compile Include="Core\View\ComponentsForm.cs">
       <SubType>Form</SubType>
@@ -81,9 +90,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Compiler\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
