@@ -47,10 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\CompileErrorExcepton.cs" />
-    <Compile Include="Compiler\Model\CommandProcessordFactory.cs" />
+    <Compile Include="Compiler\Model\CommandProcessorFactory.cs" />
+    <Compile Include="Compiler\Model\CompilerEnvironment.cs" />
     <Compile Include="Compiler\Model\CompilerModel.cs" />
     <Compile Include="Compiler\CompilerController.cs" />
     <Compile Include="Compiler\Model\CompilerModelOutput.cs" />
+    <Compile Include="Compiler\Model\CompilerSupport.cs" />
     <Compile Include="Compiler\View\CompilerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +62,7 @@
     <Compile Include="Compiler\View\CompilerFormOutput.cs" />
     <Compile Include="Core\Assembly.cs" />
     <Compile Include="Core\CentralController.cs" />
+    <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\View\ComponentsForm.cs">
       <SubType>Form</SubType>
     </Compile>
