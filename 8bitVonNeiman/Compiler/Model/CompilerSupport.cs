@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using _8bitVonNeiman.Core;
 
@@ -52,10 +53,20 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// <param name="bitArray">Массив бит, в который будут записываться биты.</param>
         /// <param name="number">Число, из которого будут браться биты.</param>
         /// <param name="bitsCount">Количество бит, которое будет записано.</param>
-        public static void fillBitArray(BitArray bitArray, short number, int bitsCount) {
+        public static void FillBitArray(BitArray bitArray, short number, int bitsCount) {
             for (int i = 0; i < bitsCount; i++) {
                 bitArray[i] = (number & 2 ^ i) == 1;
             }
+        }
+
+        /// <summary>
+        /// Проверяет слово на корректность для использования в качестве метки, переменной или аргумента.
+        /// </summary>
+        /// <param name="word">Слово для проверки на корректность.</param>
+        public static bool CheckWord(string word) {
+            return word.Length != 0 && 
+                Regex.IsMatch(word, @"^[a-zA-Z0-9_-]+$") && 
+                !(word[0] <= '9' && word[1] >= '0');
         }
     }
 }

@@ -39,5 +39,14 @@ namespace _8bitVonNeiman.Compiler.Model {
                 return -1;
             }
         }
+
+        /// <summary>
+        /// Добавляет метку.
+        /// </summary>
+        /// <param name="label">Имя метки.</param>
+        /// <param name="address">Адрес, на который ссылается метка.</param>
+        public void AddAddressLabel(string label, short address) {
+            _labels.Add(label, address);
+        }
     }
 }
