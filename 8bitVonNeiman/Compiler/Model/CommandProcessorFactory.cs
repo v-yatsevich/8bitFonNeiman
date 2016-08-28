@@ -14,6 +14,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             return NoAddressCommandsFactory.GetCommands()
                 .Concat(CycleCommandsFactory.GetCommands())
                 .Concat(ConditionalJumpCommandsFactory.GetCommands())
+                .Concat(UnconditionalJumpCommandsFactory.GetCommands())
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -359,6 +360,63 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[11] = true;
                 bitArray[12] = true;
                 bitArray[13] = true;
+
+                return bitArray;
+            }
+
+            private static void Validate(string[] args, string op, int line) {
+                if (args.Length != 1) {
+                    throw new CompileErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
+                }
+            }
+        }
+
+        private static class UnconditionalJumpCommandsFactory {
+            public static Dictionary<string, CommandProcessor> GetCommands() {
+                return new Dictionary<string, CommandProcessor> {
+                    ["jmp"] = JMP,
+                    ["call"] = CALL,
+                    ["int"] = INT
+                };
+            }
+
+            private static BitArray JMP(string[] args, CompilerEnvironment env) {
+                Validate(args, "JMP", env.GitCurrentLine());
+
+                var bitArray = new BitArray(16);
+
+                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                CompilerSupport.fillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+
+                bitArray[14] = true;
+
+                return bitArray;
+            }
+
+            private static BitArray CALL(string[] args, CompilerEnvironment env) {
+                Validate(args, "CALL", env.GitCurrentLine());
+
+                var bitArray = new BitArray(16);
+
+                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                CompilerSupport.fillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+
+                bitArray[10] = true;
+                bitArray[14] = true;
+
+                return bitArray;
+            }
+
+            private static BitArray INT(string[] args, CompilerEnvironment env) {
+                Validate(args, "INT", env.GitCurrentLine());
+
+                var bitArray = new BitArray(16);
+
+                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                CompilerSupport.fillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+
+                bitArray[11] = true;
+                bitArray[14] = true;
 
                 return bitArray;
             }
