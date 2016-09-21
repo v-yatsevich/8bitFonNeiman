@@ -8,7 +8,7 @@ namespace _8bitVonNeiman.Compiler.Model {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public static class CommandProcessorFactory {
 
-        public delegate BitArray CommandProcessor(string[] args, CompilerEnvironment env);
+        public delegate void CommandProcessor(string[] args, CompilerEnvironment env);
 
         public static Dictionary<string, CommandProcessor> GetCommandProcessors() {
             return NoAddressCommandsFactory.GetCommands()
@@ -44,160 +44,180 @@ namespace _8bitVonNeiman.Compiler.Model {
                 };
             }
 
-            private static BitArray NOP(string[] args, CompilerEnvironment env) {
+            private static void NOP(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "NOP", env.GetCurrentLine());
-                return new BitArray(16) { [0] = true };
+                BitArray array = new BitArray(16) { [0] = true };
+                env.SetCommand(array);
             }
 
-            private static BitArray RET(string[] args, CompilerEnvironment env) {
+            private static void RET(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RET", env.GetCurrentLine());
-                return new BitArray(16) { [1] = true };
+                BitArray array = new BitArray(16) { [1] = true };
+                env.SetCommand(array);
             }
 
-            private static BitArray IRET(string[] args, CompilerEnvironment env) {
+            private static void IRET(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "IRET", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [1] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray EI(string[] args, CompilerEnvironment env) {
+            private static void EI(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "EI", env.GetCurrentLine());
-                return new BitArray(16) { [2] = true };
+                BitArray array = new BitArray(16) { [2] = true };
+                env.SetCommand(array);
             }
 
-            private static BitArray DI(string[] args, CompilerEnvironment env) {
+            private static void DI(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DI", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [2] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray RR(string[] args, CompilerEnvironment env) {
+            private static void RR(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RR", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [1] = true,
                     [2] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray RL(string[] args, CompilerEnvironment env) {
+            private static void RL(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RL", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [1] = true,
                     [2] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray RRC(string[] args, CompilerEnvironment env) {
+            private static void RRC(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RRC", env.GetCurrentLine());
-                return new BitArray(16) { [3] = true };
+                BitArray array = new BitArray(16) { [3] = true };
+                env.SetCommand(array);
             }
 
-            private static BitArray RLC(string[] args, CompilerEnvironment env) {
+            private static void RLC(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RLC", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [3] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray HLT(string[] args, CompilerEnvironment env) {
+            private static void HLT(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "HLT", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [1] = true,
                     [3] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray INCA(string[] args, CompilerEnvironment env) {
+            private static void INCA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "INCA", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [1] = true,
                     [3] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray DECA(string[] args, CompilerEnvironment env) {
+            private static void DECA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DECA", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [2] = true,
                     [3] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray SWAPA(string[] args, CompilerEnvironment env) {
+            private static void SWAPA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "SWAPA", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [2] = true,
                     [3] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray DAA(string[] args, CompilerEnvironment env) {
+            private static void DAA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DAA", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [1] = true,
                     [2] = true,
                     [3] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray DSA(string[] args, CompilerEnvironment env) {
+            private static void DSA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DSA", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [1] = true,
                     [2] = true,
                     [3] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray IN(string[] args, CompilerEnvironment env) {
+            private static void IN(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "IN", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [4] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray OUT(string[] args, CompilerEnvironment env) {
+            private static void OUT(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "OUT", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [1] = true,
                     [4] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray ES(string[] args, CompilerEnvironment env) {
+            private static void ES(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "ES", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [1] = true,
                     [4] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray MOVASR(string[] args, CompilerEnvironment env) {
+            private static void MOVASR(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVASR", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [2] = true,
                     [4] = true
                 };
+                env.SetCommand(array);
             }
 
-            private static BitArray MOVSRA(string[] args, CompilerEnvironment env) {
+            private static void MOVSRA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVSRA", env.GetCurrentLine());
-                return new BitArray(16) {
+                BitArray array = new BitArray(16) {
                     [0] = true,
                     [2] = true,
                     [4] = true
                 };
+                env.SetCommand(array);
             }
 
             private static void ValidateNoAddressCommand(string[] args, string op, int line) {
@@ -212,7 +232,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 return new Dictionary<string, CommandProcessor> {["djrnz"] = DJRNZ};
             }
 
-            private static BitArray DJRNZ(string[] args, CompilerEnvironment env) {
+            private static void DJRNZ(string[] args, CompilerEnvironment env) {
                 if (args.Length != 2) {
                     throw new CompileErrorExcepton("Оператор DJRNZ должен принимать ровно 2 аргумента", env.GetCurrentLine());
                 }
@@ -230,7 +250,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[10] = (R[1] - '0' & 1) == 1;
                 bitArray[11] = (R[1] - '0' & 2) == 1;
                 bitArray[12] = true;
-                return bitArray;
+                env.SetCommand(bitArray);
             }
         }
 
@@ -248,7 +268,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 };
             }
 
-            private static BitArray JNZ(string[] args, CompilerEnvironment env) {
+            private static void JNZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNZ", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -258,10 +278,10 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray JNC(string[] args, CompilerEnvironment env) {
+            private static void JNC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNC", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -272,10 +292,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[10] = true;
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray JNS(string[] args, CompilerEnvironment env) {
+            private static void JNS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNS", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -286,10 +306,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[11] = true;
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray JNO(string[] args, CompilerEnvironment env) {
+            private static void JNO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNO", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -301,10 +321,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[11] = true;
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray JZ(string[] args, CompilerEnvironment env) {
+            private static void JZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JZ", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -315,10 +335,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[12] = true;
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray JC(string[] args, CompilerEnvironment env) {
+            private static void JC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JC", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -330,10 +350,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[12] = true;
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray JS(string[] args, CompilerEnvironment env) {
+            private static void JS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JS", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -345,10 +365,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[12] = true;
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray JO(string[] args, CompilerEnvironment env) {
+            private static void JO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JO", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -361,7 +381,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[12] = true;
                 bitArray[13] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
             private static void Validate(string[] args, string op, int line) {
@@ -380,7 +400,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 };
             }
 
-            private static BitArray JMP(string[] args, CompilerEnvironment env) {
+            private static void JMP(string[] args, CompilerEnvironment env) {
                 Validate(args, "JMP", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -390,10 +410,10 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 bitArray[14] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray CALL(string[] args, CompilerEnvironment env) {
+            private static void CALL(string[] args, CompilerEnvironment env) {
                 Validate(args, "CALL", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -404,10 +424,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[10] = true;
                 bitArray[14] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
-            private static BitArray INT(string[] args, CompilerEnvironment env) {
+            private static void INT(string[] args, CompilerEnvironment env) {
                 Validate(args, "INT", env.GetCurrentLine());
 
                 var bitArray = new BitArray(16);
@@ -418,7 +438,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 bitArray[11] = true;
                 bitArray[14] = true;
 
-                return bitArray;
+                env.SetCommand(bitArray);
             }
 
             private static void Validate(string[] args, string op, int line) {

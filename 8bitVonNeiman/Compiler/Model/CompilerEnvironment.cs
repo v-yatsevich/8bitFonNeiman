@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +10,18 @@ namespace _8bitVonNeiman.Compiler.Model {
     /// Класс для представления состояния среды на текущем моменте компиляции.
     public class CompilerEnvironment {
 
+        private List<BitArray> _memory = new List<BitArray>(1024);
+
         /// Текущая линия кода, на которой находится обработка.
         private int _currentLine;
 
         /// Текущий адрес памяти.
         private short _currentAddress;
 
-        /// Номер сегмента кода, который будет установлен при сбросе. Меняется директивой /Dn, где n - число от 0 до 3
+        /// <summary>
+        /// Номер сегмента кода, который будет установлен при сбросе и в который будет записываться код. 
+        /// Меняется директивой /Dn, где n - число от 0 до 3
+        /// </summary>
         private int _defaultCodeSegment;
 
         /// Номер сегмента данных, который будет установлен при сбросе. Меняется директивой /Dn, где n - число от 0 до 3
@@ -63,6 +69,15 @@ namespace _8bitVonNeiman.Compiler.Model {
 
         public void SetCurrentAddress(int address) {
             _currentAddress = (short)address;
+        }
+
+        public void SetCommand(BitArray command) {
+            _memory[_defaultCodeSegment << 8 + _currentAddress] = command;
+            _currentAddress++;
+        }
+
+        public void SetCommandWithoutLabel(BitArray command, string label) {
+            //do nothing
         }
 
         /// <summary>
