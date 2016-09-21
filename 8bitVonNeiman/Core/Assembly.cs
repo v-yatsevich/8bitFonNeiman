@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _8bitVonNeiman.Compiler;
+using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Compiler.View;
 
 namespace _8bitVonNeiman.Core {

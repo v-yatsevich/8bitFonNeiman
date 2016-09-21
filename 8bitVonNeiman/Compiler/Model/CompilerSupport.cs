@@ -38,12 +38,12 @@ namespace _8bitVonNeiman.Compiler.Model {
                 } else {
                     short address = env.GetLabelAddress(L);
                     if (address == -1) {
-                        throw new CompileErrorExcepton($"Метка с именем {L} не найдена.", env.GitCurrentLine());
+                        throw new CompileErrorExcepton($"Метка с именем {L} не найдена.", env.GetCurrentLine());
                     }
                     return address;
                 }
             } catch (OverflowException) {
-                throw new CompileErrorExcepton("Адрес не должен превышать 255", env.GitCurrentLine());
+                throw new CompileErrorExcepton("Адрес не должен превышать 255", env.GetCurrentLine());
             }
         }
 

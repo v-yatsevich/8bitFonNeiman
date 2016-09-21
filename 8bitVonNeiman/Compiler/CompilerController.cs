@@ -4,11 +4,12 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Compiler.View;
 using _8bitVonNeiman.Core;
 
 namespace _8bitVonNeiman.Compiler {
-    public class CompilerController: CompilerFormOutput, CompilerModelOutput {
+    public class CompilerController: CompilerFormOutput, ICompilerModelOutput {
 
         private CompilerForm _form;
         private CompilerModel _compilerModel;

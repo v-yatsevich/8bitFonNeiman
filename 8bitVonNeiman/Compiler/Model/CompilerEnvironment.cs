@@ -12,19 +12,57 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// Текущая линия кода, на которой находится обработка.
         private int _currentLine;
 
+        /// Текущий адрес памяти.
+        private short _currentAddress;
+
+        /// Номер сегмента кода, который будет установлен при сбросе. Меняется директивой /Dn, где n - число от 0 до 3
+        private int _defaultCodeSegment;
+
+        /// Номер сегмента данных, который будет установлен при сбросе. Меняется директивой /Dn, где n - число от 0 до 3
+        private int _defaultDataSegment;
+
+        /// Номер сегмента стека, который будет установлен при сбросе. Меняется директивой /Dn, где n - число от 0 до 3
+        private int _defaultStackSegment;
+
         /// Множество меток.
-        private Dictionary<string, short> _labels = new Dictionary<string, short>();
+        private readonly Dictionary<string, short> _labels = new Dictionary<string, short>();
 
         public CompilerEnvironment() {
-            
+            _currentLine = 0;
+            _currentAddress = 8;
         }
 
-        public int GitCurrentLine() {
+        public void SetDefaultDataSegment(int segment) {
+            if (segment < 0 || segment > 3) {
+                throw new CompileErrorExcepton("Неверный номер сегмента данных.", _currentLine);
+            }
+            _defaultDataSegment = segment;
+        }
+
+        public void SetDefaultCodeSegment(int segment) {
+            if (segment < 0 || segment > 3) {
+                throw new CompileErrorExcepton("Неверный номер сегмента кода.", _currentLine);
+            }
+            _defaultCodeSegment = segment;
+        }
+
+        public void SetDefaultStackSegment(int segment) {
+            if (segment < 0 || segment > 3) {
+                throw new CompileErrorExcepton("Неверный номер сегмента данных.", _currentLine);
+            }
+            _defaultStackSegment = segment;
+        }
+
+        public int GetCurrentLine() {
             return _currentLine;
         }
 
         public void IncrementLine() {
             _currentLine++;
+        }
+
+        public void SetCurrentAddress(int address) {
+            _currentAddress = (short)address;
         }
 
         /// <summary>
@@ -41,12 +79,11 @@ namespace _8bitVonNeiman.Compiler.Model {
         }
 
         /// <summary>
-        /// Добавляет метку.
+        /// Добавляет метку, ссылающуюся на текущий адрес.
         /// </summary>
         /// <param name="label">Имя метки.</param>
-        /// <param name="address">Адрес, на который ссылается метка.</param>
-        public void AddAddressLabel(string label, short address) {
-            _labels.Add(label, address);
+        public void AddAddressLabelToCurrentAddress(string label) {
+            _labels.Add(label, _currentAddress);
         }
     }
 }
