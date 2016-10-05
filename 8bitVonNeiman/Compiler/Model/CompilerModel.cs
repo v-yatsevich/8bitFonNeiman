@@ -86,17 +86,20 @@ namespace _8bitVonNeiman.Compiler.Model {
 
         private void HandleDirective(string line, CompilerEnvironment env) {
             if (line[1] == 'n' || line[1] == 'N') {
-                int address;
+                string[] components = line.Split(' ');
+                if (components.Length != 2) {
+                    throw new CompileErrorExcepton("После /n должно следовать одно число через пробел.", env.GetCurrentLine());
+                }
+                
                 try {
-                    address = Convert.ToInt32(line.Substring(2));
-                } catch (Exception e) {
-                    throw new CompileErrorExcepton("Некорректная директива процессора. Адрес должен быть числом.", env.GetCurrentLine(), e);
+                    int address = CompilerSupport.ConvertToInt(components[1]);
+                    if (address > 255 || address < 0) {
+                        throw new Exception();
+                    }
+                    env.SetCurrentAddress(address);
+                } catch (Exception) {
+                    throw new CompileErrorExcepton("Некорректная директива процессора. Адрес должен быть числом в диапазоне от 0 до 255.", env.GetCurrentLine());
                 }
-                if (address < 0 || address > 255) {
-                    throw new CompileErrorExcepton("Некорректная директива процессора. Адрес должен быть в диапазоне от 0 до 255.", env.GetCurrentLine());
-                }
-                env.SetCurrentAddress(address);
-
             } else if (line[1] == 'C' || line[1] == 'c') {
                 int segment = TryToGetSegmentFromDirecrive(line, env);
                 env.SetDefaultCodeSegment(segment);

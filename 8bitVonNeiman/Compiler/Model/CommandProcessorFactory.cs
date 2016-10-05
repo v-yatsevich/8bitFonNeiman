@@ -243,7 +243,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 }
 
                 string L = args[1];
-                short address = CompilerSupport.ConvertToFarAddress(L, env);
+                int address = CompilerSupport.ConvertToFarAddress(L, env);
 
                 BitArray bitArray = new BitArray(16);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
@@ -273,7 +273,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[13] = true;
@@ -286,7 +286,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[10] = true;
@@ -300,7 +300,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[11] = true;
@@ -314,7 +314,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[10] = true;
@@ -329,7 +329,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[12] = true;
@@ -343,7 +343,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[10] = true;
@@ -358,7 +358,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[11] = true;
@@ -373,7 +373,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[10] = true;
@@ -405,7 +405,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[14] = true;
@@ -418,7 +418,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[10] = true;
@@ -432,7 +432,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var bitArray = new BitArray(16);
 
-                short address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
 
                 bitArray[11] = true;

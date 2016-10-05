@@ -1,49 +1,65 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using _8bitVonNeiman.Core;
 
 namespace _8bitVonNeiman.Compiler.Model {
     public class CompilerSupport {
 
-        private const int MaxFarAddress = 2 ^ Constants.FarAddressBitsCount;
+        public const int MaxFarAddress = 2 ^ Constants.FarAddressBitsCount - 1;
 
         /// <summary>
         /// Функция, которая приводит переданную строку к полному, 10-битовому адресу.
         /// Если введен слишком большой адрес или строка не является меткой, 
         /// будет сгенерированно исключение <see cref="CompilerEnvironment"/>.
         /// </summary>
-        /// <param name="L">Строка-метка.</param>
+        /// <param name="label">Строка-метка или адрес в памяти.</param>
         /// <param name="env">Текущее окружение компилятора.</param>
         /// <returns>Адресс, на который ссылается метка или который был записан как число.</returns>
-        public static short ConvertToFarAddress(string L, CompilerEnvironment env) {
-            return ConvertToAddress(L, env, MaxFarAddress);
+        public static int ConvertToFarAddress(string label, CompilerEnvironment env) {
+            return ConvertToAddress(label, env, MaxFarAddress);
         }
 
-
-        private static short ConvertToAddress(string L, CompilerEnvironment env, int maxAddress) {
+        /// <summary>
+        /// Функция, которая приводит переданную строку к полному, 10-битовому адресу.
+        /// Если введен слишком большой адрес или строка не является меткой, 
+        /// будет сгенерированно исключение <see cref="CompilerEnvironment"/>.
+        /// </summary>
+        /// <param name="label">Строка-метка или адрес в памяти.</param>
+        /// <param name="env">Текущее окружение компилятора.</param>
+        /// <param name="maxAddress">Максимальный адрес, который может быть использован.</param>
+        /// <returns>Адресс, на который ссылается метка или который был записан как число.</returns>
+        private static int ConvertToAddress(string label, CompilerEnvironment env, int maxAddress) {
             try {
-                if (L.All(c => c >= '0' && c <= '9')) {
-                    short address = Convert.ToInt16(L, L[0] == 0 ? 8 : 10);
+                if (label[0] >= '0' && label[0] <= '9') {
+                    int address = ConvertToInt(label);
                     if (address > maxAddress) {
                         throw new OverflowException();
                     }
                     return address;
-                } else if (L.StartsWith("0x") && L.Skip(2).All(c => c >= '0' && c <= '9')) {
-                    return Convert.ToInt16(L.Substring(2), 16);
                 } else {
-                    short address = env.GetLabelAddress(L);
+                    short address = env.GetLabelAddress(label);
                     if (address == -1) {
-                        throw new CompileErrorExcepton($"Метка с именем {L} не найдена.", env.GetCurrentLine());
+                        throw new CompileErrorExcepton($"Метка с именем {label} не найдена.", env.GetCurrentLine());
                     }
                     return address;
                 }
             } catch (OverflowException) {
-                throw new CompileErrorExcepton("Адрес не должен превышать 255", env.GetCurrentLine());
+                throw new CompileErrorExcepton($"Адрес не должен превышать {maxAddress}", env.GetCurrentLine());
+            } catch (FormatException) {
+                throw new CompileErrorExcepton("Некорректный адрес метки", env.GetCurrentLine());
+            } catch (Exception e) {
+                throw new CompileErrorExcepton("Непредвиденная ошибка при обработке метки", env.GetCurrentLine(), e);
+            }
+        }
+
+        public static int ConvertToInt(string s) {    
+            if (s.StartsWith("0x")) {
+                return Convert.ToInt32(s.Substring(2), 16);
+            } else if (s.StartsWith("0b")) {
+                return Convert.ToInt32(s.Substring(2), 2);
+            } else {
+                return Convert.ToInt32(s);
             }
         }
 
@@ -53,7 +69,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// <param name="bitArray">Массив бит, в который будут записываться биты.</param>
         /// <param name="number">Число, из которого будут браться биты.</param>
         /// <param name="bitsCount">Количество бит, которое будет записано.</param>
-        public static void FillBitArray(BitArray bitArray, short number, int bitsCount) {
+        public static void FillBitArray(BitArray bitArray, int number, int bitsCount) {
             for (int i = 0; i < bitsCount; i++) {
                 bitArray[i] = (number & 2 ^ i) == 1;
             }
