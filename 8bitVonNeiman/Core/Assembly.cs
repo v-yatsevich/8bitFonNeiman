@@ -12,7 +12,7 @@ namespace _8bitVonNeiman.Core {
         public static CompilerController GetCompilerController() {
             CompilerController compilerController = new CompilerController();
 
-            CompilerModel compilerModel = new CompilerModel(compilerController);
+            CompilerModel compilerModel = new CompilerModel(compilerController.CompilationComplete, compilerController.CompilationError);
             compilerController.SetCompiler(compilerModel);
 
             return compilerController;

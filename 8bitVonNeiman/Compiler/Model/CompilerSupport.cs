@@ -40,16 +40,16 @@ namespace _8bitVonNeiman.Compiler.Model {
                 } else {
                     short address = env.GetLabelAddress(label);
                     if (address == -1) {
-                        throw new CompileErrorExcepton($"Метка с именем {label} не найдена.", env.GetCurrentLine());
+                        throw new CompilationErrorExcepton($"Метка с именем {label} не найдена.", env.GetCurrentLine());
                     }
                     return address;
                 }
             } catch (OverflowException) {
-                throw new CompileErrorExcepton($"Адрес не должен превышать {maxAddress}", env.GetCurrentLine());
+                throw new CompilationErrorExcepton($"Адрес не должен превышать {maxAddress}", env.GetCurrentLine());
             } catch (FormatException) {
-                throw new CompileErrorExcepton("Некорректный адрес метки", env.GetCurrentLine());
+                throw new CompilationErrorExcepton("Некорректный адрес метки", env.GetCurrentLine());
             } catch (Exception e) {
-                throw new CompileErrorExcepton("Непредвиденная ошибка при обработке метки", env.GetCurrentLine(), e);
+                throw new CompilationErrorExcepton("Непредвиденная ошибка при обработке метки", env.GetCurrentLine(), e);
             }
         }
 

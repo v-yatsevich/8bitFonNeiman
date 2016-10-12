@@ -40,21 +40,21 @@ namespace _8bitVonNeiman.Compiler.Model {
 
         public void SetDefaultDataSegment(int segment) {
             if (segment < 0 || segment > 3) {
-                throw new CompileErrorExcepton("Неверный номер сегмента данных.", _currentLine);
+                throw new CompilationErrorExcepton("Неверный номер сегмента данных.", _currentLine);
             }
             _defaultDataSegment = segment;
         }
 
         public void SetDefaultCodeSegment(int segment) {
             if (segment < 0 || segment > 3) {
-                throw new CompileErrorExcepton("Неверный номер сегмента кода.", _currentLine);
+                throw new CompilationErrorExcepton("Неверный номер сегмента кода.", _currentLine);
             }
             _defaultCodeSegment = segment;
         }
 
         public void SetDefaultStackSegment(int segment) {
             if (segment < 0 || segment > 3) {
-                throw new CompileErrorExcepton("Неверный номер сегмента данных.", _currentLine);
+                throw new CompilationErrorExcepton("Неверный номер сегмента данных.", _currentLine);
             }
             _defaultStackSegment = segment;
         }

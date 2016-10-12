@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,33 +6,51 @@ using System.Linq;
 namespace _8bitVonNeiman.Compiler.Model {
     public class CompilerModel {
 
-        private readonly ICompilerModelOutput _output;
-        private readonly BackgroundWorker _backgroundWorker;
-        private string _code;
-        private readonly Dictionary<string, CommandProcessorFactory.CommandProcessor> _commandProcessors;
+        public delegate void CompileCompleteDelegate(CompilerEnvironment env);
+        private CompileCompleteDelegate _completeDelegate;
 
-        public CompilerModel(ICompilerModelOutput output) {
-            _output = output;
+        public delegate void CompileErrorDelegate(CompilationErrorExcepton e);
+        private CompileErrorDelegate _errorDelegate;
+
+        private BackgroundWorker _backgroundWorker;
+        private string _code;
+        private Dictionary<string, CommandProcessorFactory.CommandProcessor> _commandProcessors;
+
+        public CompilerModel(CompileCompleteDelegate completeDelegate, CompileErrorDelegate errorDelegate) {
+            Setup(completeDelegate, errorDelegate, CommandProcessorFactory.GetCommandProcessors());
+        }
+
+        public CompilerModel(CompileCompleteDelegate completeDelegate, CompileErrorDelegate errorDelegate,
+                             Dictionary<string, CommandProcessorFactory.CommandProcessor> commandProcessors) {
+            Setup(completeDelegate, errorDelegate, commandProcessors);
+        }
+
+        private void Setup(CompileCompleteDelegate completeDelegate, CompileErrorDelegate errorDelegate,
+                           Dictionary<string, CommandProcessorFactory.CommandProcessor> commandProcessors) {
+            _completeDelegate = completeDelegate;
+            _errorDelegate = errorDelegate;
             _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.DoWork += StartCompile;
             _backgroundWorker.RunWorkerCompleted += CompileCompleted;
             _backgroundWorker.WorkerReportsProgress = true;
-            _commandProcessors = CommandProcessorFactory.GetCommandProcessors();
+            _commandProcessors = commandProcessors;
         }
 
+        /// <summary>
+        /// Запускает компиляцию переданного кода. Компиляция происходит ассинхронно, по завершению вызывается функция
+        /// <see cref="CompileCompleteDelegate"/>
+        /// </summary>
+        /// <param name="code"></param>
         public void Compile(string code) {
             _code = code;
             _backgroundWorker.RunWorkerAsync();
         }
         
+        /// <summary>
+        /// Функция, начинающая обработку кода и содержащая базовую логику прохождения по нему и вызова обработчиков.
+        /// </summary>
         private void StartCompile(object sender, DoWorkEventArgs e) {
-            List<string> lines = _code
-                .Split('\n')
-                .Select(x => {
-                    int semicolon = x.IndexOf(";");
-                    return semicolon == -1 ? x.Trim() : x.Remove(semicolon).Trim();
-                })
-                .ToList();
+            List<string> lines = PrepareCode(_code);
             var env = new CompilerEnvironment();
             for (short i = 0; i < lines.Count; i++) {
                 if (lines[i][0] == '/') {
@@ -48,7 +65,27 @@ namespace _8bitVonNeiman.Compiler.Model {
             e.Result = env;
         }
 
-        private void HandleCommand(string line, CompilerEnvironment env) {
+        /// <summary>
+        /// Подготавливает исходный код к обработке: разбивает на массив строк, удаляет лишние пробелы, убирает комментарии
+        /// </summary>
+        /// <param name="code">Исходный код программы.</param>
+        /// <returns></returns>
+        public List<string> PrepareCode(string code) {
+            return _code
+                .Split('\n')
+                .Select(x => {
+                    int semicolon = x.IndexOf(";");
+                    return semicolon == -1 ? x.Trim() : x.Remove(semicolon).Trim();
+                })
+                .ToList();
+        } 
+
+        /// <summary>
+        /// Обрабатывает команду. В случае, если команда некорректна, генерируется <see cref="CompilationErrorExcepton"/>
+        /// </summary>
+        /// <param name="line">Строка кода, содержащая команду процессора.</param>
+        /// <param name="env">Текущее окружение компилятора, в которое записывается команда.</param>
+        public void HandleCommand(string line, CompilerEnvironment env) {
             string command;
             string[] args;
 
@@ -63,32 +100,45 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             command = command.ToUpper();
             if (!_commandProcessors.ContainsKey(command)) {
-                throw new CompileErrorExcepton("Неверная команда", env.GetCurrentLine());
+                throw new CompilationErrorExcepton("Неверная команда", env.GetCurrentLine());
             }
             _commandProcessors[command](args, env);
         }
 
-        private string HandleLabelAndReturnLine(string line, CompilerEnvironment env) {
+        /// <summary>
+        /// Проверяет, присутствует ли в строке метка, и если она есть, добавляет метку в окружение и удаляет ее из строки.
+        /// Если имя метки некорректно или занято, генерируется <see cref="CompilationErrorExcepton"/>
+        /// </summary>
+        /// <param name="line">Строка кода, которая проверяется на наличие метки.</param>
+        /// <param name="env">Текущее окружение компилятора, в которое добавляется метка.</param>
+        /// <returns>Строка, из которой была удалена метка, если она существовала ранее.</returns>
+        public string HandleLabelAndReturnLine(string line, CompilerEnvironment env) {
             int colon = line.IndexOf(':');
             if (colon == -1) {
                 return line;
             }
             string label = line.Substring(0, colon - 1);
             if (!CompilerSupport.CheckWord(label)) {
-                throw new CompileErrorExcepton($"Имя метки {label} некорректно", env.GetCurrentLine());
+                throw new CompilationErrorExcepton($"Имя метки {label} некорректно", env.GetCurrentLine());
             }
             if (env.GetLabelAddress(label) != -1) {
-                throw new CompileErrorExcepton($"Метка {label} уже существует", env.GetCurrentLine());
+                throw new CompilationErrorExcepton($"Метка {label} уже существует", env.GetCurrentLine());
             }
             env.AddAddressLabelToCurrentAddress(label);
             return line.Substring(colon + 1);
         }
 
-        private void HandleDirective(string line, CompilerEnvironment env) {
+        /// <summary>
+        /// Обрабатывает директиву процессора, и изменяет окружение в соответствии с ней.
+        /// В случае, если директива некорректна, генерируется <see cref="CompilationErrorExcepton"/>
+        /// </summary>
+        /// <param name="line">Строка кода, из которой извлекается директива.</param>
+        /// <param name="env">Текущее окружение компилятора, которое изменяется в соответствии с директивой.</param>
+        public void HandleDirective(string line, CompilerEnvironment env) {
             if (line[1] == 'n' || line[1] == 'N') {
                 string[] components = line.Split(' ');
                 if (components.Length != 2) {
-                    throw new CompileErrorExcepton("После /n должно следовать одно число через пробел.", env.GetCurrentLine());
+                    throw new CompilationErrorExcepton("После /n должно следовать одно число через пробел.", env.GetCurrentLine());
                 }
                 
                 try {
@@ -98,40 +148,52 @@ namespace _8bitVonNeiman.Compiler.Model {
                     }
                     env.SetCurrentAddress(address);
                 } catch (Exception) {
-                    throw new CompileErrorExcepton("Некорректная директива процессора. Адрес должен быть числом в диапазоне от 0 до 255.", env.GetCurrentLine());
+                    throw new CompilationErrorExcepton("Некорректная директива процессора. Адрес должен быть числом в диапазоне от 0 до 255.", env.GetCurrentLine());
                 }
             } else if (line[1] == 'C' || line[1] == 'c') {
-                int segment = TryToGetSegmentFromDirecrive(line, env);
+                int segment = TryToGetSegmentFromDirecrive(line, env.GetCurrentLine());
                 env.SetDefaultCodeSegment(segment);
 
             } else if (line[1] == 'S' || line[1] == 's') {
-                int segment = TryToGetSegmentFromDirecrive(line, env);
+                int segment = TryToGetSegmentFromDirecrive(line, env.GetCurrentLine());
                 env.SetDefaultStackSegment(segment);
 
             } else if (line[1] == 'D' || line[1] == 'd') {
-                int segment = TryToGetSegmentFromDirecrive(line, env);
+                int segment = TryToGetSegmentFromDirecrive(line, env.GetCurrentLine());
                 env.SetDefaultDataSegment(segment);
 
             } else {
-                throw new CompileErrorExcepton("Некорректная директива процессора.", env.GetCurrentLine());
+                throw new CompilationErrorExcepton("Некорректная директива процессора.", env.GetCurrentLine());
             }
         }
 
-        private int TryToGetSegmentFromDirecrive(string line, CompilerEnvironment env) {
+        /// <summary>
+        /// Извлекает сегмент кода из директивы и возвращает его. Сегмент должен быть числом в промежутке от 0 до 3.
+        /// В случае, если сегмент не является числом или не попадает в промежуток от 0 до 3 генерируется
+        /// <see cref="CompilationErrorExcepton"/>
+        /// </summary>
+        /// <param name="line">Строка кода, содержащая директиву.</param>
+        /// <param name="lineNumber">Номер строки кода. Нужен для генерации исключения.</param>
+        /// <returns></returns>
+        public int TryToGetSegmentFromDirecrive(string line, int lineNumber) {
             int segment;
             try {
                 segment = Convert.ToInt32(line.Substring(2));
             } catch (Exception e) {
-                throw new CompileErrorExcepton("Некорректная директива процессора. Номер сегмента должен быть числом.", env.GetCurrentLine(), e);
+                throw new CompilationErrorExcepton("Некорректная директива процессора. Номер сегмента должен быть числом.", lineNumber, e);
             }
             if (segment > 4 || segment < 0) {
-                throw new CompileErrorExcepton("Некорректная директива процессора. Номер сегмента должен быть в диапазоне от 0 до 4.", env.GetCurrentLine());
+                throw new CompilationErrorExcepton("Некорректная директива процессора. Номер сегмента должен быть в диапазоне от 0 до 4.", lineNumber);
             }
             return segment;
         }
 
         private void CompileCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            
+            if (e.Error == null) {
+                _completeDelegate(e.Result as CompilerEnvironment);
+            } else {
+                _errorDelegate(e.Error as CompilationErrorExcepton);
+            }
         }
     }
 }

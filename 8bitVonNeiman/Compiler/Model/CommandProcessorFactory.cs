@@ -222,7 +222,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void ValidateNoAddressCommand(string[] args, string op, int line) {
                 if (args.Length != 0) {
-                    throw new CompileErrorExcepton($"Оператор {op} не должен принимать никаких аргументов", line);
+                    throw new CompilationErrorExcepton($"Оператор {op} не должен принимать никаких аргументов", line);
                 }
             }
         }
@@ -234,12 +234,12 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void DJRNZ(string[] args, CompilerEnvironment env) {
                 if (args.Length != 2) {
-                    throw new CompileErrorExcepton("Оператор DJRNZ должен принимать ровно 2 аргумента", env.GetCurrentLine());
+                    throw new CompilationErrorExcepton("Оператор DJRNZ должен принимать ровно 2 аргумента", env.GetCurrentLine());
                 }
 
                 string R = args[0];
                 if (R.Length != 2 || R[0] != 'R' || R[1] < '0' || R[1] > '4') {
-                    throw new CompileErrorExcepton("У оператора DJRNZ первым аргументом должен выступать регистр R*", env.GetCurrentLine());
+                    throw new CompilationErrorExcepton("У оператора DJRNZ первым аргументом должен выступать регистр R*", env.GetCurrentLine());
                 }
 
                 string L = args[1];
@@ -386,7 +386,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void Validate(string[] args, string op, int line) {
                 if (args.Length != 1) {
-                    throw new CompileErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
+                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
                 }
             }
         }
@@ -443,7 +443,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void Validate(string[] args, string op, int line) {
                 if (args.Length != 1) {
-                    throw new CompileErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
+                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
                 }
             }
         }
