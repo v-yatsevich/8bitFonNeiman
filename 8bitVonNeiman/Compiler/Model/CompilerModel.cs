@@ -66,12 +66,12 @@ namespace _8bitVonNeiman.Compiler.Model {
         }
 
         /// <summary>
-        /// Подготавливает исходный код к обработке: разбивает на массив строк, удаляет лишние пробелы, убирает комментарии
+        /// Подготавливает исходный код к обработке: разбивает на массив строк, удаляет лишние пробелы, убирает комментарии.
         /// </summary>
         /// <param name="code">Исходный код программы.</param>
         /// <returns></returns>
         public List<string> PrepareCode(string code) {
-            return _code
+            return code
                 .Split('\n')
                 .Select(x => {
                     int semicolon = x.IndexOf(";");
@@ -94,7 +94,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 command = line;
                 args = new string[0];
             } else {
-                command = line.Substring(0, firstSpaceIndex - 1);
+                command = line.Substring(0, firstSpaceIndex);
                 args = line.Substring(firstSpaceIndex + 1).Split(',').Select(x => x.Trim()).ToArray();
             }
 
@@ -117,7 +117,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             if (colon == -1) {
                 return line;
             }
-            string label = line.Substring(0, colon - 1);
+            string label = line.Substring(0, colon);
             if (!CompilerSupport.CheckWord(label)) {
                 throw new CompilationErrorExcepton($"Имя метки {label} некорректно", env.GetCurrentLine());
             }
@@ -146,21 +146,21 @@ namespace _8bitVonNeiman.Compiler.Model {
                     if (address > 255 || address < 0) {
                         throw new Exception();
                     }
-                    env.SetCurrentAddress(address);
+                    env.CurrentAddress = address;
                 } catch (Exception) {
                     throw new CompilationErrorExcepton("Некорректная директива процессора. Адрес должен быть числом в диапазоне от 0 до 255.", env.GetCurrentLine());
                 }
             } else if (line[1] == 'C' || line[1] == 'c') {
                 int segment = TryToGetSegmentFromDirecrive(line, env.GetCurrentLine());
-                env.SetDefaultCodeSegment(segment);
+                env.DefaultCodeSegment = segment;
 
             } else if (line[1] == 'S' || line[1] == 's') {
                 int segment = TryToGetSegmentFromDirecrive(line, env.GetCurrentLine());
-                env.SetDefaultStackSegment(segment);
+                env.DefaultStackSegment = segment;
 
             } else if (line[1] == 'D' || line[1] == 'd') {
                 int segment = TryToGetSegmentFromDirecrive(line, env.GetCurrentLine());
-                env.SetDefaultDataSegment(segment);
+                env.DefaultDataSegment = segment;
 
             } else {
                 throw new CompilationErrorExcepton("Некорректная директива процессора.", env.GetCurrentLine());

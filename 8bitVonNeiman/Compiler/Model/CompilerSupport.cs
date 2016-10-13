@@ -38,7 +38,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     }
                     return address;
                 } else {
-                    short address = env.GetLabelAddress(label);
+                    int address = env.GetLabelAddress(label);
                     if (address == -1) {
                         throw new CompilationErrorExcepton($"Метка с именем {label} не найдена.", env.GetCurrentLine());
                     }
@@ -82,7 +82,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         public static bool CheckWord(string word) {
             return word.Length != 0 && 
                 Regex.IsMatch(word, @"^[a-zA-Z0-9_-]+$") && 
-                !(word[0] <= '9' && word[1] >= '0');
+                !(word[0] <= '9' && word[0] >= '0');
         }
     }
 }

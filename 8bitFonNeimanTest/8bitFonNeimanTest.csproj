@@ -53,6 +53,12 @@
     <Compile Include="CompilerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\8bitVonNeiman\8bitVonNeiman.csproj">
+      <Project>{439C9411-D0BC-44DA-95D2-D8C100A28859}</Project>
+      <Name>8bitVonNeiman</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
