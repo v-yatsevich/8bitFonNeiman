@@ -40,7 +40,7 @@
             this.codeRichTextBox.Name = "codeRichTextBox";
             this.codeRichTextBox.Size = new System.Drawing.Size(682, 322);
             this.codeRichTextBox.TabIndex = 0;
-            this.codeRichTextBox.Text = "";
+            this.codeRichTextBox.Text = ";test\nnop ;test 123\nret\n";
             // 
             // outputRichTextBox
             // 

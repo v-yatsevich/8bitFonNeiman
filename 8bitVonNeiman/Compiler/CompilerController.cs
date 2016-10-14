@@ -1,4 +1,6 @@
-﻿using _8bitVonNeiman.Compiler.Model;
+﻿using System.Collections;
+using System.Collections.Generic;
+using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Compiler.View;
 
 namespace _8bitVonNeiman.Compiler {
@@ -6,6 +8,7 @@ namespace _8bitVonNeiman.Compiler {
 
         private CompilerForm _form;
         private CompilerModel _compilerModel;
+        private Dictionary<int, BitArray> _memory; 
 
         public void SetCompiler(CompilerModel compilerModel) {
             _compilerModel = compilerModel;
@@ -35,6 +38,7 @@ namespace _8bitVonNeiman.Compiler {
         /// </summary>
         /// <param name="code">Код программы.</param>
         public void Compile(string code) {
+            _form.AddLineToOutput("Начало компиляции...");
             _compilerModel.Compile(code);
         }
 
@@ -43,7 +47,8 @@ namespace _8bitVonNeiman.Compiler {
         /// </summary>
         /// <param name="env">Окружение компилятора, сформировавшееся после компиляции.</param>
         public void CompilationComplete(CompilerEnvironment env) {
-            
+            _memory = env.GetMemory();
+            _form.AddLineToOutput("Компиляция завершена успешно!");
         }
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace _8bitVonNeiman.Compiler {
         /// </summary>
         /// <param name="e">Исключение, сгенерированное в процессе компиляции.</param>
         public void CompilationError(CompilationErrorExcepton e) {
-            
+            _form.AddLineToOutput($"Ошибка компиляции: {e.ErrorMessage} в строке {e.LineNumber}");
         }
     }
 }

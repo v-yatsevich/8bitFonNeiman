@@ -79,6 +79,10 @@ namespace _8bitVonNeiman.Compiler.Model {
             _currentLine++;
         }
 
+        public Dictionary<int, BitArray> GetMemory() {
+            return _memory;
+        }
+
         public void SetCommand(BitArray command) {
             _memory[_defaultCodeSegment << 8 + _currentAddress] = command;
             _currentAddress++;
