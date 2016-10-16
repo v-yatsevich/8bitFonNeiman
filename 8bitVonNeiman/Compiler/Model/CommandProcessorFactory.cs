@@ -234,21 +234,30 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void DJRNZ(string[] args, CompilerEnvironment env) {
                 if (args.Length != 2) {
-                    throw new CompilationErrorExcepton("Оператор DJRNZ должен принимать ровно 2 аргумента", env.GetCurrentLine());
+                    throw new CompilationErrorExcepton("Оператор DJRNZ должен принимать ровно 2 аргумента.", env.GetCurrentLine());
                 }
 
-                string R = args[0];
-                if (R.Length != 2 || R[0] != 'R' || R[1] < '0' || R[1] > '4') {
-                    throw new CompilationErrorExcepton("У оператора DJRNZ первым аргументом должен выступать регистр R*", env.GetCurrentLine());
+                var R = CompilerSupport.ConvertToRegister(args[0]);
+                if (!R.HasValue) {
+                    throw new CompilationErrorExcepton("Первым аргументом должен быть регистр.", env.GetCurrentLine());
                 }
-
+                var register = R.Value;
+                if (register.IsChange) {
+                    throw new CompilationErrorExcepton("В этой команде нельзя использовать инкремент/декремент регистра.", env.GetCurrentLine());
+                }
+                if (!register.IsDirect) {
+                    throw new CompilationErrorExcepton("В этой команде нельзя использовать косвенную адерсацию.", env.GetCurrentLine());
+                }
+                if (register.Number > 3) {
+                    throw new CompilationErrorExcepton("В этой команде можно использовать только первые 4 регистра.", env.GetCurrentLine());
+                }
                 string L = args[1];
                 int address = CompilerSupport.ConvertToFarAddress(L, env);
 
                 BitArray bitArray = new BitArray(16);
                 CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
-                bitArray[10] = (R[1] - '0' & 1) == 1;
-                bitArray[11] = (R[1] - '0' & 2) == 1;
+                bitArray[10] = (register.Number & 1) == 1;
+                bitArray[11] = (register.Number & 2) == 1;
                 bitArray[12] = true;
                 env.SetCommand(bitArray);
             }
