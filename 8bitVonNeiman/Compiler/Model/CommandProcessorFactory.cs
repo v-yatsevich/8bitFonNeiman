@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using _8bitVonNeiman.Core;
+using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
     [SuppressMessage("ReSharper", "InconsistentNaming")]

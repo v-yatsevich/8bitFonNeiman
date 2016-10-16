@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using _8bitVonNeiman.Compiler.Model;
+﻿using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Compiler.View;
 
 namespace _8bitVonNeiman.Compiler {
@@ -8,7 +6,11 @@ namespace _8bitVonNeiman.Compiler {
 
         private CompilerForm _form;
         private CompilerModel _compilerModel;
-        private Dictionary<int, BitArray> _memory; 
+        private ICompilerControllerOutput _output;
+
+        public CompilerController(ICompilerControllerOutput output) {
+            _output = output;
+        }
 
         public void SetCompiler(CompilerModel compilerModel) {
             _compilerModel = compilerModel;
@@ -47,7 +49,7 @@ namespace _8bitVonNeiman.Compiler {
         /// </summary>
         /// <param name="env">Окружение компилятора, сформировавшееся после компиляции.</param>
         public void CompilationComplete(CompilerEnvironment env) {
-            _memory = env.GetMemory();
+            _output.MemoryFormed(env.GetMemory());
             _form.AddLineToOutput("Компиляция завершена успешно!");
         }
 

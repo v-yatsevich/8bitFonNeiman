@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace _8bitVonNeiman.Core.View {
+namespace _8bitVonNeiman.Controller.View {
     public partial class ComponentsForm : Form {
 
         private ComponentsFormOutput _output;
@@ -24,6 +24,10 @@ namespace _8bitVonNeiman.Core.View {
 
         private void editorButton_Click(object sender, EventArgs e) {
             _output.EditorButtonClicked();
+        }
+
+        private void memoryButton_Click(object sender, EventArgs e) {
+            _output.MemoryButtonClicked();
         }
     }
 }

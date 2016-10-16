@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
-using _8bitVonNeiman.Core;
+using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
     public class CompilerSupport {
@@ -56,7 +56,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// <param name="env">Текущее окружение компилятора.</param>
         /// <param name="maxAddress">Максимальный адрес, который может быть использован.</param>
         /// <returns>Адресс, на который ссылается метка или который был записан как число.</returns>
-        private static int ConvertToAddress(string label, CompilerEnvironment env, int maxAddress) {
+        public static int ConvertToAddress(string label, CompilerEnvironment env, int maxAddress) {
             try {
                 if (label[0] >= '0' && label[0] <= '9') {
                     int address = ConvertToInt(label);

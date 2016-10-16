@@ -1,4 +1,4 @@
-﻿namespace _8bitVonNeiman.Core.View {
+﻿namespace _8bitVonNeiman.Controller.View {
     partial class ComponentsForm {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.editorButton = new System.Windows.Forms.Button();
+            this.memoryButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // editorButton
@@ -36,11 +37,22 @@
             this.editorButton.UseVisualStyleBackColor = true;
             this.editorButton.Click += new System.EventHandler(this.editorButton_Click);
             // 
+            // memoryButton
+            // 
+            this.memoryButton.Location = new System.Drawing.Point(113, 12);
+            this.memoryButton.Name = "memoryButton";
+            this.memoryButton.Size = new System.Drawing.Size(75, 23);
+            this.memoryButton.TabIndex = 1;
+            this.memoryButton.Text = "Память";
+            this.memoryButton.UseVisualStyleBackColor = true;
+            this.memoryButton.Click += new System.EventHandler(this.memoryButton_Click);
+            // 
             // ComponentsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.memoryButton);
             this.Controls.Add(this.editorButton);
             this.Name = "ComponentsForm";
             this.Text = "Form1";
@@ -52,6 +64,7 @@
         #endregion
 
         private System.Windows.Forms.Button editorButton;
+        private System.Windows.Forms.Button memoryButton;
     }
 }
 

@@ -62,7 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BitArrayToString.cs" />
     <Compile Include="Compiler\CompilationErrorExcepton.cs" />
+    <Compile Include="Compiler\ICompilerControllerOutput.cs" />
     <Compile Include="Compiler\Model\CommandProcessorFactory.cs" />
     <Compile Include="Compiler\Model\CompilerEnvironment.cs" />
     <Compile Include="Compiler\Model\CompilerModel.cs" />
@@ -75,23 +77,35 @@
       <DependentUpon>CompilerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Compiler\View\CompilerFormOutput.cs" />
-    <Compile Include="Core\Assembly.cs" />
-    <Compile Include="Core\CentralController.cs" />
-    <Compile Include="Core\Constants.cs" />
-    <Compile Include="Core\View\ComponentsForm.cs">
+    <Compile Include="Controller\Assembly.cs" />
+    <Compile Include="Controller\CentralController.cs" />
+    <Compile Include="Controller\Constants.cs" />
+    <Compile Include="Controller\View\ComponentsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Core\View\ComponentsForm.Designer.cs">
+    <Compile Include="Controller\View\ComponentsForm.Designer.cs">
       <DependentUpon>ComponentsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\View\ComponentsFormOutput.cs" />
+    <Compile Include="Controller\View\ComponentsFormOutput.cs" />
+    <Compile Include="Memory\IMemoryControllerInput.cs" />
+    <Compile Include="Memory\MemoryController.cs" />
+    <Compile Include="Memory\View\IMemoryFormOutput.cs" />
+    <Compile Include="Memory\View\MemoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Memory\View\MemoryForm.Designer.cs">
+      <DependentUpon>MemoryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Compiler\View\CompilerForm.resx">
       <DependentUpon>CompilerForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Core\View\ComponentsForm.resx">
+    <EmbeddedResource Include="Controller\View\ComponentsForm.resx">
       <DependentUpon>ComponentsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Memory\View\MemoryForm.resx">
+      <DependentUpon>MemoryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -38,23 +38,27 @@
             this.codeRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.codeRichTextBox.Location = new System.Drawing.Point(12, 47);
             this.codeRichTextBox.Name = "codeRichTextBox";
-            this.codeRichTextBox.Size = new System.Drawing.Size(682, 322);
+            this.codeRichTextBox.Size = new System.Drawing.Size(484, 133);
             this.codeRichTextBox.TabIndex = 0;
             this.codeRichTextBox.Text = ";test\nnop ;test 123\nret\n";
             // 
             // outputRichTextBox
             // 
+            this.outputRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.outputRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.outputRichTextBox.Location = new System.Drawing.Point(12, 400);
+            this.outputRichTextBox.Location = new System.Drawing.Point(12, 211);
             this.outputRichTextBox.Name = "outputRichTextBox";
-            this.outputRichTextBox.Size = new System.Drawing.Size(682, 80);
+            this.outputRichTextBox.Size = new System.Drawing.Size(484, 80);
             this.outputRichTextBox.TabIndex = 1;
             this.outputRichTextBox.Text = "";
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 381);
+            this.label1.Location = new System.Drawing.Point(13, 192);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 13);
             this.label1.TabIndex = 2;
@@ -71,7 +75,8 @@
             // 
             // compileButton
             // 
-            this.compileButton.Location = new System.Drawing.Point(583, 18);
+            this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.compileButton.Location = new System.Drawing.Point(385, 18);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(111, 23);
             this.compileButton.TabIndex = 4;
@@ -83,7 +88,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(706, 492);
+            this.ClientSize = new System.Drawing.Size(508, 303);
             this.Controls.Add(this.compileButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

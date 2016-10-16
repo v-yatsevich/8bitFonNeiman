@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using _8bitVonNeiman.Core;
+using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman {
     static class Program {

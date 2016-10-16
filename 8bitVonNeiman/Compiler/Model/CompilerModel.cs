@@ -53,6 +53,9 @@ namespace _8bitVonNeiman.Compiler.Model {
             List<string> lines = PrepareCode(_code);
             var env = new CompilerEnvironment();
             for (short i = 0; i < lines.Count; i++) {
+                if (lines[i].Length == 0) {
+                    continue;
+                }
                 if (lines[i][0] == '/') {
                     HandleDirective(lines[i], env);
                     env.IncrementLine();
@@ -98,7 +101,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 args = line.Substring(firstSpaceIndex + 1).Split(',').Select(x => x.Trim()).ToArray();
             }
 
-            command = command.ToUpper();
+            command = command.ToLower();
             if (!_commandProcessors.ContainsKey(command)) {
                 throw new CompilationErrorExcepton("Неверная команда", env.GetCurrentLine());
             }
