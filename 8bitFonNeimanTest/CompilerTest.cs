@@ -228,10 +228,10 @@ namespace _8bitFonNeimanTest {
         [TestMethod]
         public void TestHandleCommand_whenCommandCorrect_thenArgumentsPassed() {
             var env = new CompilerEnvironment();
-            var line = "test arg1  , arg2 ";
+            var line = "tEsT arg1  , arg2 ";
             var commands = new Dictionary<string, CommandProcessorFactory.CommandProcessor> {
                 {
-                    "TEST",
+                    "test",
                     (args, innerEnv) => {
                         Assert.AreSame(innerEnv, env);
                         Assert.AreEqual(args.Length, 2);
@@ -248,10 +248,10 @@ namespace _8bitFonNeimanTest {
         [TestMethod]
         public void TestHandleCommand_whenCommandWithoutArgs_thenArgumentsEmpty() {
             var env = new CompilerEnvironment();
-            var line = "test";
+            var line = "tEsT";
             var commands = new Dictionary<string, CommandProcessorFactory.CommandProcessor> {
                 {
-                    "TEST",
+                    "test",
                     (args, innerEnv) => {
                         Assert.AreSame(innerEnv, env);
                         Assert.AreEqual(args.Length, 0);

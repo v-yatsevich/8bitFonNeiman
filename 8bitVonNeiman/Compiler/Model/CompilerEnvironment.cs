@@ -29,7 +29,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             _currentAddress = 8;
         }
 
-        private int _defaultCodeSegment;
+        private int _defaultCodeSegment = 0;
         /// <summary>
         /// Номер сегмента кода, который будет установлен при сбросе и в который будет записываться код. 
         /// Меняется директивой /Dn, где n - число от 0 до 3
@@ -44,7 +44,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
-        private int _defaultDataSegment;
+        private int _defaultDataSegment = 1;
         /// Номер сегмента данных, который будет установлен при сбросе. Меняется директивой /Dn, где n - число от 0 до 3
         public int DefaultDataSegment {
             get { return _defaultDataSegment; }
@@ -56,7 +56,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
-        private int _defaultStackSegment;
+        private int _defaultStackSegment = 3;
         /// Номер сегмента стека, который будет установлен при сбросе. Меняется директивой /Dn, где n - число от 0 до 3
         public int DefaultStackSegment {
             get { return _defaultStackSegment; }
@@ -83,8 +83,16 @@ namespace _8bitVonNeiman.Compiler.Model {
             return _memory;
         }
 
-        public void SetCommand(BitArray command) {
-            _memory[_defaultCodeSegment << 8 + _currentAddress] = command;
+        /// <summary>
+        /// Устанавливает байт по текущему адресу и переходит к следующему адресу.
+        /// При переполнении адреса заползает на следующий сегмент.
+        /// </summary>
+        /// <param name="command">Бассив бит: определяющих байт. Должен содержать 8 бит.</param>
+        public void SetByte(BitArray command) {
+            if (command.Count != 8) {
+                throw new ArgumentOutOfRangeException("Число бит в байте должно быть равно 8");
+            }
+            _memory[(_defaultCodeSegment << 8) + _currentAddress] = command;
             _currentAddress++;
         }
 
@@ -106,10 +114,10 @@ namespace _8bitVonNeiman.Compiler.Model {
         }
 
         /// <summary>
-        /// Добавляет метку, ссылающуюся на текущий адрес.
+        /// Добавляет метку, ссылающуюся на адрес новой команды.
         /// </summary>
         /// <param name="label">Имя метки.</param>
-        public void AddAddressLabelToCurrentAddress(string label) {
+        public void AddAddressLabelToNewCommand(string label) {
             _labels.Add(label, _currentAddress);
         }
 

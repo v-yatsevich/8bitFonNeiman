@@ -46,178 +46,198 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void NOP(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "NOP", env.GetCurrentLine());
-                BitArray array = new BitArray(16) { [0] = true };
-                env.SetCommand(array);
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) { [0] = true };
+                env.SetByte(array);
             }
 
             private static void RET(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RET", env.GetCurrentLine());
-                BitArray array = new BitArray(16) { [1] = true };
-                env.SetCommand(array);
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) { [1] = true };
+                env.SetByte(array);
             }
 
             private static void IRET(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "IRET", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [1] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void EI(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "EI", env.GetCurrentLine());
-                BitArray array = new BitArray(16) { [2] = true };
-                env.SetCommand(array);
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) { [2] = true };
+                env.SetByte(array);
             }
 
             private static void DI(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DI", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [2] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void RR(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RR", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [1] = true,
                     [2] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void RL(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RL", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [1] = true,
                     [2] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void RRC(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RRC", env.GetCurrentLine());
-                BitArray array = new BitArray(16) { [3] = true };
-                env.SetCommand(array);
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) { [3] = true };
+                env.SetByte(array);
             }
 
             private static void RLC(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RLC", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [3] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void HLT(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "HLT", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [1] = true,
                     [3] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void INCA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "INCA", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [1] = true,
                     [3] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void DECA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DECA", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [2] = true,
                     [3] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void SWAPA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "SWAPA", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [2] = true,
                     [3] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void DAA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DAA", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [1] = true,
                     [2] = true,
                     [3] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void DSA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DSA", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [1] = true,
                     [2] = true,
                     [3] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void IN(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "IN", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [4] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void OUT(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "OUT", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [1] = true,
                     [4] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void ES(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "ES", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [1] = true,
                     [4] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void MOVASR(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVASR", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [2] = true,
                     [4] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void MOVSRA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVSRA", env.GetCurrentLine());
-                BitArray array = new BitArray(16) {
+                env.SetByte(new BitArray(8));
+                BitArray array = new BitArray(8) {
                     [0] = true,
                     [2] = true,
                     [4] = true
                 };
-                env.SetCommand(array);
+                env.SetByte(array);
             }
 
             private static void ValidateNoAddressCommand(string[] args, string op, int line) {
@@ -254,12 +274,14 @@ namespace _8bitVonNeiman.Compiler.Model {
                 string L = args[1];
                 int address = CompilerSupport.ConvertToFarAddress(L, env);
 
-                BitArray bitArray = new BitArray(16);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
-                bitArray[10] = (register.Number & 1) == 1;
-                bitArray[11] = (register.Number & 2) == 1;
-                bitArray[12] = true;
-                env.SetCommand(bitArray);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
+                highBitArray[5] = (register.Number & 1) == 1;
+                highBitArray[6] = (register.Number & 2) == 1;
+                highBitArray[7] = true;
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
         }
 
@@ -280,117 +302,134 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JNZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNZ", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[13] = true;
+                highBitArray[5] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void JNC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNC", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[10] = true;
-                bitArray[13] = true;
+                highBitArray[2] = true;
+                highBitArray[5] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void JNS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNS", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[11] = true;
-                bitArray[13] = true;
+                highBitArray[3] = true;
+                highBitArray[5] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void JNO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNO", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[10] = true;
-                bitArray[11] = true;
-                bitArray[13] = true;
+                highBitArray[3] = true;
+                highBitArray[4] = true;
+                highBitArray[5] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void JZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JZ", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[12] = true;
-                bitArray[13] = true;
+                highBitArray[4] = true;
+                highBitArray[5] = true;
+                
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void JC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JC", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[10] = true;
-                bitArray[12] = true;
-                bitArray[13] = true;
+                highBitArray[3] = true;
+                highBitArray[4] = true;
+                highBitArray[5] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void JS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JS", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[11] = true;
-                bitArray[12] = true;
-                bitArray[13] = true;
+                highBitArray[3] = true;
+                highBitArray[4] = true;
+                highBitArray[5] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void JO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JO", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[10] = true;
-                bitArray[11] = true;
-                bitArray[12] = true;
-                bitArray[13] = true;
+                highBitArray[2] = true;
+                highBitArray[3] = true;
+                highBitArray[4] = true;
+                highBitArray[5] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void Validate(string[] args, string op, int line) {
@@ -412,42 +451,47 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JMP(string[] args, CompilerEnvironment env) {
                 Validate(args, "JMP", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[14] = true;
+                highBitArray[6] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void CALL(string[] args, CompilerEnvironment env) {
                 Validate(args, "CALL", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[10] = true;
-                bitArray[14] = true;
+                highBitArray[2] = true;
+                highBitArray[6] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
 
             private static void INT(string[] args, CompilerEnvironment env) {
                 Validate(args, "INT", env.GetCurrentLine());
 
-                var bitArray = new BitArray(16);
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(bitArray, address, Constants.FarAddressBitsCount);
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
 
-                bitArray[11] = true;
-                bitArray[14] = true;
+                highBitArray[3] = true;
+                highBitArray[6] = true;
 
-                env.SetCommand(bitArray);
+                env.SetByte(highBitArray);
             }
 
             private static void Validate(string[] args, string op, int line) {

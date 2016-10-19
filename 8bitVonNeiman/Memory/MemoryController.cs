@@ -14,9 +14,7 @@ namespace _8bitVonNeiman.Memory {
 
         public void SetMemory(Dictionary<int, BitArray> memory) {
             _memory = memory;
-            if (_form != null) {
-                _form.ShowMemory(memory);
-            }
+            _form?.ShowMemory(memory);
         }
 
         /// <summary>

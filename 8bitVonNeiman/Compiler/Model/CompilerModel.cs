@@ -127,7 +127,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             if (env.GetLabelAddress(label) != -1) {
                 throw new CompilationErrorExcepton($"Метка {label} уже существует", env.GetCurrentLine());
             }
-            env.AddAddressLabelToCurrentAddress(label);
+            env.AddAddressLabelToNewCommand(label);
             return line.Substring(colon + 1);
         }
 

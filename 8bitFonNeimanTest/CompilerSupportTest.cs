@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using _8bitVonNeiman.Compiler.Model;
@@ -123,6 +124,39 @@ namespace _8bitFonNeimanTest {
                 Assert.AreEqual(r.IsChange, expected.IsChange, $"Строка: {inputs[i]}, регистр {r}, ожидалось {expected}");
                 Assert.AreEqual(r.IsIncrement, expected.IsIncrement, $"Строка: {inputs[i]}, регистр {r}, ожидалось {expected}");
                 Assert.AreEqual(r.IsPostchange, expected.IsPostchange, $"Строка: {inputs[i]}, регистр {r}, ожидалось {expected}");
+            }
+        }
+
+        [TestMethod]
+        public void FillAddressTest() {
+            var inputs = new List<int> {
+                8, 12, 43, 263
+            };
+
+            var lowOutputs = new List<BitArray> {
+                new BitArray(8) {[3] = true},
+                new BitArray(8) {[2] = true, [3] = true },
+                new BitArray(8) {[5] = true, [3] = true, [1] = true, [0] = true },
+                new BitArray(8) {[2] = true, [1] = true, [0] = true }
+            };
+
+            var highOutputs = new List<BitArray> {
+                new BitArray(8),
+                new BitArray(8),
+                new BitArray(8),
+                new BitArray(8) {[0] = true}
+            };
+
+            for (int i = 0; i < lowOutputs.Count; i++) {
+                var highBitArray = new BitArray(8);
+                var lowBitArray = new BitArray(8);
+
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, inputs[i], 10);
+
+                for (int j = 0; j < 8; j++) {
+                    Assert.AreEqual(lowOutputs[i][j], lowBitArray[j], $"low: i = {i}, j = {j}");
+                    Assert.AreEqual(highOutputs[i][j], highBitArray[j], $"high: i = {i}, j = {j}");
+                }
             }
         }
     }
