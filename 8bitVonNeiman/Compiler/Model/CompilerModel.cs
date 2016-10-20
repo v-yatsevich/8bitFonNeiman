@@ -62,7 +62,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                     continue;
                 }
                 string line = HandleLabelAndReturnLine(lines[i], env);
-                HandleCommand(line, env);
+                bool isSuccess = TryToGetVariable(line, env);
+                if (!isSuccess) {
+                    HandleCommand(line, env);
+                }
                 env.IncrementLine();
             }
             e.Result = env;
@@ -109,6 +112,39 @@ namespace _8bitVonNeiman.Compiler.Model {
         }
 
         /// <summary>
+        /// Пытается достать из строки объявление переменной.
+        /// Если в строке нет слова eql, то возвращает false,
+        /// Если есть и строка имеет формат *идетификатор* eql *адрес*, то пытается сохранить адрес за идентификатором
+        /// Если есть, но строка не подходит по формату, выбрасывает исключение <see cref="CompilationErrorExcepton"/>
+        /// </summary>
+        /// <param name="line">Строка кода для обработки.</param>
+        /// <returns>True, если в строке присутствовала переменная, false, если нет.</returns>
+        public bool TryToGetVariable(string line, CompilerEnvironment env) {
+            if (!line.Contains(" eql ")) {
+                return false;
+            }
+            var args = line.Split(' ').Select(x => x.ToLower().Trim()).ToArray();
+            if (args.Length != 3 || !args[1].Equals("eql", StringComparison.OrdinalIgnoreCase)) {
+                throw new CompilationErrorExcepton("Объявление переменной должно соответствовать формату *имя переменной* eql *адрес*.", env.GetCurrentLine());
+            }
+
+            bool isIdentifierCorrect = CompilerSupport.CheckIdentifierName(args[0]);
+            if (!isIdentifierCorrect) {
+                throw new CompilationErrorExcepton("Имя переменной должно содержать только латиские буквы, цифры знаки тире и подчеркивания и начинаться с буквы.", env.GetCurrentLine());
+            }
+
+            int address = CompilerSupport.ConvertToInt(args[2]);
+            if (address > 255) {
+                throw new CompilationErrorExcepton("Адрес не может превышать 255", env.GetCurrentLine());
+            }
+            if (env.IsIdentifierExist(args[0])) {
+                throw new CompilationErrorExcepton($"Идентификатор с именем {args[0]} уже существует.", env.GetCurrentLine());
+            }
+            env.AddVariable(args[0], address);
+            return true;
+        }
+
+        /// <summary>
         /// Проверяет, присутствует ли в строке метка, и если она есть, добавляет метку в окружение и удаляет ее из строки.
         /// Если имя метки некорректно или занято, генерируется <see cref="CompilationErrorExcepton"/>
         /// </summary>
@@ -121,11 +157,11 @@ namespace _8bitVonNeiman.Compiler.Model {
                 return line;
             }
             string label = line.Substring(0, colon);
-            if (!CompilerSupport.CheckWord(label)) {
+            if (!CompilerSupport.CheckIdentifierName(label)) {
                 throw new CompilationErrorExcepton($"Имя метки {label} некорректно", env.GetCurrentLine());
             }
-            if (env.GetLabelAddress(label) != -1) {
-                throw new CompilationErrorExcepton($"Метка {label} уже существует", env.GetCurrentLine());
+            if (env.IsIdentifierExist(label)) {
+                throw new CompilationErrorExcepton($"Идентификатор с именем {label} уже существует.", env.GetCurrentLine());
             }
             env.AddAddressLabelToNewCommand(label);
             return line.Substring(colon + 1);

@@ -111,7 +111,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// Проверяет слово на корректность для использования в качестве метки, переменной или аргумента.
         /// </summary>
         /// <param name="word">Слово для проверки на корректность.</param>
-        public static bool CheckWord(string word) {
+        public static bool CheckIdentifierName(string word) {
             return word.Length != 0 && 
                 Regex.IsMatch(word, @"^[a-zA-Z0-9_-]+$") && 
                 !(word[0] <= '9' && word[0] >= '0');

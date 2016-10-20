@@ -70,6 +70,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
         /// Множество меток.
         private readonly Dictionary<string, int> _labels = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _variables = new Dictionary<string, int>();
 
         public int GetCurrentLine() {
             return _currentLine;
@@ -90,7 +91,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// <param name="command">Бассив бит: определяющих байт. Должен содержать 8 бит.</param>
         public void SetByte(BitArray command) {
             if (command.Count != 8) {
-                throw new ArgumentOutOfRangeException("Число бит в байте должно быть равно 8");
+                throw new ArgumentException("Число бит в байте должно быть равно 8");
             }
             _memory[(_defaultCodeSegment << 8) + _currentAddress] = command;
             _currentAddress++;
@@ -123,6 +124,22 @@ namespace _8bitVonNeiman.Compiler.Model {
 
         public int GetLabelsCount() {
             return _labels.Count;
+        }
+
+        public void AddVariable(string name, int address) {
+            _variables.Add(name, address);
+        }
+
+        public int GetVariableAddress(string name) {
+            if (_variables.ContainsKey(name)) {
+                return _variables[name];
+            } else {
+                return -1;
+            }
+        }
+
+        public bool IsIdentifierExist(string name) {
+            return _labels.ContainsKey(name) || _variables.ContainsKey(name);
         }
     }
 }
