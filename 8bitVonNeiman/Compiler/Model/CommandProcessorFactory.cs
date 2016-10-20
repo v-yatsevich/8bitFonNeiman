@@ -500,5 +500,79 @@ namespace _8bitVonNeiman.Compiler.Model {
                 }
             }
         }
+
+        private static class RamCommands {
+            public static Dictionary<string, CommandProcessor> GetCommands() {
+                return new Dictionary<string, CommandProcessor> {
+                    ["ads"] = ADC,
+                    ["subb"] = SUBB,
+                    ["xch"] = XCH
+                };
+            }
+
+            private static void ADC(string[] args, CompilerEnvironment env) {
+                Validate(args, "ADC", env.GetCurrentLine());
+                DataResponse dataResponse = GetBitArrays(args, env);
+
+                dataResponse.highBitArray[0] = true;
+                dataResponse.highBitArray[2] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.highBitArray);
+                env.SetByte(dataResponse.lowBitArray);
+            }
+
+            private static void SUBB(string[] args, CompilerEnvironment env) {
+                Validate(args, "SUBB", env.GetCurrentLine());
+                DataResponse dataResponse = GetBitArrays(args, env);
+
+                dataResponse.highBitArray[1] = true;
+                dataResponse.highBitArray[2] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.highBitArray);
+                env.SetByte(dataResponse.lowBitArray);
+            }
+
+            private static void XCH(string[] args, CompilerEnvironment env) {
+                Validate(args, "XCH", env.GetCurrentLine());
+                DataResponse dataResponse = GetBitArrays(args, env);
+
+                dataResponse.highBitArray[0] = true;
+                dataResponse.highBitArray[1] = true;
+                dataResponse.highBitArray[2] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.highBitArray);
+                env.SetByte(dataResponse.lowBitArray);
+            }
+
+            private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
+                DataResponse dataResponse = new DataResponse();
+                dataResponse.lowBitArray = new BitArray(8);
+                dataResponse.highBitArray = new BitArray(8);
+
+                dataResponse.highBitArray[7] = true;
+                dataResponse.highBitArray[6] = true;
+
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                if (address != -1) {
+                    CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
+                    return dataResponse;
+                }
+                return dataResponse;
+            }
+
+            private static void Validate(string[] args, string op, int line) {
+                if (args.Length != 1) {
+                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
+                }
+            }
+
+            public class DataResponse {
+                public BitArray lowBitArray { get; set; }
+                public BitArray highBitArray { get; set; }
+            }
+        }
     }
 }
