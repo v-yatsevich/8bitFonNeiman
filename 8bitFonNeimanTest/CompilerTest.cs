@@ -60,7 +60,7 @@ namespace _8bitFonNeimanTest {
             var result = compilerModel.HandleLabelAndReturnLine(line, env);
             Assert.IsTrue(result.Equals("test"));
             Assert.AreEqual(env.GetLabelsCount(), 1);
-            Assert.AreEqual(env.GetLabelAddress("la2_-s"), address);
+            Assert.AreEqual(env.GetIdentityAddress("la2_-s"), address);
         }
 
         [TestMethod]

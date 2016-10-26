@@ -20,7 +20,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 .Concat(CycleCommandsFactory.GetCommands())
                 .Concat(JumpCommandsFactory.GetCommands())
                 .Concat(RamCommands.GetCommands())
-                .Concat(BitCommands.GetCommands())
+                .Concat(BitRamCommands.GetCommands())
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -268,9 +268,6 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton("Первым аргументом должен быть регистр.", env.GetCurrentLine());
                 }
                 var register = R.Value;
-                if (register.IsChange) {
-                    throw new CompilationErrorExcepton("В этой команде нельзя использовать инкремент/декремент регистра.", env.GetCurrentLine());
-                }
                 if (!register.IsDirect) {
                     throw new CompilationErrorExcepton("В этой команде нельзя использовать косвенную адерсацию.", env.GetCurrentLine());
                 }
@@ -278,7 +275,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton("В этой команде можно использовать только первые 4 регистра.", env.GetCurrentLine());
                 }
                 string L = args[1];
-                int address = CompilerSupport.ConvertToFarAddress(L, env);
+                int address = CompilerSupport.ConvertLabelToFarAddress(L, env);
                 
                 var lowBitArray = new BitArray(8);
                 var highBitArray = new BitArray(8) {
@@ -463,7 +460,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
 
             private static void FillAddressAndSetCommand(BitArray highBitArray, BitArray lowBitArray, string label, CompilerEnvironment env) {
-                int address = CompilerSupport.ConvertToFarAddress(label, env);
+                int address = CompilerSupport.ConvertLabelToFarAddress(label, env);
 
                 if (address == -1) {
                     var memoryForLabel = new CompilerEnvironment.MemoryForLabel {
@@ -532,15 +529,22 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var dataResponse = new DataResponse();
                 dataResponse.lowBitArray = new BitArray(8);
                 dataResponse.highBitArray = new BitArray(8) {
-                    [7] = true,
+                    [5] = true,
                     [6] = true
                 };
-                
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                if (address != -1) {
-                    CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
+
+                if (args[0][0] == '#') {
+                    int num = CompilerSupport.ConvertToInt(args[0].Substring(1));
+                    CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, num, Constants.ShortAddressBitsCount);
+                    dataResponse.highBitArray[4] = true;
                     return dataResponse;
                 }
+
+                int address = CompilerSupport.ConvertVariableToAddress(args[0], env);
+                if (address == -1) {
+                    throw new CompilationErrorExcepton($"Переменной с именем {args[0]} не существует.", env.GetCurrentLine());
+                }
+                CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
                 return dataResponse;
             }
 
@@ -551,7 +555,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
-        private static class BitCommands {
+        private static class BitRamCommands {
             public static Dictionary<string, CommandProcessor> GetCommands() {
                 return new Dictionary<string, CommandProcessor> {
                     ["cb"] = CB,
@@ -608,13 +612,46 @@ namespace _8bitVonNeiman.Compiler.Model {
                     [7] = true
                 };
 
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                if (address != -1) {
-                    CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
-                    return dataResponse;
+                int address = CompilerSupport.ConvertVariableToAddress(args[0], env);
+                if (address == -1) {
+                    throw new CompilationErrorExcepton($"Переменной с именем {args[0]} не существует.", env.GetCurrentLine());
                 }
+                CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
                 return dataResponse;
             }
+
+            private static void Validate(string[] args, string op, int line) {
+                if (args.Length != 2) {
+                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 2 аргумента.", line);
+                }
+            }
+        }
+
+        private static class BitRegisterCommands {
+            public static Dictionary<string, CommandProcessor> GetCommands() {
+                return new Dictionary<string, CommandProcessor> {
+                    /*["cbi"] = CBI,
+                    ["sbi"] = SBI,
+                    ["nbi"] = NBI,
+                    ["sbic"] = SBIC,
+                    ["sbis"] = SBIS,
+                    ["sbisc"] = SBISC*/
+                };
+            }
+
+            /*private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
+                var R = CompilerSupport.ConvertToRegister(args[0]);
+                if (!R.HasValue) {
+                    throw new CompilationErrorExcepton("Первым аргументом должен быть регистр.", env.GetCurrentLine());
+                }
+                var register = R.Value;
+                if (!register.IsDirect) {
+                    throw new CompilationErrorExcepton("В этой команде нельзя использовать косвенную адерсацию.", env.GetCurrentLine());
+                }
+                if (register.Number > 3) {
+                    throw new CompilationErrorExcepton("В этой команде можно использовать только первые 4 регистра.", env.GetCurrentLine());
+                }
+            }*/
 
             private static void Validate(string[] args, string op, int line) {
                 if (args.Length != 2) {

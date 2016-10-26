@@ -33,34 +33,49 @@ namespace _8bitVonNeiman.Compiler.Model {
             public bool IsPostchange;
         }
 
-        public const int MaxFarAddress = 2 ^ Constants.FarAddressBitsCount - 1;
+        public const int MaxFarAddress = (1 << Constants.FarAddressBitsCount) - 1;
+        public const int MaxVariableAddress = (1 << Constants.ShortAddressBitsCount) - 1;
 
         /// <summary>
-        /// Функция, которая приводит переданную строку к полному, 10-битовому адресу.
-        /// Если введен слишком большой адрес или строка не является меткой, 
-        /// будет сгенерированно исключение <see cref="CompilerEnvironment"/>.
+        /// Приводит переданную строку к 8-битовому адресу.
         /// </summary>
-        /// <param name="label">Строка-метка или адрес в памяти.</param>
-        /// <param name="env">Текущее окружение компилятора.</param>
-        /// <returns>Адресс, на который ссылается метка или который был записан как число, или -1, если использована несуществующая метка.</returns>
-        public static int ConvertToFarAddress(string label, CompilerEnvironment env) {
-            return ConvertToAddress(label, env, MaxFarAddress);
+        /// <param name="name"></param>
+        /// <param name="env"></param>
+        /// <returns></returns>
+        public static int ConvertVariableToAddress(string name, CompilerEnvironment env) {
+            try {
+                if (name[0] >= '0' && name[0] <= '9') {
+                    int address = ConvertToInt(name);
+                    if (address > MaxVariableAddress) {
+                        throw new OverflowException();
+                    }
+                    return address;
+                } else {
+                    int address = env.GetVariableAddress(name);
+                    return address;
+                }
+            } catch (OverflowException) {
+                throw new CompilationErrorExcepton($"Адрес не должен превышать {MaxVariableAddress}", env.GetCurrentLine());
+            } catch (FormatException) {
+                throw new CompilationErrorExcepton("Некорректный адрес метки", env.GetCurrentLine());
+            } catch (Exception e) {
+                throw new CompilationErrorExcepton("Непредвиденная ошибка при обработке метки", env.GetCurrentLine(), e);
+            }
         }
 
         /// <summary>
-        /// Функция, которая приводит переданную строку к полному, 10-битовому адресу.
+        /// Приводит переданную строку к полному, 10-битовому адресу.
         /// Если введен слишком большой адрес или строка не является меткой, 
         /// будет сгенерированно исключение <see cref="CompilerEnvironment"/>.
         /// </summary>
         /// <param name="label">Строка-метка или адрес в памяти.</param>
         /// <param name="env">Текущее окружение компилятора.</param>
-        /// <param name="maxAddress">Максимальный адрес, который может быть использован.</param>
         /// <returns>Адресс, на который ссылается метка или который был записан как число, или -1, если использована несуществующая метка.</returns>
-        public static int ConvertToAddress(string label, CompilerEnvironment env, int maxAddress) {
+        public static int ConvertLabelToFarAddress(string label, CompilerEnvironment env) {
             try {
                 if (label[0] >= '0' && label[0] <= '9') {
                     int address = ConvertToInt(label);
-                    if (address > maxAddress) {
+                    if (address > MaxFarAddress) {
                         throw new OverflowException();
                     }
                     return address;
@@ -69,7 +84,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     return address;
                 }
             } catch (OverflowException) {
-                throw new CompilationErrorExcepton($"Адрес не должен превышать {maxAddress}", env.GetCurrentLine());
+                throw new CompilationErrorExcepton($"Адрес не должен превышать {MaxFarAddress}", env.GetCurrentLine());
             } catch (FormatException) {
                 throw new CompilationErrorExcepton("Некорректный адрес метки", env.GetCurrentLine());
             } catch (Exception e) {
@@ -80,11 +95,11 @@ namespace _8bitVonNeiman.Compiler.Model {
         public static int ConvertToInt(string s) {    
             if (s.StartsWith("0x")) {
                 return Convert.ToInt32(s.Substring(2), 16);
-            } else if (s.StartsWith("0b")) {
-                return Convert.ToInt32(s.Substring(2), 2);
-            } else {
-                return Convert.ToInt32(s);
             }
+            if (s.StartsWith("0b")) {
+                return Convert.ToInt32(s.Substring(2), 2);
+            }
+            return Convert.ToInt32(s);
         }
 
         /// <summary>
