@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using _8bitVonNeiman.Controller;
@@ -11,11 +10,17 @@ namespace _8bitVonNeiman.Compiler.Model {
 
         public delegate void CommandProcessor(string[] args, CompilerEnvironment env);
 
+        public class DataResponse {
+            public BitArray lowBitArray { get; set; }
+            public BitArray highBitArray { get; set; }
+        }
+
         public static Dictionary<string, CommandProcessor> GetCommandProcessors() {
             return NoAddressCommandsFactory.GetCommands()
                 .Concat(CycleCommandsFactory.GetCommands())
                 .Concat(JumpCommandsFactory.GetCommands())
                 .Concat(RamCommands.GetCommands())
+                .Concat(BitCommands.GetCommands())
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -530,8 +535,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     [7] = true,
                     [6] = true
                 };
-
-
+                
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 if (address != -1) {
                     CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
@@ -545,10 +549,77 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
                 }
             }
+        }
 
-            public class DataResponse {
-                public BitArray lowBitArray { get; set; }
-                public BitArray highBitArray { get; set; }
+        private static class BitCommands {
+            public static Dictionary<string, CommandProcessor> GetCommands() {
+                return new Dictionary<string, CommandProcessor> {
+                    ["cb"] = CB,
+                    ["sb"] = SB,
+                    ["sbc"] = SBC,
+                    ["sbs"] = SBS
+                };
+            }
+
+            private static void CB(string[] args, CompilerEnvironment env) {
+                Validate(args, "CB", env.GetCurrentLine());
+
+                var dataResponse = GetBitArrays(args, env);
+
+                env.SetByte(dataResponse.highBitArray);
+                env.SetByte(dataResponse.lowBitArray);
+            }
+
+            private static void SB(string[] args, CompilerEnvironment env) {
+                Validate(args, "SB", env.GetCurrentLine());
+
+                var dataResponse = GetBitArrays(args, env);
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.highBitArray);
+                env.SetByte(dataResponse.lowBitArray);
+            }
+
+            private static void SBC(string[] args, CompilerEnvironment env) {
+                Validate(args, "SBC", env.GetCurrentLine());
+
+                var dataResponse = GetBitArrays(args, env);
+                dataResponse.highBitArray[4] = true;
+
+                env.SetByte(dataResponse.highBitArray);
+                env.SetByte(dataResponse.lowBitArray);
+            }
+
+            private static void SBS(string[] args, CompilerEnvironment env) {
+                Validate(args, "SBS", env.GetCurrentLine());
+
+                var dataResponse = GetBitArrays(args, env);
+                dataResponse.highBitArray[3] = true;
+                dataResponse.highBitArray[4] = true;
+
+                env.SetByte(dataResponse.highBitArray);
+                env.SetByte(dataResponse.lowBitArray);
+            }
+
+            private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
+                var dataResponse = new DataResponse();
+                dataResponse.lowBitArray = new BitArray(8);
+                dataResponse.highBitArray = new BitArray(8) {
+                    [7] = true
+                };
+
+                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
+                if (address != -1) {
+                    CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
+                    return dataResponse;
+                }
+                return dataResponse;
+            }
+
+            private static void Validate(string[] args, string op, int line) {
+                if (args.Length != 2) {
+                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 2 аргумента.", line);
+                }
             }
         }
     }
