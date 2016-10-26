@@ -274,12 +274,13 @@ namespace _8bitVonNeiman.Compiler.Model {
                 }
                 string L = args[1];
                 int address = CompilerSupport.ConvertToFarAddress(L, env);
-
-                var highBitArray = new BitArray(8);
+                
                 var lowBitArray = new BitArray(8);
-                highBitArray[5] = (register.Number & 1) == 1;
-                highBitArray[6] = (register.Number & 2) == 1;
-                highBitArray[7] = true;
+                var highBitArray = new BitArray(8) {
+                    [5] = (register.Number & 1) == 1,
+                    [6] = (register.Number & 2) == 1,
+                    [7] = true
+                };
 
                 if (address == -1) {
                     var memoryForLabel = new CompilerEnvironment.MemoryForLabel {
@@ -316,35 +317,36 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void JNZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNZ", env.GetCurrentLine());
-
-                var highBitArray = new BitArray(8);
+                
                 var lowBitArray = new BitArray(8);
+                var highBitArray = new BitArray(8) {
+                    [5] = true
+                };
 
-                highBitArray[5] = true;
 
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JNC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNC", env.GetCurrentLine());
-
-                var highBitArray = new BitArray(8);
+                
                 var lowBitArray = new BitArray(8);
-
-                highBitArray[2] = true;
-                highBitArray[5] = true;
+                var highBitArray = new BitArray(8) {
+                    [2] = true,
+                    [5] = true
+                };
 
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JNS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNS", env.GetCurrentLine());
-
-                var highBitArray = new BitArray(8);
+  
                 var lowBitArray = new BitArray(8);
-
-                highBitArray[3] = true;
-                highBitArray[5] = true;
+                var highBitArray = new BitArray(8) {
+                    [3] = true,
+                    [5] = true
+                };
 
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
@@ -352,12 +354,12 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JNO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNO", env.GetCurrentLine());
 
-                var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-
-                highBitArray[3] = true;
-                highBitArray[4] = true;
-                highBitArray[5] = true;
+                var highBitArray = new BitArray(8) {
+                    [3] = true,
+                    [4] = true,
+                    [5] = true
+                };
 
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
@@ -365,37 +367,37 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JZ", env.GetCurrentLine());
 
-                var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
+                var highBitArray = new BitArray(8) {
+                    [4] = true,
+                    [5] = true
+                };
 
-                highBitArray[4] = true;
-                highBitArray[5] = true;
-                
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JC", env.GetCurrentLine());
-
-                var highBitArray = new BitArray(8);
-                var lowBitArray = new BitArray(8);
                 
-                highBitArray[3] = true;
-                highBitArray[4] = true;
-                highBitArray[5] = true;
-
+                var lowBitArray = new BitArray(8);
+                var highBitArray = new BitArray(8) {
+                    [3] = true,
+                    [4] = true,
+                    [5] = true
+                };
+                
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JS", env.GetCurrentLine());
-
-                var highBitArray = new BitArray(8);
-                var lowBitArray = new BitArray(8);
                 
-                highBitArray[3] = true;
-                highBitArray[4] = true;
-                highBitArray[5] = true;
+                var lowBitArray = new BitArray(8);
+                var highBitArray = new BitArray(8) {
+                    [3] = true,
+                    [4] = true,
+                    [5] = true
+                };
 
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
@@ -403,24 +405,24 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JO", env.GetCurrentLine());
 
-                var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
+                var highBitArray = new BitArray(8) {
+                    [2] = true,
+                    [3] = true,
+                    [4] = true,
+                    [5] = true
+                };
                 
-                highBitArray[2] = true;
-                highBitArray[3] = true;
-                highBitArray[4] = true;
-                highBitArray[5] = true;
-
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JMP(string[] args, CompilerEnvironment env) {
                 Validate(args, "JMP", env.GetCurrentLine());
 
-                var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-                
-                highBitArray[6] = true;
+                var highBitArray = new BitArray(8) {
+                    [6] = true
+                };
 
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
@@ -486,7 +488,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void ADC(string[] args, CompilerEnvironment env) {
                 Validate(args, "ADC", env.GetCurrentLine());
-                DataResponse dataResponse = GetBitArrays(args, env);
+                var dataResponse = GetBitArrays(args, env);
 
                 dataResponse.highBitArray[0] = true;
                 dataResponse.highBitArray[2] = true;
@@ -498,7 +500,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void SUBB(string[] args, CompilerEnvironment env) {
                 Validate(args, "SUBB", env.GetCurrentLine());
-                DataResponse dataResponse = GetBitArrays(args, env);
+                var dataResponse = GetBitArrays(args, env);
 
                 dataResponse.highBitArray[1] = true;
                 dataResponse.highBitArray[2] = true;
@@ -510,7 +512,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void XCH(string[] args, CompilerEnvironment env) {
                 Validate(args, "XCH", env.GetCurrentLine());
-                DataResponse dataResponse = GetBitArrays(args, env);
+                var dataResponse = GetBitArrays(args, env);
 
                 dataResponse.highBitArray[0] = true;
                 dataResponse.highBitArray[1] = true;
@@ -522,12 +524,13 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
 
             private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
-                DataResponse dataResponse = new DataResponse();
+                var dataResponse = new DataResponse();
                 dataResponse.lowBitArray = new BitArray(8);
-                dataResponse.highBitArray = new BitArray(8);
+                dataResponse.highBitArray = new BitArray(8) {
+                    [7] = true,
+                    [6] = true
+                };
 
-                dataResponse.highBitArray[7] = true;
-                dataResponse.highBitArray[6] = true;
 
                 int address = CompilerSupport.ConvertToFarAddress(args[0], env);
                 if (address != -1) {
