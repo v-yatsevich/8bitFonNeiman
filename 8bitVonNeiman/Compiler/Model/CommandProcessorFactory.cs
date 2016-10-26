@@ -617,6 +617,13 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton($"Переменной с именем {args[0]} не существует.", env.GetCurrentLine());
                 }
                 CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, Constants.ShortAddressBitsCount);
+
+                int bit = CompilerSupport.ConvertToInt(args[1]);
+                if (bit >= 1 << 3 || bit < 0) {
+                    throw new CompilationErrorExcepton("Номер бита не должен превышать 7", env.GetCurrentLine());
+                }
+                CompilerSupport.FillBitArray(null, dataResponse.highBitArray, bit, 3);
+
                 return dataResponse;
             }
 

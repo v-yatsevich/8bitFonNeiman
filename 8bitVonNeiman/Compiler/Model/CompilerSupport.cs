@@ -92,7 +92,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
-        public static int ConvertToInt(string s) {    
+        public static int ConvertToInt(string s) {  
             if (s.StartsWith("0x")) {
                 return Convert.ToInt32(s.Substring(2), 16);
             }
