@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using _8bitVonNeiman.Controller;
@@ -13,8 +14,8 @@ namespace _8bitVonNeiman.Compiler.Model {
         public static Dictionary<string, CommandProcessor> GetCommandProcessors() {
             return NoAddressCommandsFactory.GetCommands()
                 .Concat(CycleCommandsFactory.GetCommands())
-                .Concat(ConditionalJumpCommandsFactory.GetCommands())
-                .Concat(UnconditionalJumpCommandsFactory.GetCommands())
+                .Concat(JumpCommandsFactory.GetCommands())
+                .Concat(RamCommands.GetCommands())
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -276,16 +277,27 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
                 highBitArray[5] = (register.Number & 1) == 1;
                 highBitArray[6] = (register.Number & 2) == 1;
                 highBitArray[7] = true;
+
+                if (address == -1) {
+                    var memoryForLabel = new CompilerEnvironment.MemoryForLabel {
+                        HighBitArray = highBitArray,
+                        LowBitArray = lowBitArray,
+                        Address = env.CurrentAddress
+                    };
+                    env.SetCommandWithoutLabel(memoryForLabel, L);
+                    return;
+                }
+
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
                 env.SetByte(highBitArray);
                 env.SetByte(lowBitArray);
             }
         }
 
-        private static class ConditionalJumpCommandsFactory {
+        private static class JumpCommandsFactory {
             public static Dictionary<string, CommandProcessor> GetCommands() {
                 return new Dictionary<string, CommandProcessor> {
                     ["jnz"] = JNZ,
@@ -296,6 +308,9 @@ namespace _8bitVonNeiman.Compiler.Model {
                     ["jc"] = JC,
                     ["js"] = JS,
                     ["jo"] = JO,
+                    ["jmp"] = JMP,
+                    ["call"] = CALL,
+                    ["int"] = INT
                 };
             }
 
@@ -305,13 +320,9 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
 
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
                 highBitArray[5] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JNC(string[] args, CompilerEnvironment env) {
@@ -320,14 +331,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
 
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
                 highBitArray[2] = true;
                 highBitArray[5] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JNS(string[] args, CompilerEnvironment env) {
@@ -336,14 +343,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
 
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
                 highBitArray[3] = true;
                 highBitArray[5] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JNO(string[] args, CompilerEnvironment env) {
@@ -352,15 +355,11 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
 
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
                 highBitArray[3] = true;
                 highBitArray[4] = true;
                 highBitArray[5] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JZ(string[] args, CompilerEnvironment env) {
@@ -369,15 +368,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
 
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
                 highBitArray[4] = true;
                 highBitArray[5] = true;
                 
-
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JC(string[] args, CompilerEnvironment env) {
@@ -385,16 +379,12 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
+                
                 highBitArray[3] = true;
                 highBitArray[4] = true;
                 highBitArray[5] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JS(string[] args, CompilerEnvironment env) {
@@ -402,16 +392,12 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
+                
                 highBitArray[3] = true;
                 highBitArray[4] = true;
                 highBitArray[5] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JO(string[] args, CompilerEnvironment env) {
@@ -419,33 +405,13 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
+                
                 highBitArray[2] = true;
                 highBitArray[3] = true;
                 highBitArray[4] = true;
                 highBitArray[5] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
-            }
-
-            private static void Validate(string[] args, string op, int line) {
-                if (args.Length != 1) {
-                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
-                }
-            }
-        }
-
-        private static class UnconditionalJumpCommandsFactory {
-            public static Dictionary<string, CommandProcessor> GetCommands() {
-                return new Dictionary<string, CommandProcessor> {
-                    ["jmp"] = JMP,
-                    ["call"] = CALL,
-                    ["int"] = INT
-                };
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void JMP(string[] args, CompilerEnvironment env) {
@@ -453,14 +419,10 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
+                
                 highBitArray[6] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void CALL(string[] args, CompilerEnvironment env) {
@@ -468,15 +430,11 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
+                
                 highBitArray[2] = true;
                 highBitArray[6] = true;
 
-                env.SetByte(highBitArray);
-                env.SetByte(lowBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void INT(string[] args, CompilerEnvironment env) {
@@ -484,20 +442,36 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-
-                int address = CompilerSupport.ConvertToFarAddress(args[0], env);
-                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
-
+                
                 highBitArray[3] = true;
                 highBitArray[6] = true;
 
-                env.SetByte(highBitArray);
+                FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
             private static void Validate(string[] args, string op, int line) {
                 if (args.Length != 1) {
                     throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
                 }
+            }
+
+            private static void FillAddressAndSetCommand(BitArray highBitArray, BitArray lowBitArray, string label, CompilerEnvironment env) {
+                int address = CompilerSupport.ConvertToFarAddress(label, env);
+
+                if (address == -1) {
+                    var memoryForLabel = new CompilerEnvironment.MemoryForLabel {
+                        HighBitArray = highBitArray,
+                        LowBitArray = lowBitArray,
+                        Address = env.CurrentAddress
+                    };
+                    env.SetCommandWithoutLabel(memoryForLabel, label);
+                    return;
+                }
+
+                CompilerSupport.FillBitArray(highBitArray, lowBitArray, address, Constants.FarAddressBitsCount);
+
+                env.SetByte(highBitArray);
+                env.SetByte(lowBitArray);
             }
         }
 

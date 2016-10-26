@@ -45,7 +45,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             _code = code;
             _backgroundWorker.RunWorkerAsync();
         }
-        
+
         /// <summary>
         /// Функция, начинающая обработку кода и содержащая базовую логику прохождения по нему и вызова обработчиков.
         /// </summary>
@@ -54,6 +54,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             var env = new CompilerEnvironment();
             for (short i = 0; i < lines.Count; i++) {
                 if (lines[i].Length == 0) {
+                    env.IncrementLine();
                     continue;
                 }
                 if (lines[i][0] == '/') {
@@ -67,6 +68,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                     HandleCommand(line, env);
                 }
                 env.IncrementLine();
+            }
+            var commandWithoutLabel = env.FirstCommandWithoutLabel();
+            if (commandWithoutLabel.HasValue) {
+                throw new CompilationErrorExcepton($"Метка {commandWithoutLabel.Value.Value} не определена", commandWithoutLabel.Value.Key);
             }
             e.Result = env;
         }
@@ -118,6 +123,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// Если есть, но строка не подходит по формату, выбрасывает исключение <see cref="CompilationErrorExcepton"/>
         /// </summary>
         /// <param name="line">Строка кода для обработки.</param>
+        /// <param name="env">Окружение компилятора.</param>
         /// <returns>True, если в строке присутствовала переменная, false, если нет.</returns>
         public bool TryToGetVariable(string line, CompilerEnvironment env) {
             if (!line.Contains(" eql ")) {

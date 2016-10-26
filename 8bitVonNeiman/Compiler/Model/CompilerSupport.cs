@@ -42,7 +42,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// </summary>
         /// <param name="label">Строка-метка или адрес в памяти.</param>
         /// <param name="env">Текущее окружение компилятора.</param>
-        /// <returns>Адресс, на который ссылается метка или который был записан как число.</returns>
+        /// <returns>Адресс, на который ссылается метка или который был записан как число, или -1, если использована несуществующая метка.</returns>
         public static int ConvertToFarAddress(string label, CompilerEnvironment env) {
             return ConvertToAddress(label, env, MaxFarAddress);
         }
@@ -55,7 +55,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// <param name="label">Строка-метка или адрес в памяти.</param>
         /// <param name="env">Текущее окружение компилятора.</param>
         /// <param name="maxAddress">Максимальный адрес, который может быть использован.</param>
-        /// <returns>Адресс, на который ссылается метка или который был записан как число.</returns>
+        /// <returns>Адресс, на который ссылается метка или который был записан как число, или -1, если использована несуществующая метка.</returns>
         public static int ConvertToAddress(string label, CompilerEnvironment env, int maxAddress) {
             try {
                 if (label[0] >= '0' && label[0] <= '9') {
@@ -66,9 +66,6 @@ namespace _8bitVonNeiman.Compiler.Model {
                     return address;
                 } else {
                     int address = env.GetLabelAddress(label);
-                    if (address == -1) {
-                        throw new CompilationErrorExcepton($"Метка с именем {label} не найдена.", env.GetCurrentLine());
-                    }
                     return address;
                 }
             } catch (OverflowException) {
@@ -100,7 +97,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         public static void FillBitArray(BitArray highBitArray, BitArray lowBitArray, int number, int bitsCount) {
             for (int i = 0; i < bitsCount; i++) {
                 if (i < 8) {
-                    lowBitArray[i] = (number & (1 << i)) != 0; ;
+                    lowBitArray[i] = (number & (1 << i)) != 0;
                 } else {
                     highBitArray[i % 8] = (number & (1 << i)) != 0;
                 }
@@ -126,7 +123,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             if (s.Length < 2 || s.Length > 4) {
                 return null;
             }
-            Register register = new Register();
+            var register = new Register();
             register.IsChange = false;
             register.IsDirect = true;
             try {

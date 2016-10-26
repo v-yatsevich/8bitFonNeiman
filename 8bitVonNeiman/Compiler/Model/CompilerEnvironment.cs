@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
 
     /// Класс для представления состояния среды на текущем моменте компиляции.
     public class CompilerEnvironment {
 
+        public struct MemoryForLabel {
+            public BitArray HighBitArray;
+            public BitArray LowBitArray;
+            public int Address;
+            public int Line;
+        }
+
         private Dictionary<int, BitArray> _memory = new Dictionary<int, BitArray>();
+        private Dictionary<string, List<MemoryForLabel>> _memoryForLabels = new Dictionary<string, List<MemoryForLabel>>(); 
 
         /// Текущая линия кода, на которой находится обработка.
         private int _currentLine;
@@ -97,8 +107,25 @@ namespace _8bitVonNeiman.Compiler.Model {
             _currentAddress++;
         }
 
-        public void SetCommandWithoutLabel(BitArray command, string label) {
-            //do nothing
+        public void SetCommandWithoutLabel(MemoryForLabel memoryForLabel, string label) {
+            if (!_memoryForLabels.ContainsKey(label)) {
+                _memoryForLabels.Add(label, new List<MemoryForLabel>());
+            }
+            memoryForLabel.Line = _currentLine;
+            _memoryForLabels[label].Add(memoryForLabel);
+            _currentAddress += 2;
+        }
+
+        /// <summary>
+        /// Возвращает первую неопределенную, но использованную метку, или null, если таких нет.
+        /// </summary>
+        /// <returns>Первую неопределенная, но использованная метку, или null, если таких нет.</returns>
+        public KeyValuePair<int, string>? FirstCommandWithoutLabel() {
+            if (_memoryForLabels.Count == 0) {
+                return null;
+            }
+            var first = _memoryForLabels.First();
+            return new KeyValuePair<int, string>(first.Value.First().Line, first.Key);
         }
 
         /// <summary>
@@ -115,21 +142,36 @@ namespace _8bitVonNeiman.Compiler.Model {
         }
 
         /// <summary>
-        /// Добавляет метку, ссылающуюся на адрес новой команды.
+        /// Добавляет метку, ссылающуюся на адрес новой команды. Если существуют команды, использующие эту метку, подставляет ее ад
         /// </summary>
         /// <param name="label">Имя метки.</param>
         public void AddAddressLabelToNewCommand(string label) {
             _labels.Add(label, _currentAddress);
+            if (!_memoryForLabels.ContainsKey(label)) {
+                return;
+            }
+            foreach (var memoryForLabel in _memoryForLabels[label]) {
+                CompilerSupport.FillBitArray(memoryForLabel.HighBitArray, memoryForLabel.LowBitArray,
+                _currentAddress, Constants.FarAddressBitsCount);
+                _memory[memoryForLabel.Address] = memoryForLabel.HighBitArray;
+                _memory[memoryForLabel.Address + 1] = memoryForLabel.LowBitArray;
+            }
+            _memoryForLabels.Remove(label);
         }
 
         public int GetLabelsCount() {
             return _labels.Count;
         }
-
+        
         public void AddVariable(string name, int address) {
             _variables.Add(name, address);
         }
 
+        /// <summary>
+        /// Возвращает адрес, ассоциированный с переданным идентификатором.
+        /// </summary>
+        /// <param name="name">Идентификатор переменной.</param>
+        /// <returns>Адрес переменной, если переменная с переданным идентификатором существует, -1 в ином случае.</returns>
         public int GetVariableAddress(string name) {
             if (_variables.ContainsKey(name)) {
                 return _variables[name];
@@ -138,6 +180,11 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
+        /// <summary>
+        /// Проверяет, существует ли переданный идентификатор (в качестве имени переменной или метки).
+        /// </summary>
+        /// <param name="name">Идентификатор.</param>
+        /// <returns>True, если переданный идентификатор уже существует, false в ином случае.</returns>
         public bool IsIdentifierExist(string name) {
             return _labels.ContainsKey(name) || _variables.ContainsKey(name);
         }

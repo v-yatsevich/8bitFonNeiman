@@ -58,7 +58,7 @@ namespace _8bitVonNeiman.Compiler {
         /// </summary>
         /// <param name="e">Исключение, сгенерированное в процессе компиляции.</param>
         public void CompilationError(CompilationErrorExcepton e) {
-            _form.AddLineToOutput($"Ошибка компиляции: {e.ErrorMessage} в строке {e.LineNumber}");
+            _form.AddLineToOutput($"Ошибка компиляции: {e.ErrorMessage} в строке {e.LineNumber + 1}");
         }
     }
 }
