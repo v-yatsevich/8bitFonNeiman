@@ -44,8 +44,6 @@ namespace _8bitVonNeiman.Compiler.Model {
                     ["swapa"] = SWAPA,
                     ["daa"] = DAA,
                     ["dsa"] = DSA,
-                    ["in"] = IN,
-                    ["out"] = OUT,
                     ["es"] = ES,
                     ["movasr"] = MOVASR,
                     ["movsra"] = MOVSRA
@@ -191,26 +189,6 @@ namespace _8bitVonNeiman.Compiler.Model {
                     [1] = true,
                     [2] = true,
                     [3] = true
-                };
-                env.SetByte(array);
-                env.SetByte(new BitArray(8));
-            }
-
-            private static void IN(string[] args, CompilerEnvironment env) {
-                ValidateNoAddressCommand(args, "IN", env.GetCurrentLine());
-                var array = new BitArray(8) {
-                    [0] = true,
-                    [4] = true
-                };
-                env.SetByte(array);
-                env.SetByte(new BitArray(8));
-            }
-
-            private static void OUT(string[] args, CompilerEnvironment env) {
-                ValidateNoAddressCommand(args, "OUT", env.GetCurrentLine());
-                var array = new BitArray(8) {
-                    [1] = true,
-                    [4] = true
                 };
                 env.SetByte(array);
                 env.SetByte(new BitArray(8));
@@ -556,6 +534,98 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
+        private static class RegisterCommands {
+            public static Dictionary<string, CommandProcessor> GetCommands() {
+                return new Dictionary<string, CommandProcessor> {
+                    ["push"] = PUSH,
+                    ["pop"] = POP,
+                    ["mov"] = MOV
+                };
+            }
+
+            private static void PUSH(string[] args, CompilerEnvironment env) {
+                if (args.Length != 1) {
+                    throw new CompilationErrorExcepton("Оператор PUSH должен принимать 1 аргумент.", env.GetCurrentLine());
+                }
+                var r = CompilerSupport.ConvertToRegister(args[0]);
+                if (!r.HasValue) {
+                    throw new CompilationErrorExcepton("Аргументом должен быть регистр.", env.GetCurrentLine());
+                }
+                var registr = r.Value;
+                if (!registr.IsDirect) {
+                    throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
+                }
+                var highBitArray = new BitArray(8) {
+                    [6] = true,
+                    [4] = true,
+                    [3] = true,
+                    [2] = true,
+                    [1] = true
+                };
+                var lowBitArray = new BitArray(8);
+                CompilerSupport.FillBitArray(null, lowBitArray, registr.Number, 4);
+
+                env.SetByte(lowBitArray);
+                env.SetByte(highBitArray);
+            }
+
+            private static void POP(string[] args, CompilerEnvironment env) {
+                if (args.Length != 1) {
+                    throw new CompilationErrorExcepton("Оператор POP должен принимать 1 аргумент.", env.GetCurrentLine());
+                }
+                var r = CompilerSupport.ConvertToRegister(args[0]);
+                if (!r.HasValue) {
+                    throw new CompilationErrorExcepton("Аргументом должен быть регистр.", env.GetCurrentLine());
+                }
+                var registr = r.Value;
+                if (!registr.IsDirect) {
+                    throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
+                }
+                var highBitArray = new BitArray(8) {
+                    [6] = true,
+                    [4] = true,
+                    [3] = true,
+                    [2] = true,
+                    [0] = true
+                };
+                var lowBitArray = new BitArray(8);
+                CompilerSupport.FillBitArray(null, lowBitArray, registr.Number, 4);
+
+                env.SetByte(lowBitArray);
+                env.SetByte(highBitArray);
+            }
+
+            private static void MOV(string[] args, CompilerEnvironment env) {
+                if (args.Length != 2) {
+                    throw new CompilationErrorExcepton("Оператор MOV должен принимать 2 аргументa.", env.GetCurrentLine());
+                }
+                var r1 = CompilerSupport.ConvertToRegister(args[0]);
+                var r2 = CompilerSupport.ConvertToRegister(args[1]);
+                if (!r1.HasValue || !r2.HasValue) {
+                    throw new CompilationErrorExcepton("Аргументом должен быть регистр.", env.GetCurrentLine());
+                }
+                var registr1 = r1.Value;
+                var registr2 = r1.Value;
+                if (!registr1.IsDirect || !registr2.IsDirect) {
+                    throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
+                }
+                var highBitArray = new BitArray(8) {
+                    [6] = true,
+                    [4] = true,
+                    [3] = true,
+                    [2] = true,
+                    [1] = true,
+                    [0] = true
+                };
+                var lowBitArray = new BitArray(8);
+                CompilerSupport.FillBitArray(null, lowBitArray, registr1.Number, 4);
+                CompilerSupport.FillBitArray(null, lowBitArray, registr2.Number << 4, 4);
+
+                env.SetByte(lowBitArray);
+                env.SetByte(highBitArray);
+            }
+        }
+
         private static class BitRamCommands {
             public static Dictionary<string, CommandProcessor> GetCommands() {
                 return new Dictionary<string, CommandProcessor> {
@@ -747,7 +817,19 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
 
             private static void IN(string[] args, CompilerEnvironment env) {
-                Validate(args, "IN", env.GetCurrentLine());
+                if (args.Length == 0) {
+                    var array = new BitArray(8) {
+                        [0] = true,
+                        [4] = true
+                    };
+                    env.SetByte(array);
+                    env.SetByte(new BitArray(8));
+                    return;
+                }
+                if (args.Length > 0) {
+                    throw new CompilationErrorExcepton("Команда IN не может принимать более 1 аргумента.", env.GetCurrentLine());
+                }
+
                 var dataResponse = GetBitArrays(args, env);
 
                 env.SetByte(dataResponse.lowBitArray);
@@ -755,7 +837,18 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
 
             private static void OUT(string[] args, CompilerEnvironment env) {
-                Validate(args, "OUT", env.GetCurrentLine());
+                if (args.Length == 0) {
+                    var array = new BitArray(8) {
+                        [1] = true,
+                        [4] = true
+                    };
+                    env.SetByte(array);
+                    env.SetByte(new BitArray(8));
+                    return;
+                }
+                if (args.Length > 0) {
+                    throw new CompilationErrorExcepton("Команда OUT не может принимать более 1 аргумента.", env.GetCurrentLine());
+                }
                 var dataResponse = GetBitArrays(args, env);
 
                 dataResponse.highBitArray[0] = true;
@@ -778,12 +871,6 @@ namespace _8bitVonNeiman.Compiler.Model {
                 };
                 CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, register, 7);
                 return dataResponse;
-            }
-
-            private static void Validate(string[] args, string op, int line) {
-                if (args.Length != 1) {
-                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
-                }
             }
         }
     }
