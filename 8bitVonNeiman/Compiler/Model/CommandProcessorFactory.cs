@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
@@ -23,6 +22,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 .Concat(RamCommands.GetCommands())
                 .Concat(BitRamCommands.GetCommands())
                 .Concat(BitRegisterCommands.GetCommands())
+                .Concat(InOutCommands.GetCommands())
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -734,6 +734,55 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void Validate(string[] args, string op, int line) {
                 if (args.Length != 2) {
                     throw new CompilationErrorExcepton($"Оператор {op} должен принимать 2 аргумента.", line);
+                }
+            }
+        }
+
+        private static class InOutCommands {
+            public static Dictionary<string, CommandProcessor> GetCommands() {
+                return new Dictionary<string, CommandProcessor> {
+                    ["in"] = IN,
+                    ["out"] = OUT,
+                };
+            }
+
+            private static void IN(string[] args, CompilerEnvironment env) {
+                Validate(args, "IN", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void OUT(string[] args, CompilerEnvironment env) {
+                Validate(args, "OUT", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                dataResponse.highBitArray[0] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
+                int register = CompilerSupport.ConvertToInt(args[0]);
+                if (register < 0 || register > 127) {
+                    throw new CompilationErrorExcepton("Номер регистра должен быть числом от 0 до 127", env.GetCurrentLine());
+                }
+                var dataResponse = new DataResponse {
+                    lowBitArray = new BitArray(8),
+                    highBitArray = new BitArray(8) {
+                        [7] = true,
+                        [6] = true
+                    }
+                };
+                CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, register, 7);
+                return dataResponse;
+            }
+
+            private static void Validate(string[] args, string op, int line) {
+                if (args.Length != 1) {
+                    throw new CompilationErrorExcepton($"Оператор {op} должен принимать 1 аргумент.", line);
                 }
             }
         }
