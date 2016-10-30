@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
@@ -21,6 +22,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 .Concat(JumpCommandsFactory.GetCommands())
                 .Concat(RamCommands.GetCommands())
                 .Concat(BitRamCommands.GetCommands())
+                .Concat(BitRegisterCommands.GetCommands())
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -636,28 +638,98 @@ namespace _8bitVonNeiman.Compiler.Model {
         private static class BitRegisterCommands {
             public static Dictionary<string, CommandProcessor> GetCommands() {
                 return new Dictionary<string, CommandProcessor> {
-                    /*["cbi"] = CBI,
+                    ["cbi"] = CBI,
                     ["sbi"] = SBI,
                     ["nbi"] = NBI,
                     ["sbic"] = SBIC,
                     ["sbis"] = SBIS,
-                    ["sbisc"] = SBISC*/
+                    ["sbisc"] = SBISC
                 };
             }
 
-            /*private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
-                var R = CompilerSupport.ConvertToRegister(args[0]);
-                if (!R.HasValue) {
-                    throw new CompilationErrorExcepton("Первым аргументом должен быть регистр.", env.GetCurrentLine());
+            private static void CBI(string[] args, CompilerEnvironment env) {
+                Validate(args, "CBI", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                dataResponse.lowBitArray[7] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void SBI(string[] args, CompilerEnvironment env) {
+                Validate(args, "SBI", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void NBI(string[] args, CompilerEnvironment env) {
+                Validate(args, "NBI", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                dataResponse.lowBitArray[7] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void SBIC(string[] args, CompilerEnvironment env) {
+                Validate(args, "SBIC", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                dataResponse.highBitArray[4] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void SBIS(string[] args, CompilerEnvironment env) {
+                Validate(args, "SBIS", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                dataResponse.lowBitArray[7] = true;
+                dataResponse.highBitArray[4] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void SBISC(string[] args, CompilerEnvironment env) {
+                Validate(args, "SBISC", env.GetCurrentLine());
+                var dataResponse = GetBitArrays(args, env);
+
+                dataResponse.highBitArray[3] = true;
+                dataResponse.highBitArray[4] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
+                int register = CompilerSupport.ConvertToInt(args[0]);
+                if (register < 0 || register > 127) {
+                    throw new CompilationErrorExcepton("Номер регистра должен быть числом от 0 до 127", env.GetCurrentLine());
                 }
-                var register = R.Value;
-                if (!register.IsDirect) {
-                    throw new CompilationErrorExcepton("В этой команде нельзя использовать косвенную адерсацию.", env.GetCurrentLine());
+                int bit = CompilerSupport.ConvertToInt(args[1]);
+                if (bit < 0 || bit > 7) {
+                    throw new CompilationErrorExcepton("Номер бита должен быть числом от 0 до 7", env.GetCurrentLine());
                 }
-                if (register.Number > 3) {
-                    throw new CompilationErrorExcepton("В этой команде можно использовать только первые 4 регистра.", env.GetCurrentLine());
-                }
-            }*/
+                var dataResponse = new DataResponse {
+                    lowBitArray = new BitArray(8),
+                    highBitArray = new BitArray(8) {
+                        [7] = true,
+                        [5] = true
+                    }
+                };
+                CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, register, 7);
+                CompilerSupport.FillBitArray(null, dataResponse.highBitArray, bit, 3);
+                return dataResponse;
+            }
 
             private static void Validate(string[] args, string op, int line) {
                 if (args.Length != 2) {
