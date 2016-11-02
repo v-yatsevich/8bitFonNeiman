@@ -146,7 +146,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// </summary>
         /// <param name="label">Имя метки.</param>
         public void AddAddressLabelToNewCommand(string label) {
-            _labels.Add(label, _currentAddress);
+            _labels.Add(label, _currentAddress + (_defaultCodeSegment << 8));
             if (!_memoryForLabels.ContainsKey(label)) {
                 return;
             }

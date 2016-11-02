@@ -200,7 +200,6 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void ES(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "ES", env.GetCurrentLine());
                 var array = new BitArray(8) {
-                    [0] = true,
                     [1] = true,
                     [4] = true
                 };
@@ -211,7 +210,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void MOVASR(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVASR", env.GetCurrentLine());
                 var array = new BitArray(8) {
-                    [2] = true,
+                    [0] = true,
+                    [1] = true,
                     [4] = true
                 };
                 env.SetByte(array);
@@ -221,7 +221,6 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void MOVSRA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVSRA", env.GetCurrentLine());
                 var array = new BitArray(8) {
-                    [0] = true,
                     [2] = true,
                     [4] = true
                 };
@@ -262,9 +261,9 @@ namespace _8bitVonNeiman.Compiler.Model {
                 
                 var lowBitArray = new BitArray(8);
                 var highBitArray = new BitArray(8) {
-                    [5] = (register.Number & 1) == 1,
-                    [6] = (register.Number & 2) == 1,
-                    [7] = true
+                    [2] = (register.Number & 1) != 0,
+                    [3] = (register.Number & 2) != 0,
+                    [4] = true
                 };
 
                 if (address == -1) {
@@ -340,8 +339,8 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var lowBitArray = new BitArray(8);
                 var highBitArray = new BitArray(8) {
+                    [2] = true,
                     [3] = true,
-                    [4] = true,
                     [5] = true
                 };
 
@@ -365,7 +364,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 
                 var lowBitArray = new BitArray(8);
                 var highBitArray = new BitArray(8) {
-                    [3] = true,
+                    [2] = true,
                     [4] = true,
                     [5] = true
                 };
@@ -417,7 +416,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
                 
-                highBitArray[2] = true;
+                highBitArray[3] = true;
                 highBitArray[6] = true;
 
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
@@ -428,7 +427,8 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var highBitArray = new BitArray(8);
                 var lowBitArray = new BitArray(8);
-                
+
+                highBitArray[2] = true;
                 highBitArray[3] = true;
                 highBitArray[6] = true;
 
@@ -464,7 +464,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         private static class RamCommands {
             public static Dictionary<string, CommandProcessor> GetCommands() {
                 return new Dictionary<string, CommandProcessor> {
-                    ["ads"] = ADC,
+                    ["adc"] = ADC,
                     ["subb"] = SUBB,
                     ["xch"] = XCH
                 };
@@ -609,7 +609,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton("Аргументом должен быть регистр.", env.GetCurrentLine());
                 }
                 var registr1 = r1.Value;
-                var registr2 = r1.Value;
+                var registr2 = r2.Value;
                 if (!registr1.IsDirect || !registr2.IsDirect) {
                     throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
                 }
@@ -622,8 +622,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     [0] = true
                 };
                 var lowBitArray = new BitArray(8);
-                CompilerSupport.FillBitArray(null, lowBitArray, registr1.Number, 4);
-                CompilerSupport.FillBitArray(null, lowBitArray, registr2.Number << 4, 4);
+                CompilerSupport.FillBitArray(null, lowBitArray, (registr2.Number << 4) + registr1.Number, 8);
 
                 env.SetByte(lowBitArray);
                 env.SetByte(highBitArray);
@@ -792,18 +791,24 @@ namespace _8bitVonNeiman.Compiler.Model {
                 return dataResponse;
             }
 
+            //Прямая - 000
+            //@R     - 100
+            //@R+    - 001
+            //+@R    - 101
+            //@R-    - 011
+            //-@R    - 111
             private static DataResponse DataResponseFromRegister(string[] args, string op, CompilerEnvironment env, DataResponse dataResponse, CompilerSupport.Register register) {
                 dataResponse.highBitArray[6] = true;
                 dataResponse.highBitArray[4] = true;
                 CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, register.Number, 4);
                 if (register.IsDirect) {
-                    dataResponse.lowBitArray[4] = true;
+                    //Ничего не делаем
                 } else if (!register.IsChange) {
-                    dataResponse.lowBitArray[5] = true;
-                } else if (register.IsPostchange && register.IsIncrement) {
                     dataResponse.lowBitArray[4] = true;
-                    dataResponse.lowBitArray[5] = true;
+                } else if (register.IsPostchange && register.IsIncrement) {
+                    dataResponse.lowBitArray[6] = true;
                 } else if (register.IsPostchange) {
+                    dataResponse.lowBitArray[5] = true;
                     dataResponse.lowBitArray[6] = true;
                 } else if (register.IsIncrement) {
                     dataResponse.lowBitArray[6] = true;
@@ -811,15 +816,17 @@ namespace _8bitVonNeiman.Compiler.Model {
                 } else {
                     dataResponse.lowBitArray[6] = true;
                     dataResponse.lowBitArray[5] = true;
+                    dataResponse.lowBitArray[4] = true;
                 }
-                if (args.Length == 2) {
-                    if (args[1] == "1") {
-                        dataResponse.lowBitArray[7] = true;
-                    } else if (args[1] == "0") {
-                        return dataResponse;
-                    }
-                    throw new CompilationErrorExcepton(
-                        $"Вторым аргументом у команды {op} может быть только 0 или 1.", env.GetCurrentLine());
+                if (args.Length != 2) {
+                    return dataResponse;
+                }
+                if (args[1] == "1") {
+                    dataResponse.lowBitArray[7] = true;
+                    return dataResponse;
+                }
+                if (args[1] != "0") {
+                    throw new CompilationErrorExcepton($"Вторым аргументом у команды {op} может быть только 0 или 1.", env.GetCurrentLine());
                 }
                 return dataResponse;
             }
@@ -1019,7 +1026,6 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void IN(string[] args, CompilerEnvironment env) {
                 if (args.Length == 0) {
                     var array = new BitArray(8) {
-                        [0] = true,
                         [4] = true
                     };
                     env.SetByte(array);
@@ -1039,7 +1045,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void OUT(string[] args, CompilerEnvironment env) {
                 if (args.Length == 0) {
                     var array = new BitArray(8) {
-                        [1] = true,
+                        [0] = true,
                         [4] = true
                     };
                     env.SetByte(array);
