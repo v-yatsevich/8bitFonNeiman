@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using _8bitVonNeiman.Controller;
@@ -23,6 +24,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                 .Concat(BitRamCommands.GetCommands())
                 .Concat(BitRegisterCommands.GetCommands())
                 .Concat(InOutCommands.GetCommands())
+                .Concat(RegisterCommands.GetCommands())
+                .Concat(RamRegisterCommands.GetCommands())
                 .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -505,11 +508,12 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
 
             private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
-                var dataResponse = new DataResponse();
-                dataResponse.lowBitArray = new BitArray(8);
-                dataResponse.highBitArray = new BitArray(8) {
-                    [5] = true,
-                    [6] = true
+                var dataResponse = new DataResponse {
+                    lowBitArray = new BitArray(8),
+                    highBitArray = new BitArray(8) {
+                        [5] = true,
+                        [6] = true
+                    }
                 };
 
                 if (args[0][0] == '#') {
@@ -626,6 +630,201 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
+        private static class RamRegisterCommands {
+            public static Dictionary<string, CommandProcessor> GetCommands() {
+                return new Dictionary<string, CommandProcessor> {
+                    ["add"] = ADD,
+                    ["sub"] = SUB,
+                    ["mul"] = MUL,
+                    ["div"] = DIV,
+                    ["and"] = AND,
+                    ["or"] = OR,
+                    ["xor"] = XOR,
+                    ["cmp"] = CMP,
+                    ["rd"] = RD,
+                    ["wr"] = WR,
+                    ["inc"] = INC,
+                    ["dec"] = DEC,
+                    ["not"] = NOT,
+                };
+            }
+
+            private static void ADD(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "ADD", env);
+                dataResponse.highBitArray[0] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void SUB(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "SUB", env);
+                dataResponse.highBitArray[1] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void MUL(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "MUL", env);
+                dataResponse.highBitArray[0] = true;
+                dataResponse.highBitArray[1] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void DIV(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "DIV", env);
+                dataResponse.highBitArray[2] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void AND(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "AND", env);
+                dataResponse.highBitArray[0] = true;
+                dataResponse.highBitArray[2] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void OR(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "OR", env);
+                dataResponse.highBitArray[1] = true;
+                dataResponse.highBitArray[2] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void XOR(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "XOR", env);
+                dataResponse.highBitArray[0] = true;
+                dataResponse.highBitArray[1] = true;
+                dataResponse.highBitArray[2] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void CMP(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "CMP", env);
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void RD(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "RD", env);
+                dataResponse.highBitArray[0] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void WR(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "WR", env);
+                dataResponse.highBitArray[1] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void INC(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "INC", env);
+                dataResponse.highBitArray[0] = true;
+                dataResponse.highBitArray[1] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void DEC(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "DEC", env);
+                dataResponse.highBitArray[2] = true;
+                dataResponse.highBitArray[3] = true;
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void NOT(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "NOT", env);
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static DataResponse GetBitArrays(string[] args, string op, CompilerEnvironment env) {
+                if (args.Length < 0 || args.Length > 2) {
+                    throw new CompilationErrorExcepton($"Команда {op} принимает 1 или 2 агрумента.", env.GetCurrentLine());
+                }
+                var dataResponse = new DataResponse {
+                    lowBitArray = new BitArray(8),
+                    highBitArray = new BitArray(8)
+                };
+
+                var r = CompilerSupport.ConvertToRegister(args[0]);
+                if (r.HasValue) {
+                    return DataResponseFromRegister(args, op, env, dataResponse, r.Value);
+                }
+                if (args.Length == 2) {
+                    throw new CompilationErrorExcepton($"При работе с оперативной памятью команда {op} принимает только 1 аргумент", env.GetCurrentLine());
+                }
+
+                dataResponse.highBitArray[6] = true;
+                dataResponse.highBitArray[5] = true;
+                if (args[0][0] == '#') {
+                    int num = CompilerSupport.ConvertToInt(args[0].Substring(1));
+                    CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, num, Constants.ShortAddressBitsCount);
+                    dataResponse.highBitArray[4] = true;
+                } else {
+                    var address = CompilerSupport.ConvertVariableToAddress(args[0], env);
+                    CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, address, 8);
+                }
+                return dataResponse;
+            }
+
+            private static DataResponse DataResponseFromRegister(string[] args, string op, CompilerEnvironment env, DataResponse dataResponse, CompilerSupport.Register register) {
+                dataResponse.highBitArray[6] = true;
+                dataResponse.highBitArray[4] = true;
+                CompilerSupport.FillBitArray(null, dataResponse.lowBitArray, register.Number, 4);
+                if (register.IsDirect) {
+                    dataResponse.lowBitArray[4] = true;
+                } else if (!register.IsChange) {
+                    dataResponse.lowBitArray[5] = true;
+                } else if (register.IsPostchange && register.IsIncrement) {
+                    dataResponse.lowBitArray[4] = true;
+                    dataResponse.lowBitArray[5] = true;
+                } else if (register.IsPostchange) {
+                    dataResponse.lowBitArray[6] = true;
+                } else if (register.IsIncrement) {
+                    dataResponse.lowBitArray[6] = true;
+                    dataResponse.lowBitArray[4] = true;
+                } else {
+                    dataResponse.lowBitArray[6] = true;
+                    dataResponse.lowBitArray[5] = true;
+                }
+                if (args.Length == 2) {
+                    if (args[1] == "1") {
+                        dataResponse.lowBitArray[7] = true;
+                    } else if (args[1] == "0") {
+                        return dataResponse;
+                    }
+                    throw new CompilationErrorExcepton(
+                        $"Вторым аргументом у команды {op} может быть только 0 или 1.", env.GetCurrentLine());
+                }
+                return dataResponse;
+            }
+        }
+
         private static class BitRamCommands {
             public static Dictionary<string, CommandProcessor> GetCommands() {
                 return new Dictionary<string, CommandProcessor> {
@@ -677,10 +876,11 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
 
             private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
-                var dataResponse = new DataResponse();
-                dataResponse.lowBitArray = new BitArray(8);
-                dataResponse.highBitArray = new BitArray(8) {
-                    [7] = true
+                var dataResponse = new DataResponse {
+                    lowBitArray = new BitArray(8),
+                    highBitArray = new BitArray(8) {
+                        [7] = true
+                    }
                 };
 
                 int address = CompilerSupport.ConvertVariableToAddress(args[0], env);

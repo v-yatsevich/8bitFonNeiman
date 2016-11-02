@@ -37,11 +37,14 @@ namespace _8bitVonNeiman.Compiler.Model {
         public const int MaxVariableAddress = (1 << Constants.ShortAddressBitsCount) - 1;
 
         /// <summary>
-        /// Приводит переданную строку к 8-битовому адресу.
+        /// Приводит переданную строку к 8-битовому адресу. 
+        /// Если это имя переменной, возвращает адрес, ассоциированный с этой переменной,
+        /// если переменная не объявлена, будет сгенерированно исключение <see cref="CompilerEnvironment"/>.
+        /// Если в строке содержится число, будет возвращено это число.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="env"></param>
-        /// <returns></returns>
+        /// <param name="name">Имя переменной или строка с числом.</param>
+        /// <param name="env">Окружение компилятора.</param>
+        /// <returns>Адрес, ассоциированный с переменной или содержащийся в строке как число.</returns>
         public static int ConvertVariableToAddress(string name, CompilerEnvironment env) {
             try {
                 if (name[0] >= '0' && name[0] <= '9') {
