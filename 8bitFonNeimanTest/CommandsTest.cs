@@ -163,7 +163,7 @@ namespace _8bitFonNeimanTest {
         [TestMethod]
         public void RegisterCommandsTest() {
             var inputs = new List<string> {
-                "NOT", "ADD", "SUB", "MUL", "DIV", "AND", "OR", "XOR", "CMP", "RD", "WR", "INC", "DEC", "POP", "PUSH", "MOV"
+                "NOT", "ADD", "SUB", "MUL", "DIV", "AND", "OR", "XOR", "CMP", "RD", "WR", "INC", "DEC", "POP", "PUSH", "MOV", "ADC", "SUBB"
             };
 
             var args = new List<string[]> {
@@ -182,7 +182,9 @@ namespace _8bitFonNeimanTest {
                 new []{"rc", "1"},
                 new []{"Rd"},
                 new []{"Re"},
-                new []{"ra", "rc"}
+                new []{"ra", "rc"},
+                new []{"+@ra", "1"},
+                new []{ "-@rb", "1" }
             };
             //Прямая - 000
             //@R     - 100
@@ -207,7 +209,10 @@ namespace _8bitFonNeimanTest {
                 "1011000010111010",
                 "0111000001111010",
                          
-                "0101001111111010"
+                "0101001111111010",
+
+                "0101101100001111",
+                "1101111110001111",
             };
 
             Test(inputs, args, outputs);

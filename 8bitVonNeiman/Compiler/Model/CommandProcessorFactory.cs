@@ -464,34 +464,8 @@ namespace _8bitVonNeiman.Compiler.Model {
         private static class RamCommands {
             public static Dictionary<string, CommandProcessor> GetCommands() {
                 return new Dictionary<string, CommandProcessor> {
-                    ["adc"] = ADC,
-                    ["subb"] = SUBB,
                     ["xch"] = XCH
                 };
-            }
-
-            private static void ADC(string[] args, CompilerEnvironment env) {
-                Validate(args, "ADC", env.GetCurrentLine());
-                var dataResponse = GetBitArrays(args, env);
-
-                dataResponse.highBitArray[0] = true;
-                dataResponse.highBitArray[2] = true;
-                dataResponse.highBitArray[3] = true;
-
-                env.SetByte(dataResponse.lowBitArray);
-                env.SetByte(dataResponse.highBitArray);
-            }
-
-            private static void SUBB(string[] args, CompilerEnvironment env) {
-                Validate(args, "SUBB", env.GetCurrentLine());
-                var dataResponse = GetBitArrays(args, env);
-
-                dataResponse.highBitArray[1] = true;
-                dataResponse.highBitArray[2] = true;
-                dataResponse.highBitArray[3] = true;
-
-                env.SetByte(dataResponse.lowBitArray);
-                env.SetByte(dataResponse.highBitArray);
             }
 
             private static void XCH(string[] args, CompilerEnvironment env) {
@@ -645,6 +619,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                     ["inc"] = INC,
                     ["dec"] = DEC,
                     ["not"] = NOT,
+                    ["adc"] = ADC,
+                    ["subb"] = SUBB,
                 };
             }
 
@@ -756,6 +732,47 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void NOT(string[] args, CompilerEnvironment env) {
                 var dataResponse = GetBitArrays(args, "NOT", env);
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void ADC(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "ADC", env);
+
+                
+                if (dataResponse.highBitArray[5]) {
+                    //Если команда с ОЗУ
+                    dataResponse.highBitArray[0] = true;
+                    dataResponse.highBitArray[2] = true;
+                    dataResponse.highBitArray[3] = true;
+                } else {
+                    //Если команда регистровая
+                    dataResponse.highBitArray[7] = true;
+                    dataResponse.highBitArray[6] = true;
+                    dataResponse.highBitArray[5] = true;
+                    dataResponse.highBitArray[4] = true;
+                }
+
+                env.SetByte(dataResponse.lowBitArray);
+                env.SetByte(dataResponse.highBitArray);
+            }
+
+            private static void SUBB(string[] args, CompilerEnvironment env) {
+                var dataResponse = GetBitArrays(args, "SUBB", env);
+
+                if (dataResponse.highBitArray[5]) {
+                    dataResponse.highBitArray[1] = true;
+                    dataResponse.highBitArray[2] = true;
+                    dataResponse.highBitArray[3] = true;
+                } else {
+                    //Если команда регистровая
+                    dataResponse.highBitArray[7] = true;
+                    dataResponse.highBitArray[6] = true;
+                    dataResponse.highBitArray[5] = true;
+                    dataResponse.highBitArray[4] = true;
+                    dataResponse.highBitArray[0] = true;
+                }
 
                 env.SetByte(dataResponse.lowBitArray);
                 env.SetByte(dataResponse.highBitArray);

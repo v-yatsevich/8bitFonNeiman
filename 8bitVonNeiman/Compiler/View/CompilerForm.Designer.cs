@@ -34,6 +34,7 @@
             // 
             this.outputRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputRichTextBox.BackColor = System.Drawing.Color.White;
             this.outputRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.outputRichTextBox.Location = new System.Drawing.Point(12, 211);
             this.outputRichTextBox.Name = "outputRichTextBox";
