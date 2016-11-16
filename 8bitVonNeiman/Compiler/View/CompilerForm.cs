@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using ScintillaNET;
 
@@ -63,6 +64,23 @@ namespace _8bitVonNeiman.Compiler.View {
             scintilla.Styles[AsmLexer.StyleIdentifier].ForeColor = Color.Green;
             scintilla.Styles[AsmLexer.StyleKeyword].ForeColor = Color.DodgerBlue;
             scintilla.Styles[AsmLexer.StyleNumber].ForeColor = Color.DarkMagenta;
+        }
+
+        private void scintilla_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                int line = scintilla.LineFromPosition(scintilla.CurrentPosition);
+                int count = 0;
+                while (scintilla.Lines[line].Length != count && scintilla.Lines[line].Text[count] == ' ') {
+                    count++;
+                }
+                if (count == 0) {
+                    return;
+                }
+                string spaces = new string(' ', count);
+                scintilla.InsertText(scintilla.CurrentPosition, Environment.NewLine + spaces);
+                scintilla.GotoPosition(scintilla.CurrentPosition + count + Environment.NewLine.Length);
+                e.SuppressKeyPress = true;
+            }
         }
     }
 }

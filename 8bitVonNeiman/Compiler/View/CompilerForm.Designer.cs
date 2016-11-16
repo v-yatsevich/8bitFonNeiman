@@ -37,8 +37,9 @@
             this.outputRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.outputRichTextBox.Location = new System.Drawing.Point(12, 211);
             this.outputRichTextBox.Name = "outputRichTextBox";
+            this.outputRichTextBox.ReadOnly = true;
             this.outputRichTextBox.Size = new System.Drawing.Size(484, 80);
-            this.outputRichTextBox.TabIndex = 1;
+            this.outputRichTextBox.TabIndex = 2;
             this.outputRichTextBox.Text = "";
             // 
             // label1
@@ -81,9 +82,10 @@
             this.scintilla.Location = new System.Drawing.Point(12, 47);
             this.scintilla.Name = "scintilla";
             this.scintilla.Size = new System.Drawing.Size(484, 142);
-            this.scintilla.TabIndex = 5;
+            this.scintilla.TabIndex = 1;
             this.scintilla.StyleNeeded += new System.EventHandler<ScintillaNET.StyleNeededEventArgs>(this.scintilla_StyleNeeded);
             this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
+            this.scintilla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.scintilla_KeyDown);
             // 
             // CompilerForm
             // 
