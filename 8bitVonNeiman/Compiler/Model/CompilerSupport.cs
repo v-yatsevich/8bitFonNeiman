@@ -95,6 +95,12 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
         }
 
+        /// <summary>
+        /// Преобразует строку в число. Если число начинается с 0x, то оно интерпретируется как 16-ричное, 
+        /// если с 0b, то как двоичное. Если не удается преобразовать число, генерируется исключение.
+        /// </summary>
+        /// <param name="s">Строка, содержащее число.</param>
+        /// <returns>Число, содержащееся в строке.</returns>
         public static int ConvertToInt(string s) {  
             if (s.StartsWith("0x")) {
                 return Convert.ToInt32(s.Substring(2), 16);

@@ -49,6 +49,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ScintillaNET">
+      <HintPath>ScintillaNET\ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -70,6 +73,7 @@
     <Compile Include="Compiler\Model\CompilerModel.cs" />
     <Compile Include="Compiler\CompilerController.cs" />
     <Compile Include="Compiler\Model\CompilerSupport.cs" />
+    <Compile Include="Compiler\View\AsmLexer.cs" />
     <Compile Include="Compiler\View\CompilerForm.cs">
       <SubType>Form</SubType>
     </Compile>

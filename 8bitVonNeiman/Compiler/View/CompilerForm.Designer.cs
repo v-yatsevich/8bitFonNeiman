@@ -23,24 +23,12 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.codeRichTextBox = new System.Windows.Forms.RichTextBox();
             this.outputRichTextBox = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.compileButton = new System.Windows.Forms.Button();
+            this.scintilla = new ScintillaNET.Scintilla();
             this.SuspendLayout();
-            // 
-            // codeRichTextBox
-            // 
-            this.codeRichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.codeRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.codeRichTextBox.Location = new System.Drawing.Point(12, 47);
-            this.codeRichTextBox.Name = "codeRichTextBox";
-            this.codeRichTextBox.Size = new System.Drawing.Size(484, 133);
-            this.codeRichTextBox.TabIndex = 0;
-            this.codeRichTextBox.Text = ";test\nnop ;test 123\nret\n";
             // 
             // outputRichTextBox
             // 
@@ -84,16 +72,29 @@
             this.compileButton.UseVisualStyleBackColor = true;
             this.compileButton.Click += new System.EventHandler(this.compileButton_Click);
             // 
+            // scintilla
+            // 
+            this.scintilla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.scintilla.AutoCIgnoreCase = true;
+            this.scintilla.Location = new System.Drawing.Point(12, 47);
+            this.scintilla.Name = "scintilla";
+            this.scintilla.Size = new System.Drawing.Size(484, 142);
+            this.scintilla.TabIndex = 5;
+            this.scintilla.StyleNeeded += new System.EventHandler<ScintillaNET.StyleNeededEventArgs>(this.scintilla_StyleNeeded);
+            this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
+            // 
             // CompilerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(508, 303);
+            this.Controls.Add(this.scintilla);
             this.Controls.Add(this.compileButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.outputRichTextBox);
-            this.Controls.Add(this.codeRichTextBox);
             this.Name = "CompilerForm";
             this.Text = "Компилятор";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CompilerForm_FormClosed);
@@ -103,11 +104,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox codeRichTextBox;
         private System.Windows.Forms.RichTextBox outputRichTextBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button compileButton;
+        private ScintillaNET.Scintilla scintilla;
     }
 }
