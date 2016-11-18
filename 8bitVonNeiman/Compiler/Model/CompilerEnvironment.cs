@@ -39,7 +39,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             _currentAddress = 8;
         }
 
-        private int _defaultCodeSegment = 0;
+        private int _defaultCodeSegment;
         /// <summary>
         /// Номер сегмента кода, который будет установлен при сбросе и в который будет записываться код. 
         /// Меняется директивой /Dn, где n - число от 0 до 3

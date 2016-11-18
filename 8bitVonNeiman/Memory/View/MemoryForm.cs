@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Windows.Forms;
-using _8bitVonNeiman.Common;
-using _8bitVonNeiman.Compiler.Model;
 
 namespace _8bitVonNeiman.Memory.View {
     public partial class MemoryForm : Form {

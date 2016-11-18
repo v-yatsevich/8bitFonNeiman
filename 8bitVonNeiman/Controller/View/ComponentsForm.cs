@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace _8bitVonNeiman.Controller.View {
     public partial class ComponentsForm : Form {
 
-        private ComponentsFormOutput _output;
+        private IComponentsFormOutput _output;
 
-        public ComponentsForm(ComponentsFormOutput output) {
+        public ComponentsForm(IComponentsFormOutput output) {
             _output = output;
             InitializeComponent();
         }

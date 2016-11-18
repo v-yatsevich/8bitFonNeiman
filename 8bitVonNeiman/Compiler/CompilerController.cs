@@ -2,7 +2,7 @@
 using _8bitVonNeiman.Compiler.View;
 
 namespace _8bitVonNeiman.Compiler {
-    public class CompilerController: CompilerFormOutput {
+    public class CompilerController: ICompilerFormOutput {
 
         private CompilerForm _form;
         private CompilerModel _compilerModel;

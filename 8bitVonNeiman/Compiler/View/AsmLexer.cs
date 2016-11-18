@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using ScintillaNET;
 using _8bitVonNeiman.Compiler.Model;
 
@@ -120,7 +118,9 @@ namespace _8bitVonNeiman.Compiler.View {
             _scintilla.SetStyling(length, style);
             try {
                 _scintilla.SetStyling(1, StyleDefault);
-            } catch {}
+            } catch {
+                // ignored
+            }
         }
     }
 }

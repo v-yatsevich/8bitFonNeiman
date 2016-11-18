@@ -6,7 +6,7 @@ using _8bitVonNeiman.Controller.View;
 using _8bitVonNeiman.Memory;
 
 namespace _8bitVonNeiman.Controller {
-    public class CentralController: ApplicationContext, ComponentsFormOutput, ICompilerControllerOutput {
+    public class CentralController: ApplicationContext, IComponentsFormOutput, ICompilerControllerOutput {
 
         private readonly IMemoryControllerInput _memoryController;
         private readonly ComponentsForm _componentsForm;

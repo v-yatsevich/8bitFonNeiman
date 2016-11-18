@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Memory.View;

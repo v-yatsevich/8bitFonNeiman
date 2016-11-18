@@ -80,7 +80,7 @@
     <Compile Include="Compiler\View\CompilerForm.Designer.cs">
       <DependentUpon>CompilerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Compiler\View\CompilerFormOutput.cs" />
+    <Compile Include="Compiler\View\ICompilerFormOutput.cs" />
     <Compile Include="Controller\Assembly.cs" />
     <Compile Include="Controller\CentralController.cs" />
     <Compile Include="Controller\Constants.cs" />
@@ -90,7 +90,7 @@
     <Compile Include="Controller\View\ComponentsForm.Designer.cs">
       <DependentUpon>ComponentsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controller\View\ComponentsFormOutput.cs" />
+    <Compile Include="Controller\View\IComponentsFormOutput.cs" />
     <Compile Include="Memory\IMemoryControllerInput.cs" />
     <Compile Include="Memory\MemoryController.cs" />
     <Compile Include="Memory\View\IMemoryFormOutput.cs" />

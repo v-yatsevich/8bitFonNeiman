@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
 using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
-    public class CompilerSupport {
+    public static class CompilerSupport {
 
         /// <summary>
         /// Структура, для более удобной работы с регистрами при компиляции.
@@ -147,9 +146,10 @@ namespace _8bitVonNeiman.Compiler.Model {
             if (s.Length < 2 || s.Length > 4) {
                 return null;
             }
-            var register = new Register();
-            register.IsChange = false;
-            register.IsDirect = true;
+            var register = new Register {
+                IsChange = false,
+                IsDirect = true
+            };
             try {
                 int counter = 0;
                 if (s[counter] == '+') {

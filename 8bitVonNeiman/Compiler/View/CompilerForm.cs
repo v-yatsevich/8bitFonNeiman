@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using ScintillaNET;
 
 namespace _8bitVonNeiman.Compiler.View {
     public partial class CompilerForm : Form {
 
-        private CompilerFormOutput _output;
-        private AsmLexer _asmLexer;
+        private ICompilerFormOutput _output;
 
-        public CompilerForm(CompilerFormOutput output) {
+        public CompilerForm(ICompilerFormOutput output) {
             InitializeComponent();
             _output = output;
-            _asmLexer = new AsmLexer(scintilla);
             ResizeLinesCount();
             scintilla.Styles[Style.Default].Font = "Consolas";
             scintilla.Styles[Style.Default].Size = 11;
