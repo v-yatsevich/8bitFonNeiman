@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using _8bitVonNeiman.Common;
@@ -18,7 +19,7 @@ namespace _8bitFonNeimanTest {
                 env.CurrentAddress = 0;
                 commands[inputs[i].ToLower()](args[i], env);
                 var memory = env.GetMemory();
-                var str = memory[0].ToDigitString() + memory[1].ToDigitString();
+                var str = new string(memory[0].ToDigitString().Reverse().ToArray()) + new string( memory[1].ToDigitString().Reverse().ToArray());
                 Assert.AreEqual(outputs[i], str, $"Command: {inputs[i]}");
             }
         }
