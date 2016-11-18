@@ -40,6 +40,10 @@
             // 
             // memoryDataGridView
             // 
+            this.memoryDataGridView.AllowUserToAddRows = false;
+            this.memoryDataGridView.AllowUserToDeleteRows = false;
+            this.memoryDataGridView.AllowUserToResizeColumns = false;
+            this.memoryDataGridView.AllowUserToResizeRows = false;
             this.memoryDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -47,8 +51,10 @@
             this.memoryDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.memoryDataGridView.Location = new System.Drawing.Point(13, 42);
             this.memoryDataGridView.Name = "memoryDataGridView";
+            this.memoryDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.memoryDataGridView.Size = new System.Drawing.Size(548, 345);
             this.memoryDataGridView.TabIndex = 1;
+            this.memoryDataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.memoryDataGridView_CellEndEdit);
             // 
             // MemoryForm
             // 
