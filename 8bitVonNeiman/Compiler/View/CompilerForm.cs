@@ -20,12 +20,16 @@ namespace _8bitVonNeiman.Compiler.View {
             ConfigStyles();
         }
 
+        public void SetCode(string code) {
+            scintilla.Text = code;
+        }
+
         public void AddLineToOutput(string line) {
             outputRichTextBox.Text = outputRichTextBox.Text + line + Environment.NewLine;
         }
 
         private void CompilerForm_FormClosed(object sender, FormClosedEventArgs e) {
-            _output.FormClosed();
+            _output.FormClosed(scintilla.Text);
         }
 
         private void compileButton_Click(object sender, EventArgs e) {

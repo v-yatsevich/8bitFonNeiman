@@ -7,6 +7,7 @@ namespace _8bitVonNeiman.Compiler {
         private CompilerForm _form;
         private CompilerModel _compilerModel;
         private ICompilerControllerOutput _output;
+        private string _code = "";
 
         public CompilerController(ICompilerControllerOutput output) {
             _output = output;
@@ -23,15 +24,18 @@ namespace _8bitVonNeiman.Compiler {
             if (_form == null) {
                 _form = new CompilerForm(this);
                 _form.Show();
+                _form.SetCode(_code);
             } else {
                 _form.Close();
             }
         }
 
         /// <summary>
-        /// Функция, вызывающаяся при закрытии формы. Необходима для корректной работы функции ChangeState()
+        /// Функция, вызывающаяся при закрытии формы.
+        /// Необходима для корректной работы функции ChangeState() и сохранения кода программы.
         /// </summary>
-        public void FormClosed() {
+        public void FormClosed(string code) {
+            _code = code;
             _form = null;
         }
 
