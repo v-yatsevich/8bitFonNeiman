@@ -28,6 +28,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.compileButton = new System.Windows.Forms.Button();
             this.scintilla = new ScintillaNET.Scintilla();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.SuspendLayout();
             // 
             // outputRichTextBox
@@ -36,10 +40,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputRichTextBox.BackColor = System.Drawing.Color.White;
             this.outputRichTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.outputRichTextBox.Location = new System.Drawing.Point(12, 211);
+            this.outputRichTextBox.Location = new System.Drawing.Point(12, 495);
             this.outputRichTextBox.Name = "outputRichTextBox";
             this.outputRichTextBox.ReadOnly = true;
-            this.outputRichTextBox.Size = new System.Drawing.Size(484, 80);
+            this.outputRichTextBox.Size = new System.Drawing.Size(306, 80);
             this.outputRichTextBox.TabIndex = 2;
             this.outputRichTextBox.Text = "";
             // 
@@ -48,7 +52,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 192);
+            this.label1.Location = new System.Drawing.Point(13, 476);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 13);
             this.label1.TabIndex = 2;
@@ -66,7 +70,7 @@
             // compileButton
             // 
             this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.compileButton.Location = new System.Drawing.Point(385, 18);
+            this.compileButton.Location = new System.Drawing.Point(207, 5);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(111, 23);
             this.compileButton.TabIndex = 4;
@@ -82,17 +86,53 @@
             this.scintilla.AutoCIgnoreCase = true;
             this.scintilla.Location = new System.Drawing.Point(12, 47);
             this.scintilla.Name = "scintilla";
-            this.scintilla.Size = new System.Drawing.Size(484, 142);
+            this.scintilla.Size = new System.Drawing.Size(306, 426);
             this.scintilla.TabIndex = 1;
             this.scintilla.StyleNeeded += new System.EventHandler<ScintillaNET.StyleNeededEventArgs>(this.scintilla_StyleNeeded);
             this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
             this.scintilla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.scintilla_KeyDown);
             // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(12, 5);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(75, 23);
+            this.saveButton.TabIndex = 5;
+            this.saveButton.Text = "Сохранить";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(94, 5);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(75, 23);
+            this.loadButton.TabIndex = 6;
+            this.loadButton.Text = "Загрузить";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "ASM файлы|*.asm|Все файлы|*";
+            this.openFileDialog.SupportMultiDottedExtensions = true;
+            this.openFileDialog.Title = "Открыть файл";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.DefaultExt = "asm";
+            this.saveFileDialog.FileName = "code.asm";
+            this.saveFileDialog.Filter = "ASM файлы|*.asm|Все файлы|*";
+            this.saveFileDialog.SupportMultiDottedExtensions = true;
+            this.saveFileDialog.Title = "Сохранить файл";
+            // 
             // CompilerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(508, 303);
+            this.ClientSize = new System.Drawing.Size(330, 587);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.scintilla);
             this.Controls.Add(this.compileButton);
             this.Controls.Add(this.label2);
@@ -112,5 +152,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button compileButton;
         private ScintillaNET.Scintilla scintilla;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }

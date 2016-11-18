@@ -13,7 +13,7 @@ namespace _8bitVonNeiman.Compiler.View {
             _output = output;
             ResizeLinesCount();
             scintilla.Styles[Style.Default].Font = "Consolas";
-            scintilla.Styles[Style.Default].Size = 11;
+            scintilla.Styles[Style.Default].Size = 10;
             ConfigStyles();
         }
 
@@ -23,6 +23,10 @@ namespace _8bitVonNeiman.Compiler.View {
 
         public void AddLineToOutput(string line) {
             outputRichTextBox.Text = outputRichTextBox.Text + line + Environment.NewLine;
+        }
+
+        public void ShowMessage(string message) {
+            MessageBox.Show(message);
         }
 
         private void CompilerForm_FormClosed(object sender, FormClosedEventArgs e) {
@@ -82,6 +86,24 @@ namespace _8bitVonNeiman.Compiler.View {
                 scintilla.GotoPosition(scintilla.CurrentPosition + count + Environment.NewLine.Length);
                 e.SuppressKeyPress = true;
             }
+        }
+
+        private void saveButton_Click(object sender, EventArgs e) {
+            var status = saveFileDialog.ShowDialog();
+            if (status == DialogResult.OK || status == DialogResult.Yes) {
+                string path = saveFileDialog.FileName;
+                _output.Save(scintilla.Text, path);
+            }
+            saveFileDialog.FileName = null;
+        }
+
+        private void loadButton_Click(object sender, EventArgs e) {
+            var status = openFileDialog.ShowDialog();
+            if (status == DialogResult.OK || status == DialogResult.Yes) {
+                string path = openFileDialog.FileName;
+                _output.Load(path);
+            }
+            openFileDialog.FileName = null;
         }
     }
 }

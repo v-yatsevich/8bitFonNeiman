@@ -1,4 +1,5 @@
-﻿using _8bitVonNeiman.Compiler.Model;
+﻿using System.IO;
+using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Compiler.View;
 
 namespace _8bitVonNeiman.Compiler {
@@ -63,6 +64,27 @@ namespace _8bitVonNeiman.Compiler {
         /// <param name="e">Исключение, сгенерированное в процессе компиляции.</param>
         public void CompilationError(CompilationErrorExcepton e) {
             _form.AddLineToOutput($"Ошибка компиляции: {e.ErrorMessage} в строке {e.LineNumber + 1}");
+        }
+
+        public void Save(string code, string path) {
+            try {
+                using (var sw = new StreamWriter(new FileStream(path, FileMode.Create, FileAccess.Write))) {
+                    sw.Write(code);
+                }
+            } catch {
+                _form.ShowMessage("В процессе записи файла возникла ошибка.");
+            }
+        }
+
+        public void Load(string path) {
+            try {
+                using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read))) {
+                    var text = sr.ReadToEnd();
+                    _form.SetCode(text);
+                }
+            } catch {
+                _form.ShowMessage("В процессе открытия файла возникла ошибка.");
+            }
         }
     }
 }
