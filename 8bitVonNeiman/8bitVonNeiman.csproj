@@ -73,7 +73,6 @@
     <Compile Include="Compiler\Model\CompilerModel.cs" />
     <Compile Include="Compiler\CompilerController.cs" />
     <Compile Include="Compiler\Model\CompilerSupport.cs" />
-    <Compile Include="Compiler\View\AsmLexer.cs" />
     <Compile Include="Compiler\View\CompilerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,7 +82,7 @@
     <Compile Include="Compiler\View\ICompilerFormOutput.cs" />
     <Compile Include="Controller\Assembly.cs" />
     <Compile Include="Controller\CentralController.cs" />
-    <Compile Include="Controller\Constants.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Controller\View\ComponentsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +90,8 @@
       <DependentUpon>ComponentsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controller\View\IComponentsFormOutput.cs" />
+    <Compile Include="Cpu\CpuModel.cs" />
+    <Compile Include="Cpu\ICpuModelOutput.cs" />
     <Compile Include="Memory\IMemoryControllerInput.cs" />
     <Compile Include="Memory\MemoryController.cs" />
     <Compile Include="Memory\View\IMemoryFormOutput.cs" />
@@ -144,6 +145,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cpu\View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

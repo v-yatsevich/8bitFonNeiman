@@ -33,7 +33,7 @@ namespace _8bitVonNeiman.Compiler {
 
         /// <summary>
         /// Функция, вызывающаяся при закрытии формы.
-        /// Необходима для корректной работы функции ChangeState() и сохранения кода программы.
+        /// Необходима для корректной работы функции ChangeFormState() и сохранения кода программы.
         /// </summary>
         public void FormClosed(string code) {
             _code = code;

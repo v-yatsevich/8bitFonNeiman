@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Controller.View;
+using _8bitVonNeiman.Cpu;
 using _8bitVonNeiman.Memory;
 
 namespace _8bitVonNeiman.Controller {
-    public class CentralController: ApplicationContext, IComponentsFormOutput, ICompilerControllerOutput {
+    public class CentralController: ApplicationContext, IComponentsFormOutput, ICompilerControllerOutput, ICpuModelOutput {
 
         private readonly IMemoryControllerInput _memoryController;
         private readonly ComponentsForm _componentsForm;
@@ -32,7 +33,15 @@ namespace _8bitVonNeiman.Controller {
         }
 
         public void MemoryButtonClicked() {
-            _memoryController.ChangeState();
+            _memoryController.ChangeFormState();
+        }
+
+        public BitArray GetMemory(int address) {
+            return _memoryController.GetMemory(address);
+        }
+
+        public void SetMemory(BitArray memory, int address) {
+            _memoryController.SetMemory(memory, address);
         }
     }
 }

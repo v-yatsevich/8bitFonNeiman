@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
@@ -36,7 +37,7 @@ namespace _8bitVonNeiman.Compiler.Model {
 
         public CompilerEnvironment() {
             _currentLine = 0;
-            _currentAddress = 8;
+            _currentAddress = Constants.StartAddress;
         }
 
         private int _defaultCodeSegment;

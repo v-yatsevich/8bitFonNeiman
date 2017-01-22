@@ -21,11 +21,8 @@ namespace _8bitVonNeiman.Memory {
                 ShowMemory();
             }
         }
-
-        /// <summary>
-        /// Функция, показывающая форму, если она закрыта, и закрывающая ее, если она открыта
-        /// </summary>
-        public void ChangeState() {
+        
+        public void ChangeFormState() {
             if (_form == null) {
                 _form = new MemoryForm(this);
                 _form.Show();
@@ -35,13 +32,35 @@ namespace _8bitVonNeiman.Memory {
             }
         }
 
+        public void SetMemory(BitArray memory, int address) {
+            _memory[address] = memory;
+            int i = address / MemoryForm.ColumnCount;
+            int j = address % MemoryForm.ColumnCount;
+            _form.SetMemory(i, j, MemoryHex(i, j));
+        }
+
+        public BitArray GetMemory(int address) {
+            if (_memory.ContainsKey(address)) {
+                return _memory[address];
+            } else {
+                return new BitArray(8);
+            }
+        }
+
         /// <summary>
-        /// Функция, вызывающаяся при закрытии формы. Необходима для корректной работы функции ChangeState()
+        /// Функция, вызывающаяся при закрытии формы. Необходима для корректной работы функции ChangeFormState()
         /// </summary>
         public void FormClosed() {
             _form = null;
         }
 
+        /// <summary>
+        /// Функция, вызываемая при изменении пользователем текста в ячейке памяти. 
+        /// Помещает новое значение ячейки в память или выводит сообщение об ощибке, если введено некорректное число.
+        /// </summary>
+        /// <param name="row">Строка измененной ячейки.</param>
+        /// <param name="collumn">Столбец измененной ячейки.</param>
+        /// <param name="s">Строка, введенная в ячейку.</param>
         public void MemoryChanged(int row, int collumn, string s) {
             int num;
             try {
