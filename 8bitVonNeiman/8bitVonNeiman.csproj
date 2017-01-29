@@ -65,7 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\BitArrayToString.cs" />
+    <Compile Include="Common\EntendedBitArray.cs" />
     <Compile Include="Compiler\CompilationErrorExcepton.cs" />
     <Compile Include="Compiler\ICompilerControllerOutput.cs" />
     <Compile Include="Compiler\Model\CommandProcessorFactory.cs" />

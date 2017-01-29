@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace _8bitVonNeiman.Common {
-    public static class BitArrayToString {
+    public static class EntendedBitArray {
         public static string ToDigitString(this BitArray array) {
             var builder = new StringBuilder();
             foreach (var bit in array.Cast<bool>()) {
