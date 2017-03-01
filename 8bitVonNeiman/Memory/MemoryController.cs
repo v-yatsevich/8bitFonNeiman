@@ -9,13 +9,13 @@ namespace _8bitVonNeiman.Memory {
     public class MemoryController : IMemoryControllerInput, IMemoryFormOutput {
 
         private MemoryForm _form;
-        private Dictionary<int, BitArray> _memory;
+        private Dictionary<int, ExtendedBitArray> _memory;
 
         public MemoryController() {
-            _memory = new Dictionary<int, BitArray>();
+            _memory = new Dictionary<int, ExtendedBitArray>();
         }
 
-        public void SetMemory(Dictionary<int, BitArray> memory) {
+        public void SetMemory(Dictionary<int, ExtendedBitArray> memory) {
             _memory = memory;
             if (_form != null) {
                 ShowMemory();
@@ -32,18 +32,18 @@ namespace _8bitVonNeiman.Memory {
             }
         }
 
-        public void SetMemory(BitArray memory, int address) {
+        public void SetMemory(ExtendedBitArray memory, int address) {
             _memory[address] = memory;
             int i = address / MemoryForm.ColumnCount;
             int j = address % MemoryForm.ColumnCount;
             _form.SetMemory(i, j, MemoryHex(i, j));
         }
 
-        public BitArray GetMemory(int address) {
+        public ExtendedBitArray GetMemory(int address) {
             if (_memory.ContainsKey(address)) {
                 return _memory[address];
             } else {
-                return new BitArray(8);
+                return new ExtendedBitArray();
             }
         }
 
@@ -75,9 +75,9 @@ namespace _8bitVonNeiman.Memory {
                 _form.SetMemory(row, collumn, MemoryHex(row, collumn));
                 return;
             }
-            var bitArray = new BitArray(8);
-            CompilerSupport.FillBitArray(null, bitArray, num, 8);
-            _memory[row * MemoryForm.ColumnCount + collumn] = bitArray;
+            var ExtendedBitArray = new ExtendedBitArray();
+            CompilerSupport.FillBitArray(null, ExtendedBitArray, num, 8);
+            _memory[row * MemoryForm.ColumnCount + collumn] = ExtendedBitArray;
             if (s.Length == 1) {
                 s = "0" + s;
             }
@@ -86,7 +86,7 @@ namespace _8bitVonNeiman.Memory {
         }
 
         public void ClearMemoryClicked() {
-            _memory = new Dictionary<int, BitArray>();
+            _memory = new Dictionary<int, ExtendedBitArray>();
             ShowMemory();
         }
 

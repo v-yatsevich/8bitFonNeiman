@@ -12,8 +12,8 @@ namespace _8bitVonNeiman.Compiler.Model {
         public delegate void CommandProcessor(string[] args, CompilerEnvironment env);
 
         public class DataResponse {
-            public BitArray lowBitArray { get; set; }
-            public BitArray highBitArray { get; set; }
+            public ExtendedBitArray lowBitArray { get; set; }
+            public ExtendedBitArray highBitArray { get; set; }
         }
 
         public static Dictionary<string, CommandProcessor> GetCommandProcessors() {
@@ -55,177 +55,177 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void NOP(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "NOP", env.GetCurrentLine());
-                var array = new BitArray(8) { [0] = true };
+                var array = new ExtendedBitArray() { [0] = true };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void RET(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RET", env.GetCurrentLine());
-                var array = new BitArray(8) { [1] = true };
+                var array = new ExtendedBitArray() { [1] = true };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void IRET(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "IRET", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [1] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void EI(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "EI", env.GetCurrentLine());
-                var array = new BitArray(8) { [2] = true };
+                var array = new ExtendedBitArray() { [2] = true };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void DI(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DI", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [2] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void RR(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RR", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [1] = true,
                     [2] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void RL(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RL", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [1] = true,
                     [2] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void RRC(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RRC", env.GetCurrentLine());
-                var array = new BitArray(8) { [3] = true };
+                var array = new ExtendedBitArray() { [3] = true };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void RLC(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "RLC", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [3] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void HLT(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "HLT", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [1] = true,
                     [3] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void INCA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "INCA", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [1] = true,
                     [3] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void DECA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DECA", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [2] = true,
                     [3] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void SWAPA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "SWAPA", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [2] = true,
                     [3] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void DAA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DAA", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [1] = true,
                     [2] = true,
                     [3] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void DSA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "DSA", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [1] = true,
                     [2] = true,
                     [3] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void ES(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "ES", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [1] = true,
                     [4] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void MOVASR(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVASR", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [0] = true,
                     [1] = true,
                     [4] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void MOVSRA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVSRA", env.GetCurrentLine());
-                var array = new BitArray(8) {
+                var array = new ExtendedBitArray() {
                     [2] = true,
                     [4] = true
                 };
                 env.SetByte(array);
-                env.SetByte(new BitArray(8));
+                env.SetByte(new ExtendedBitArray());
             }
 
             private static void ValidateNoAddressCommand(string[] args, string op, int line) {
@@ -259,8 +259,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                 string L = args[1];
                 int address = CompilerSupport.ConvertLabelToFarAddress(L, env);
                 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [2] = (register.Number & 1) != 0,
                     [3] = (register.Number & 2) != 0,
                     [4] = true
@@ -302,8 +302,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JNZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNZ", env.GetCurrentLine());
                 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [5] = true
                 };
                 
@@ -313,8 +313,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JNC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNC", env.GetCurrentLine());
                 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [2] = true,
                     [5] = true
                 };
@@ -325,8 +325,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JNS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNS", env.GetCurrentLine());
   
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [3] = true,
                     [5] = true
                 };
@@ -337,8 +337,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JNO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JNO", env.GetCurrentLine());
 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [2] = true,
                     [3] = true,
                     [5] = true
@@ -350,8 +350,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JZ(string[] args, CompilerEnvironment env) {
                 Validate(args, "JZ", env.GetCurrentLine());
 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [4] = true,
                     [5] = true
                 };
@@ -362,8 +362,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JC(string[] args, CompilerEnvironment env) {
                 Validate(args, "JC", env.GetCurrentLine());
                 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [2] = true,
                     [4] = true,
                     [5] = true
@@ -375,8 +375,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JS(string[] args, CompilerEnvironment env) {
                 Validate(args, "JS", env.GetCurrentLine());
                 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [3] = true,
                     [4] = true,
                     [5] = true
@@ -388,8 +388,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JO(string[] args, CompilerEnvironment env) {
                 Validate(args, "JO", env.GetCurrentLine());
 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [2] = true,
                     [3] = true,
                     [4] = true,
@@ -402,8 +402,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void JMP(string[] args, CompilerEnvironment env) {
                 Validate(args, "JMP", env.GetCurrentLine());
 
-                var lowBitArray = new BitArray(8);
-                var highBitArray = new BitArray(8) {
+                var lowBitArray = new ExtendedBitArray();
+                var highBitArray = new ExtendedBitArray() {
                     [6] = true
                 };
 
@@ -413,8 +413,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void CALL(string[] args, CompilerEnvironment env) {
                 Validate(args, "CALL", env.GetCurrentLine());
 
-                var highBitArray = new BitArray(8);
-                var lowBitArray = new BitArray(8);
+                var highBitArray = new ExtendedBitArray();
+                var lowBitArray = new ExtendedBitArray();
                 
                 highBitArray[3] = true;
                 highBitArray[6] = true;
@@ -425,8 +425,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void INT(string[] args, CompilerEnvironment env) {
                 Validate(args, "INT", env.GetCurrentLine());
 
-                var highBitArray = new BitArray(8);
-                var lowBitArray = new BitArray(8);
+                var highBitArray = new ExtendedBitArray();
+                var lowBitArray = new ExtendedBitArray();
 
                 highBitArray[2] = true;
                 highBitArray[3] = true;
@@ -441,7 +441,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 }
             }
 
-            private static void FillAddressAndSetCommand(BitArray highBitArray, BitArray lowBitArray, string label, CompilerEnvironment env) {
+            private static void FillAddressAndSetCommand(ExtendedBitArray highBitArray, ExtendedBitArray lowBitArray, string label, CompilerEnvironment env) {
                 int address = CompilerSupport.ConvertLabelToFarAddress(label, env);
 
                 if (address == -1) {
@@ -483,8 +483,8 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
                 var dataResponse = new DataResponse {
-                    lowBitArray = new BitArray(8),
-                    highBitArray = new BitArray(8) {
+                    lowBitArray = new ExtendedBitArray(),
+                    highBitArray = new ExtendedBitArray() {
                         [5] = true,
                         [6] = true
                     }
@@ -533,14 +533,14 @@ namespace _8bitVonNeiman.Compiler.Model {
                 if (!registr.IsDirect) {
                     throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
                 }
-                var highBitArray = new BitArray(8) {
+                var highBitArray = new ExtendedBitArray() {
                     [6] = true,
                     [4] = true,
                     [3] = true,
                     [2] = true,
                     [1] = true
                 };
-                var lowBitArray = new BitArray(8);
+                var lowBitArray = new ExtendedBitArray();
                 CompilerSupport.FillBitArray(null, lowBitArray, registr.Number, 4);
 
                 env.SetByte(lowBitArray);
@@ -559,14 +559,14 @@ namespace _8bitVonNeiman.Compiler.Model {
                 if (!registr.IsDirect) {
                     throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
                 }
-                var highBitArray = new BitArray(8) {
+                var highBitArray = new ExtendedBitArray() {
                     [6] = true,
                     [4] = true,
                     [3] = true,
                     [2] = true,
                     [0] = true
                 };
-                var lowBitArray = new BitArray(8);
+                var lowBitArray = new ExtendedBitArray();
                 CompilerSupport.FillBitArray(null, lowBitArray, registr.Number, 4);
 
                 env.SetByte(lowBitArray);
@@ -587,7 +587,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                 if (!registr1.IsDirect || !registr2.IsDirect) {
                     throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
                 }
-                var highBitArray = new BitArray(8) {
+                var highBitArray = new ExtendedBitArray() {
                     [6] = true,
                     [4] = true,
                     [3] = true,
@@ -595,7 +595,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     [1] = true,
                     [0] = true
                 };
-                var lowBitArray = new BitArray(8);
+                var lowBitArray = new ExtendedBitArray();
                 CompilerSupport.FillBitArray(null, lowBitArray, (registr2.Number << 4) + registr1.Number, 8);
 
                 env.SetByte(lowBitArray);
@@ -783,8 +783,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton($"Команда {op} принимает 1 или 2 агрумента.", env.GetCurrentLine());
                 }
                 var dataResponse = new DataResponse {
-                    lowBitArray = new BitArray(8),
-                    highBitArray = new BitArray(8)
+                    lowBitArray = new ExtendedBitArray(),
+                    highBitArray = new ExtendedBitArray()
                 };
 
                 var r = CompilerSupport.ConvertToRegister(args[0]);
@@ -901,8 +901,8 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static DataResponse GetBitArrays(string[] args, CompilerEnvironment env) {
                 var dataResponse = new DataResponse {
-                    lowBitArray = new BitArray(8),
-                    highBitArray = new BitArray(8) {
+                    lowBitArray = new ExtendedBitArray(),
+                    highBitArray = new ExtendedBitArray() {
                         [7] = true
                     }
                 };
@@ -1014,8 +1014,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton("Номер бита должен быть числом от 0 до 7", env.GetCurrentLine());
                 }
                 var dataResponse = new DataResponse {
-                    lowBitArray = new BitArray(8),
-                    highBitArray = new BitArray(8) {
+                    lowBitArray = new ExtendedBitArray(),
+                    highBitArray = new ExtendedBitArray() {
                         [7] = true,
                         [5] = true
                     }
@@ -1042,11 +1042,11 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void IN(string[] args, CompilerEnvironment env) {
                 if (args.Length == 0) {
-                    var array = new BitArray(8) {
+                    var array = new ExtendedBitArray() {
                         [4] = true
                     };
                     env.SetByte(array);
-                    env.SetByte(new BitArray(8));
+                    env.SetByte(new ExtendedBitArray());
                     return;
                 }
                 if (args.Length > 0) {
@@ -1061,12 +1061,12 @@ namespace _8bitVonNeiman.Compiler.Model {
 
             private static void OUT(string[] args, CompilerEnvironment env) {
                 if (args.Length == 0) {
-                    var array = new BitArray(8) {
+                    var array = new ExtendedBitArray() {
                         [0] = true,
                         [4] = true
                     };
                     env.SetByte(array);
-                    env.SetByte(new BitArray(8));
+                    env.SetByte(new ExtendedBitArray());
                     return;
                 }
                 if (args.Length > 0) {
@@ -1086,8 +1086,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton("Номер регистра должен быть числом от 0 до 127", env.GetCurrentLine());
                 }
                 var dataResponse = new DataResponse {
-                    lowBitArray = new BitArray(8),
-                    highBitArray = new BitArray(8) {
+                    lowBitArray = new ExtendedBitArray(),
+                    highBitArray = new ExtendedBitArray() {
                         [7] = true,
                         [6] = true
                     }

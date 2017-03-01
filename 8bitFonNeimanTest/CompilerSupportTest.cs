@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Compiler.Model;
 
 namespace _8bitFonNeimanTest {
@@ -133,23 +134,23 @@ namespace _8bitFonNeimanTest {
                 8, 12, 43, 263
             };
 
-            var lowOutputs = new List<BitArray> {
-                new BitArray(8) {[3] = true},
-                new BitArray(8) {[2] = true, [3] = true },
-                new BitArray(8) {[5] = true, [3] = true, [1] = true, [0] = true },
-                new BitArray(8) {[2] = true, [1] = true, [0] = true }
+            var lowOutputs = new List<ExtendedBitArray> {
+                new ExtendedBitArray() {[3] = true},
+                new ExtendedBitArray() {[2] = true, [3] = true },
+                new ExtendedBitArray() {[5] = true, [3] = true, [1] = true, [0] = true },
+                new ExtendedBitArray() {[2] = true, [1] = true, [0] = true }
             };
 
-            var highOutputs = new List<BitArray> {
-                new BitArray(8),
-                new BitArray(8),
-                new BitArray(8),
-                new BitArray(8) {[0] = true}
+            var highOutputs = new List<ExtendedBitArray> {
+                new ExtendedBitArray(),
+                new ExtendedBitArray(),
+                new ExtendedBitArray(),
+                new ExtendedBitArray() {[0] = true}
             };
 
             for (int i = 0; i < lowOutputs.Count; i++) {
-                var highBitArray = new BitArray(8);
-                var lowBitArray = new BitArray(8);
+                var highBitArray = new ExtendedBitArray();
+                var lowBitArray = new ExtendedBitArray();
 
                 CompilerSupport.FillBitArray(highBitArray, lowBitArray, inputs[i], 10);
 

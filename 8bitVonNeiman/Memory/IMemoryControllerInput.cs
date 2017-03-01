@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using _8bitVonNeiman.Common;
 using System.Collections.Generic;
 
 namespace _8bitVonNeiman.Memory {
@@ -12,20 +12,20 @@ namespace _8bitVonNeiman.Memory {
         /// Устанавливает память.
         /// </summary>
         /// <param name="memory">Память, которую требуется установить в контроллер.</param>
-        void SetMemory(Dictionary<int, BitArray> memory);
+        void SetMemory(Dictionary<int, ExtendedBitArray> memory);
 
         /// <summary>
         /// Устанавливает значение конкретной ячейки памяти.
         /// </summary>
         /// <param name="memory">Значение ячейки памяти.</param>
         /// <param name="address">Адрес ячейки памяти.</param>
-        void SetMemory(BitArray memory, int address);
+        void SetMemory(ExtendedBitArray memory, int address);
 
         /// <summary>
         /// Возвращает значение конкретной ячейки памяти.
         /// </summary>
         /// <param name="address">Адрес ячейки памяти.</param>
         /// <returns>Значение ячейки памяти.</returns>
-        BitArray GetMemory(int address);
+        ExtendedBitArray GetMemory(int address);
     }
 }

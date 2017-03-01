@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Controller.View;
 using _8bitVonNeiman.Cpu;
@@ -24,7 +24,7 @@ namespace _8bitVonNeiman.Controller {
             ExitThread();
         }
 
-        public void MemoryFormed(Dictionary<int, BitArray> memory) {
+        public void MemoryFormed(Dictionary<int, ExtendedBitArray> memory) {
             _memoryController.SetMemory(memory);
         }
 
@@ -36,11 +36,11 @@ namespace _8bitVonNeiman.Controller {
             _memoryController.ChangeFormState();
         }
 
-        public BitArray GetMemory(int address) {
+        public ExtendedBitArray GetMemory(int address) {
             return _memoryController.GetMemory(address);
         }
 
-        public void SetMemory(BitArray memory, int address) {
+        public void SetMemory(ExtendedBitArray memory, int address) {
             _memoryController.SetMemory(memory, address);
         }
     }

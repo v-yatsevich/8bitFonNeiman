@@ -52,34 +52,34 @@ namespace _8bitFonNeimanTest {
         public void ConstructorTest() {
             var array = new List<string> { "00001100", "01110111", "00011100", "01010101", "01010001" };
             foreach (var code in array) {
-                var bitArray = new ExtendedBitArray(code);
-                Assert.AreEqual(bitArray.ToDigitString(), code);
+                var ExtendedBitArray = new ExtendedBitArray(code);
+                Assert.AreEqual(ExtendedBitArray.ToDigitString(), code);
             }
         }
 
         [TestMethod]
         public void EmptyConstructorTest() {
-            var bitArray = new ExtendedBitArray();
-            Assert.AreEqual(bitArray.ToDigitString(), "00000000");
+            var ExtendedBitArray = new ExtendedBitArray();
+            Assert.AreEqual(ExtendedBitArray.ToDigitString(), "00000000");
         }
 
         [TestMethod]
         public void CopyConstructorTest() {
-            var bitArray = new ExtendedBitArray("00110000");
-            var copy = new ExtendedBitArray(bitArray);
-            Assert.AreEqual(bitArray.ToDigitString(), copy.ToDigitString());
+            var ExtendedBitArray = new ExtendedBitArray("00110000");
+            var copy = new ExtendedBitArray(ExtendedBitArray);
+            Assert.AreEqual(ExtendedBitArray.ToDigitString(), copy.ToDigitString());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void LongConstructorExceptionTest() {
-            var bitArray = new ExtendedBitArray("110011100");
+            var ExtendedBitArray = new ExtendedBitArray("110011100");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void WrongFormatConstructorExceptionTest() {
-            var bitArray = new ExtendedBitArray("11201100");
+            var ExtendedBitArray = new ExtendedBitArray("11201100");
         }
 
         [TestMethod]
@@ -144,8 +144,8 @@ namespace _8bitFonNeimanTest {
         [TestMethod]
         [ExpectedException(typeof(OverflowException))]
         public void IncOverflowExceptionTest() {
-            var bitArray = new ExtendedBitArray("11111111");
-            bitArray.Inc();
+            var ExtendedBitArray = new ExtendedBitArray("11111111");
+            ExtendedBitArray.Inc();
         }
 
         [TestMethod]
@@ -173,8 +173,8 @@ namespace _8bitFonNeimanTest {
         [TestMethod]
         [ExpectedException(typeof(OverflowException))]
         public void DecOverflowExceptionTest() {
-            var bitArray = new ExtendedBitArray("00000000");
-            bitArray.Dec();
+            var ExtendedBitArray = new ExtendedBitArray("00000000");
+            ExtendedBitArray.Dec();
         }
 
         [TestMethod]

@@ -118,7 +118,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// <param name="lowBitArray">Массив бит, в который будут записываться биты. Представляет собой 8 младших разрядов.</param>
         /// <param name="number">Число, из которого будут браться биты.</param>
         /// <param name="bitsCount">Количество бит, которое будет записано.</param>
-        public static void FillBitArray(BitArray highBitArray, BitArray lowBitArray, int number, int bitsCount) {
+        public static void FillBitArray(ExtendedBitArray highBitArray, ExtendedBitArray lowBitArray, int number, int bitsCount) {
             for (int i = 0; i < bitsCount; i++) {
                 if (i < 8) {
                     lowBitArray[i] = (number & (1 << i)) != 0;

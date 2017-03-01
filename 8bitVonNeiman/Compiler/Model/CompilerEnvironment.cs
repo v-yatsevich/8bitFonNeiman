@@ -11,13 +11,13 @@ namespace _8bitVonNeiman.Compiler.Model {
     public class CompilerEnvironment {
 
         public struct MemoryForLabel {
-            public BitArray HighBitArray;
-            public BitArray LowBitArray;
+            public ExtendedBitArray HighBitArray;
+            public ExtendedBitArray LowBitArray;
             public int Address;
             public int Line;
         }
 
-        private Dictionary<int, BitArray> _memory = new Dictionary<int, BitArray>();
+        private Dictionary<int, ExtendedBitArray> _memory = new Dictionary<int, ExtendedBitArray>();
         private Dictionary<string, List<MemoryForLabel>> _memoryForLabels = new Dictionary<string, List<MemoryForLabel>>(); 
 
         /// Текущая линия кода, на которой находится обработка.
@@ -91,7 +91,7 @@ namespace _8bitVonNeiman.Compiler.Model {
             _currentLine++;
         }
 
-        public Dictionary<int, BitArray> GetMemory() {
+        public Dictionary<int, ExtendedBitArray> GetMemory() {
             return _memory;
         }
 
@@ -100,10 +100,7 @@ namespace _8bitVonNeiman.Compiler.Model {
         /// При переполнении адреса заползает на следующий сегмент.
         /// </summary>
         /// <param name="command">Бассив бит: определяющих байт. Должен содержать 8 бит.</param>
-        public void SetByte(BitArray command) {
-            if (command.Count != 8) {
-                throw new ArgumentException("Число бит в байте должно быть равно 8");
-            }
+        public void SetByte(ExtendedBitArray command) {
             _memory[(_defaultCodeSegment << 8) + _currentAddress] = command;
             _currentAddress++;
         }

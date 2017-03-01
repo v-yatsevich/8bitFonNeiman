@@ -14,7 +14,6 @@ namespace _8bitVonNeiman.Compiler.View {
             ResizeLinesCount();
             scintilla.Styles[Style.Default].Font = "Consolas";
             scintilla.Styles[Style.Default].Size = 10;
-            ConfigStyles();
         }
 
         public void SetCode(string code) {
@@ -61,14 +60,6 @@ namespace _8bitVonNeiman.Compiler.View {
             //var endPos = e.Position;
 
             //_asmLexer.Style(0, endPos);
-        }
-
-        private void ConfigStyles() {
-            scintilla.Styles[AsmLexer.StyleComment].ForeColor = Color.DarkGray;
-            scintilla.Styles[AsmLexer.StyleError].ForeColor = Color.Red;
-            scintilla.Styles[AsmLexer.StyleIdentifier].ForeColor = Color.Green;
-            scintilla.Styles[AsmLexer.StyleKeyword].ForeColor = Color.DodgerBlue;
-            scintilla.Styles[AsmLexer.StyleNumber].ForeColor = Color.DarkMagenta;
         }
 
         private void scintilla_KeyDown(object sender, KeyEventArgs e) {
