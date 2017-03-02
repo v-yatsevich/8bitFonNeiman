@@ -36,7 +36,7 @@ namespace _8bitVonNeiman.Cpu {
         private List<ExtendedBitArray> _registers = new List<ExtendedBitArray>();
 
         /// Регистр флагов
-        private ExtendedBitArray _flags = new ExtendedBitArray();
+        private ExtendedBitArray _psw = new ExtendedBitArray();
 
         /// Регистр временного хранения данных для получения оных из памяти, регистров или устройств
         private ExtendedBitArray _rdb = new ExtendedBitArray();
@@ -44,12 +44,19 @@ namespace _8bitVonNeiman.Cpu {
         /// Регистр, хранящий адрес данных, к которым необходимо получить доступ
         private int _rab;
 
+        /// ???
+        private ExtendedBitArray _dr = new ExtendedBitArray();
+
+        /// ???
+        private ExtendedBitArray[] _cr = new ExtendedBitArray[2];
+
         private ICpuModelOutput _output;
 
         /// Аллиас регистра перенома
+        // ReSharper disable once InconsistentNaming
         private bool FC {
-            get { return _flags[4]; }
-            set { _flags[4] = value; }
+            get { return _psw[4]; }
+            set { _psw[4] = value; }
         }
 
         public CpuModel(ICpuModelOutput output) {
@@ -82,6 +89,8 @@ namespace _8bitVonNeiman.Cpu {
         private void SetMemory(ExtendedBitArray data, int address) {
             _output.SetMemory(data, address);
         }
+
+        #region Микрокоманды
 
         private void _y1() {
             _rdb = GetMemory(_rab);
@@ -155,7 +164,247 @@ namespace _8bitVonNeiman.Cpu {
         }
 
         private void _y15() {
-            
+            try {
+                _acc.Inc();
+            } catch {
+                //TODO: узнать про флаги
+            }
         }
+
+        private void _y16() {
+            try {
+                _acc.Dec();
+            } catch {
+                //TODO: узнать про флаги
+            }
+        }
+
+        private void _y17() {
+            _acc.Invert();
+        }
+
+        private void _y18() {
+            var temp = new ExtendedBitArray();
+            for (int i = 0; i < Constants.WordSize; i++) {
+                temp[i] = _acc[(i + Constants.WordSize / 2) % Constants.WordSize];
+            }
+            _acc = temp;
+        }
+
+        private void _y19() {
+            _acc.Add(6);
+        }
+
+        private void _y20() {
+            _acc.Add(96);
+        }
+
+        private void _y21() {
+            _acc.Add(-6);
+        }
+
+        private void _y22() {
+            _acc.Add(-96);
+        }
+
+        private void _y23() {
+            var temp = _acc;
+            _acc = _rdb;
+            _rdb = _acc;
+        }
+
+        private void _y24() {
+            _dr = new ExtendedBitArray(_rdb);
+        }
+
+        private void _y25() {
+            _dr = new ExtendedBitArray(_cr[0]);
+        }
+
+        private void _y26() {
+            _cr[0] = new ExtendedBitArray(_rdb);
+        }
+
+        private void _y27() {
+            _cr[1] = new ExtendedBitArray(_rdb);
+        }
+
+        private void _y28() {
+            _cs = _acc[0] ? 1 : 0;
+            _cs += _acc[1] ? 2 : 0;
+
+            _ds = _acc[2] ? 1 : 0;
+            _ds += _acc[3] ? 2 : 0;
+
+            _ss = _acc[4] ? 1 : 0;
+            _ss += _acc[5] ? 2 : 0;
+        }
+
+        private void _y29() {
+            //TODO: ??????
+        }
+
+        private void _y30() {
+            //TODO: ??????
+        }
+
+        private void _y31() {
+            _pcl++;
+            if (_pcl > (2 ^ (Constants.WordSize + 2))) {
+                //TODO: Действие по переполнению PCL?
+            }
+        }
+
+        private void _y32() {
+            _pcl = _cr[0].NumValue();
+        }
+
+        private void _y33() {
+            _pcl = _rdb.NumValue();
+        }
+
+        private void _y34() {
+            _spl++;
+            if (_spl > (2 ^ Constants.WordSize)) {
+                //TODO: Действие по переполнению стека?
+            }
+        }
+
+        private void _y35() {
+            _spl--;
+            if (_spl < 0) {
+                //TODO: Действие по переполнению стека?
+            }
+        }
+
+        private void _y36() {
+            _spl = _acc.NumValue();
+        }
+
+        private void _y37() {
+            for (int i = 0; i < 6; i++) {
+                _psw[i] = _rdb[i + 2];
+            }
+        }
+
+        private void _y38() {
+            _psw[5] = false;
+        }
+
+        private void _y39() {
+            _psw[5] = true;
+        }
+
+        private void _y40() {
+            _psw[5] = false;
+        }
+
+        private void _y41() {
+            _psw[5] = true;
+        }
+
+        private void _y42() {
+            _rab = _acc.NumValue();
+        }
+
+        private void _y43() {
+            _rab = _pcl + (_cs << Constants.WordSize);
+        }
+
+        private void _y44() {
+            _rab = _cr[0].NumValue() + (_ds << Constants.WordSize);
+        }
+
+        private void _y45() {
+            _rab = _spl + (_ss << Constants.WordSize);
+        }
+
+        private void _y46() {
+            _rab = 0;
+            for (int i = 4; i < 8; i++) {
+                _rab += _cr[0][i] ? 1 << i - 4 : 0;
+            }
+        }
+
+        private void _y47() {
+            _rab = 0;
+            for (int i = 0; i < 4; i++) {
+                _rab += _cr[0][i] ? 1 << i : 0;
+            }
+        }
+
+        private void _y48() {
+            _rab = 0;
+            for (int i = 0; i < 6; i++) {
+                _rab += _cr[0][i] ? 1 << i - 4 : 0;
+            }
+        }
+
+        private void _y49() {
+            _rdb = new ExtendedBitArray(_acc);
+        }
+
+        private void _y50() {
+            try {
+                _rdb.Inc();
+            } catch {
+                //TODO: Переполнение RDB
+            }
+        }
+
+        private void _y51() {
+            try {
+                _rdb.Dec();
+            } catch {
+                //TODO: Переполнение RDB
+            }
+        }
+
+        private void _y52() {
+            _rdb.Invert();
+        }
+
+        private void _y53() {
+            var temp = new ExtendedBitArray();
+            for (int i = 0; i < Constants.WordSize; i++) {
+                temp[i] = _rdb[(i + Constants.WordSize / 2) % Constants.WordSize];
+            }
+            _rdb = temp;
+        }
+
+        private void _y54() {
+            var bitNumber = _cr[1][0] ? 1 : 0;
+            bitNumber += _cr[1][1] ? 2 : 0;
+            _rdb[bitNumber] = true;
+        }
+
+        private void _y55() {
+            var bitNumber = _cr[1][0] ? 1 : 0;
+            bitNumber += _cr[1][1] ? 2 : 0;
+            _rdb[bitNumber] = false;
+        }
+
+        private void _y56() {
+            var bitNumber = _cr[1][0] ? 1 : 0;
+            bitNumber += _cr[1][1] ? 2 : 0;
+            _rdb[bitNumber] = true;
+        }
+
+        private void _y57() {
+            _rdb[0] = (_cs & 1) != 0;
+            _rdb[1] = (_cs & 2) != 0;
+        }
+
+        private void _y58() {
+            for (int i = 0; i < 6; i++) {
+                _rdb[i + 2] = _psw[i];
+            }
+        }
+
+        private void _y59() {
+            //TODO: Работа с регистром вывода
+        }
+
+        #endregion
     }
 }

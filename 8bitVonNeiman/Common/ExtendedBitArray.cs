@@ -69,6 +69,16 @@ namespace _8bitVonNeiman.Common {
         }
 
         /// <summary>
+        /// Прибавляет значение передаваемого числа к текущему слову. Генерирует <see cref="OverflowException"/> при переполнении.
+        /// </summary>
+        /// <param name="num">Число, значение которого прибавляется к текущему байту.</param>
+        public void Add(int num) {
+            checked {
+                _data += (byte)num;
+            }
+        }
+
+        /// <summary>
         /// Возвращает или задает значения бита с переданным индексом.
         /// </summary>
         /// <param name="key">Индекс бита.</param>
@@ -105,6 +115,16 @@ namespace _8bitVonNeiman.Common {
             checked {
                 _data--;
             }
+        }
+
+        /// Инвертирует все биты слова.
+        public void Invert() {
+            _data = (byte)~_data;
+        }
+
+        /// Возвращает числовую интерпретацию слова
+        public int NumValue() {
+            return _data;
         }
     }
 }

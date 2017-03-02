@@ -219,5 +219,27 @@ namespace _8bitFonNeimanTest {
             var array = new ExtendedBitArray();
             array[8] = true;
         }
+
+        [TestMethod]
+        public void InvertTest() {
+            var array = new List<ExtendedBitArray> {
+                new ExtendedBitArray("00000011"),
+                new ExtendedBitArray("00100100"),
+                new ExtendedBitArray("11000000"),
+                new ExtendedBitArray("00000000"),
+                new ExtendedBitArray("11111111"),      
+            };
+            var results = new List<string> {
+                "11111100",
+                "11011011",
+                "00111111",
+                "11111111",
+                "00000000"
+            };
+            for (int i = 0; i < array.Count; i++) {
+                array[i].Invert();
+                Assert.AreEqual(array[i].ToDigitString(), results[i]);
+            }
+        }
     }
 }
