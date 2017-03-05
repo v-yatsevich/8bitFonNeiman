@@ -12,12 +12,14 @@ namespace _8bitVonNeiman.Controller {
         private readonly IMemoryControllerInput _memoryController;
         private readonly ComponentsForm _componentsForm;
         private readonly CompilerController _compilerController;
+        private readonly ICpuModelInput _cpu;
 
         public CentralController() {
             _componentsForm = new ComponentsForm(this);
             _componentsForm.Show();
             _compilerController = Assembly.GetCompilerController(this);
             _memoryController = Assembly.GetMemoryController();
+            _cpu = Assembly.GetCpu(this);
         }
 
         public void FormClosed() {
@@ -34,6 +36,10 @@ namespace _8bitVonNeiman.Controller {
 
         public void MemoryButtonClicked() {
             _memoryController.ChangeFormState();
+        }
+
+        public void CpuButtonClicked() {
+            _cpu.ChangeFormState();
         }
 
         public ExtendedBitArray GetMemory(int address) {

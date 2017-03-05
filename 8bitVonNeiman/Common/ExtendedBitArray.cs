@@ -40,7 +40,7 @@ namespace _8bitVonNeiman.Common {
         /// Возвращает информацию байта в виде двоичной строки.
         /// </summary>
         /// <returns>Информация, хранимая в байте в виде двоичной строки.</returns>
-        public string ToDigitString() {
+        public string ToBinString() {
             var s = Convert.ToString(_data, 2);
             var diff = Constants.WordSize - s.Length;
             if (diff == 0) {

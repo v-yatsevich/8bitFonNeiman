@@ -3,5 +3,6 @@
         void FormClosed();
         void EditorButtonClicked();
         void MemoryButtonClicked();
+        void CpuButtonClicked();
     }
 }

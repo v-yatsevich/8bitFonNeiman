@@ -19,7 +19,7 @@ namespace _8bitFonNeimanTest {
                 env.CurrentAddress = 0;
                 commands[inputs[i].ToLower()](args[i], env);
                 var memory = env.GetMemory();
-                var str = new string(memory[0].ToDigitString().Reverse().ToArray()) + new string( memory[1].ToDigitString().Reverse().ToArray());
+                var str = new string(memory[0].ToBinString().Reverse().ToArray()) + new string( memory[1].ToBinString().Reverse().ToArray());
                 Assert.AreEqual(outputs[i], str, $"Command: {inputs[i]}");
             }
         }

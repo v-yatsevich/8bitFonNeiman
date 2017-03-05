@@ -22,5 +22,9 @@ namespace _8bitVonNeiman.Controller.View {
         private void memoryButton_Click(object sender, EventArgs e) {
             _output.MemoryButtonClicked();
         }
+
+        private void cpuButton_Click(object sender, EventArgs e) {
+            _output.CpuButtonClicked();
+        }
     }
 }

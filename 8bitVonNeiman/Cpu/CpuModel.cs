@@ -1,9 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _8bitVonNeiman.Common;
+using _8bitVonNeiman.Cpu.View;
 
 namespace _8bitVonNeiman.Cpu {
-    public class CpuModel {
+    public class CpuModel: ICpuModelInput {
+
+        public delegate ICpuFormInput GetView();
+
+        private GetView _viewDelegate;
 
         /// Аккамулятор.
         private ExtendedBitArray _acc = new ExtendedBitArray();
@@ -48,9 +52,11 @@ namespace _8bitVonNeiman.Cpu {
         private ExtendedBitArray _dr = new ExtendedBitArray();
 
         /// ???
-        private ExtendedBitArray[] _cr = new ExtendedBitArray[2];
+        private ExtendedBitArray[] _cr = { new ExtendedBitArray(), new ExtendedBitArray() };
 
         private ICpuModelOutput _output;
+        //TODO: Сделать через интерфейс
+        private CpuForm _view;
 
         /// Аллиас регистра перенома
         // ReSharper disable once InconsistentNaming
@@ -59,9 +65,31 @@ namespace _8bitVonNeiman.Cpu {
             set { _psw[4] = value; }
         }
 
-        public CpuModel(ICpuModelOutput output) {
+        public CpuModel(ICpuModelOutput output, GetView viewDelegate) {
+            _viewDelegate = viewDelegate;
             _output = output;
             Reset();
+        }
+
+        public void Tick() {
+            _y45();
+            _y50();
+            _y19();
+            _y22();
+            //Получить из памяти значение?
+            //Вызвать выполнение команды
+            _view?.ShowState(MakeState());
+        }
+
+        public void ChangeFormState() {
+            if (_view == null) {
+                _view = new CpuForm();
+                _view.Show();
+                _view?.ShowState(MakeState());
+            } else {
+                _view.Close();
+                _view = null;
+            }
         }
 
         public void Reset() {
@@ -88,6 +116,10 @@ namespace _8bitVonNeiman.Cpu {
         /// <param name="address">Адрес, по которому записывается память.</param>
         private void SetMemory(ExtendedBitArray data, int address) {
             _output.SetMemory(data, address);
+        }
+
+        private CpuState MakeState() {
+            return new CpuState(_acc, _dr, _psw, _ss, _ds, _cs, _pcl, _spl, _cr, _registers);
         }
 
         #region Микрокоманды

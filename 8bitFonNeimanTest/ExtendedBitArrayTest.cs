@@ -53,21 +53,21 @@ namespace _8bitFonNeimanTest {
             var array = new List<string> { "00001100", "01110111", "00011100", "01010101", "01010001" };
             foreach (var code in array) {
                 var ExtendedBitArray = new ExtendedBitArray(code);
-                Assert.AreEqual(ExtendedBitArray.ToDigitString(), code);
+                Assert.AreEqual(ExtendedBitArray.ToBinString(), code);
             }
         }
 
         [TestMethod]
         public void EmptyConstructorTest() {
             var ExtendedBitArray = new ExtendedBitArray();
-            Assert.AreEqual(ExtendedBitArray.ToDigitString(), "00000000");
+            Assert.AreEqual(ExtendedBitArray.ToBinString(), "00000000");
         }
 
         [TestMethod]
         public void CopyConstructorTest() {
             var ExtendedBitArray = new ExtendedBitArray("00110000");
             var copy = new ExtendedBitArray(ExtendedBitArray);
-            Assert.AreEqual(ExtendedBitArray.ToDigitString(), copy.ToDigitString());
+            Assert.AreEqual(ExtendedBitArray.ToBinString(), copy.ToBinString());
         }
 
         [TestMethod]
@@ -107,7 +107,7 @@ namespace _8bitFonNeimanTest {
             };
             for (int i = 0; i < array1.Count; i++) {
                 array1[i].Add(array2[i]);
-                Assert.AreEqual(array1[i].ToDigitString(), results[i]);
+                Assert.AreEqual(array1[i].ToBinString(), results[i]);
             }
         }
 
@@ -137,7 +137,7 @@ namespace _8bitFonNeimanTest {
             };
             for (int i = 0; i < array.Count; i++) {
                 array[i].Inc();
-                Assert.AreEqual(array[i].ToDigitString(), results[i]);
+                Assert.AreEqual(array[i].ToBinString(), results[i]);
             }
         }
 
@@ -166,7 +166,7 @@ namespace _8bitFonNeimanTest {
             };
             for (int i = 0; i < array.Count; i++) {
                 array[i].Dec();
-                Assert.AreEqual(array[i].ToDigitString(), results[i]);
+                Assert.AreEqual(array[i].ToBinString(), results[i]);
             }
         }
 
@@ -191,19 +191,19 @@ namespace _8bitFonNeimanTest {
             var array = new ExtendedBitArray("00100101");
 
             array[1] = true;
-            Assert.AreEqual(array.ToDigitString(), "00100111");
+            Assert.AreEqual(array.ToBinString(), "00100111");
 
             array[1] = true;
-            Assert.AreEqual(array.ToDigitString(), "00100111");
+            Assert.AreEqual(array.ToBinString(), "00100111");
 
             array[1] = false;
-            Assert.AreEqual(array.ToDigitString(), "00100101");
+            Assert.AreEqual(array.ToBinString(), "00100101");
 
             array[7] = false;
-            Assert.AreEqual(array.ToDigitString(), "00100101");
+            Assert.AreEqual(array.ToBinString(), "00100101");
 
             array[7] = true;
-            Assert.AreEqual(array.ToDigitString(), "10100101");
+            Assert.AreEqual(array.ToBinString(), "10100101");
         }
 
         [TestMethod]
@@ -238,7 +238,7 @@ namespace _8bitFonNeimanTest {
             };
             for (int i = 0; i < array.Count; i++) {
                 array[i].Invert();
-                Assert.AreEqual(array[i].ToDigitString(), results[i]);
+                Assert.AreEqual(array[i].ToBinString(), results[i]);
             }
         }
     }

@@ -1,5 +1,7 @@
 ﻿using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Compiler.Model;
+using _8bitVonNeiman.Cpu;
+using _8bitVonNeiman.Cpu.View;
 using _8bitVonNeiman.Memory;
 
 namespace _8bitVonNeiman.Controller {
@@ -16,6 +18,14 @@ namespace _8bitVonNeiman.Controller {
         public static MemoryController GetMemoryController() {
             var memoryController = new MemoryController();
             return memoryController;
+        }
+
+        public static ICpuModelInput GetCpu(ICpuModelOutput output) {
+            return new CpuModel(output, GetView);
+        }
+
+        private static ICpuFormInput GetView() {
+            return new CpuForm();
         }
     }
 }
