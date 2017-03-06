@@ -27,7 +27,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.compileButton = new System.Windows.Forms.Button();
-            this.scintilla = new ScintillaNET.Scintilla();
+            this.scintilla = new System.Windows.Forms.RichTextBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -83,12 +83,10 @@
             this.scintilla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.scintilla.AutoCIgnoreCase = true;
             this.scintilla.Location = new System.Drawing.Point(12, 47);
             this.scintilla.Name = "scintilla";
             this.scintilla.Size = new System.Drawing.Size(306, 426);
             this.scintilla.TabIndex = 1;
-            this.scintilla.StyleNeeded += new System.EventHandler<ScintillaNET.StyleNeededEventArgs>(this.scintilla_StyleNeeded);
             this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
             this.scintilla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.scintilla_KeyDown);
             // 
@@ -151,7 +149,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button compileButton;
-        private ScintillaNET.Scintilla scintilla;
+        private System.Windows.Forms.RichTextBox scintilla;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
