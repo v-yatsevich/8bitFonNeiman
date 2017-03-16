@@ -87,6 +87,7 @@
             this.scintilla.Name = "scintilla";
             this.scintilla.Size = new System.Drawing.Size(306, 426);
             this.scintilla.TabIndex = 1;
+            this.scintilla.Text = "ADD R4\nSUB R4\nMUL R4\nDIV R4\nAND R4\nOR R4\nXOR R4\nCMP R4\nRD R4\nWP R4\nINC R4\n";
             this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
             this.scintilla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.scintilla_KeyDown);
             // 

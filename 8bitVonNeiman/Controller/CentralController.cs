@@ -42,6 +42,10 @@ namespace _8bitVonNeiman.Controller {
             _cpu.ChangeFormState();
         }
 
+        public void TactButtonClicked() {
+            _cpu.Tick();
+        }
+
         public ExtendedBitArray GetMemory(int address) {
             return _memoryController.GetMemory(address);
         }

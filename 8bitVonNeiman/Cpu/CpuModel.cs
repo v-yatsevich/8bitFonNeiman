@@ -3,7 +3,7 @@ using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Cpu.View;
 
 namespace _8bitVonNeiman.Cpu {
-    public class CpuModel: ICpuModelInput {
+    public class CpuModel: ICpuModelInput, ICpuFormOutput {
 
         public delegate ICpuFormInput GetView();
 
@@ -71,6 +71,15 @@ namespace _8bitVonNeiman.Cpu {
             Reset();
         }
 
+        public void ResetButtonTapped() {
+            Reset();
+            _view?.ShowState(MakeState());
+        }
+
+        public void FormClosed() {
+            _view = null;
+        }
+
         public void Tick() {
             _y43();
             _y1();
@@ -80,13 +89,14 @@ namespace _8bitVonNeiman.Cpu {
             _y1();
             _y27();
             _y31();
-            //Вызвать выполнение команды
+            RunCommand();
             _view?.ShowState(MakeState());
         }
 
         public void ChangeFormState() {
             if (_view == null) {
                 _view = new CpuForm();
+                _view.Output = this;
                 _view.Show();
                 _view?.ShowState(MakeState());
             } else {
@@ -104,7 +114,7 @@ namespace _8bitVonNeiman.Cpu {
             _spl = 0;
             _registers = new List<ExtendedBitArray> {
                 new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(),
-                new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray()
+                new ExtendedBitArray("00110011"), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray()
             };
         }
         
@@ -123,6 +133,210 @@ namespace _8bitVonNeiman.Cpu {
 
         private CpuState MakeState() {
             return new CpuState(_acc, _dr, _psw, _ss, _ds, _cs, _pcl, _spl, _cr, _registers);
+        }
+
+        private void RunCommand() {
+            var highBin = _cr[1].ToBinString();
+            var highHex = _cr[1].ToHexString();
+            var lowBin = _cr[0].ToBinString();
+            var lowHex = _cr[0].ToHexString();
+            //RET
+            if (highHex == "00" && lowHex == "01") {
+                //Do nothing
+                return;
+            }
+            //Регистровые
+            if (highHex[0] == '5' || highHex == "F0" || highHex == "F1") {
+                //MOV
+                if (highHex[1] == 'F') {
+                    return;
+                }
+                //POP
+                if (highHex[1] == 'D') {
+                    _y45();
+                    _y2();
+                    _y34();
+                    _y47();
+                    _y5();
+                    //TODO: Установить флаги
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //WP
+                if (highHex[1] == 'A') {
+                    _y49();
+                    _y47();
+                    _y5();
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+
+                LoadRegister(lowHex);
+                //NOT
+                if (highHex[1] == '0') {
+                    _y52();
+                    UnloadRegister(lowHex);
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //ADD
+                if (highHex[1] == '1') {
+                    bool overflow = _acc.Add(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //SUB
+                if (highHex[1] == '2') {
+                    bool overflow = _acc.Sub(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //MUL
+                if (highHex[1] == '3') {
+                    bool overflow = _acc.Mul(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //DIV
+                if (highHex[1] == '4') {
+                    _acc.Div(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //AND
+                if (highHex[1] == '5') { 
+                    _acc.And(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //OR
+                if (highHex[1] == '6') {
+                    _acc.Or(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //XOR
+                if (highHex[1] == '7') {
+                    _acc.Xor(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //CMP
+                if (highHex[1] == '8') {
+                    var temp = new ExtendedBitArray(_rdb);
+                    bool overflow = temp.Sub(_acc);
+                    //TODO: установить регистры
+                    UnloadRegister(lowHex);
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //RD
+                if (highHex[1] == '9') {
+                    _acc = new ExtendedBitArray(_rdb);
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //INC
+                if (highHex[1] == 'B') {
+                    _rdb.Inc();
+                    //TODO: Установить флаги
+                    UnloadRegister(lowHex);
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //DEC
+                if (highHex[1] == 'C') {
+                    _rdb.Dec();
+                    //TODO: Установить флаги
+                    UnloadRegister(lowHex);
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //PUSH
+                if (highHex[1] == 'E') {
+                    _y35();
+                    _y45();
+                    _y4();
+                    //TODO: Установить флаги
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //ADC
+                if (highHex == "F0") {
+                    var overflow = _acc.Add(_rdb);
+                    if (FC) {
+                        overflow |= _acc.Inc();
+                    }
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+                //SUBB
+                if (highHex == "F1") {
+                    var overflow = _acc.Sub(_rdb);
+                    if (FC) {
+                        overflow |= _acc.Dec();
+                    }
+                    //TODO: установить регистры
+                    ModifyRegister(lowHex);
+                    return;
+                }
+            }
+        }
+
+        private void LoadRegister(string lowHex) {
+            _y47();
+            _y2();
+            if (lowHex[0] != '0') {
+                //+@R    - 101
+                if (lowHex[0] == '5') {
+                    _y50();
+                    _y5();
+                } 
+                else
+                //-@R    - 111
+                if (lowHex[0] == '7') {
+                    _y51();
+                    _y5();
+                }
+                _y60();
+                _y1();
+            }
+        }
+
+        private void UnloadRegister(string lowHex) {
+            if (lowHex[0] == '0') {
+                _y5();
+            } else {
+                _y4();
+            }
+        }
+        
+        private void ModifyRegister(string lowHex) {
+            //@R+ - 001
+            if (lowHex[0] == '1') {
+                _y47();
+                _y2();
+                _y50();
+                _y5();
+                return;
+            }
+            //@R- - 011
+            if (lowHex[0] == '3') {
+                _y47();
+                _y2();
+                _y51();
+                _y5();
+            }
         }
 
         #region Микрокоманды
@@ -438,6 +652,10 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y59() {
             //TODO: Работа с регистром вывода
+        }
+
+        private void _y60() {
+            _rab = _rdb.NumValue() + (_ds << Constants.WordSize);
         }
 
         #endregion

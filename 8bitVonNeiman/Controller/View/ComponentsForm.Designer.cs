@@ -26,6 +26,7 @@
             this.editorButton = new System.Windows.Forms.Button();
             this.memoryButton = new System.Windows.Forms.Button();
             this.cpuButton = new System.Windows.Forms.Button();
+            this.tempTactButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // editorButton
@@ -58,11 +59,22 @@
             this.cpuButton.UseVisualStyleBackColor = true;
             this.cpuButton.Click += new System.EventHandler(this.cpuButton_Click);
             // 
+            // tempTactButton
+            // 
+            this.tempTactButton.Location = new System.Drawing.Point(69, 122);
+            this.tempTactButton.Name = "tempTactButton";
+            this.tempTactButton.Size = new System.Drawing.Size(75, 23);
+            this.tempTactButton.TabIndex = 3;
+            this.tempTactButton.Text = "Такт";
+            this.tempTactButton.UseVisualStyleBackColor = true;
+            this.tempTactButton.Click += new System.EventHandler(this.tempTactButton_Click);
+            // 
             // ComponentsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.tempTactButton);
             this.Controls.Add(this.cpuButton);
             this.Controls.Add(this.memoryButton);
             this.Controls.Add(this.editorButton);
@@ -78,6 +90,7 @@
         private System.Windows.Forms.Button editorButton;
         private System.Windows.Forms.Button memoryButton;
         private System.Windows.Forms.Button cpuButton;
+        private System.Windows.Forms.Button tempTactButton;
     }
 }
 

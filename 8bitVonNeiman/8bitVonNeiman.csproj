@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="Cpu\View\CpuState.cs" />
     <Compile Include="Cpu\View\ICpuFormInput.cs" />
+    <Compile Include="Cpu\View\ICpuFormOutput.cs" />
     <Compile Include="Memory\IMemoryControllerInput.cs" />
     <Compile Include="Memory\MemoryController.cs" />
     <Compile Include="Memory\View\IMemoryFormOutput.cs" />

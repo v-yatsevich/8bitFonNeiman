@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace _8bitVonNeiman.Cpu.View {
     public partial class CpuForm : Form, ICpuFormInput {
+
+        public ICpuFormOutput Output;
+
         public CpuForm() {
             InitializeComponent();
 
@@ -38,13 +41,13 @@ namespace _8bitVonNeiman.Cpu.View {
             crHexTextBox.Text = state.Cr[0].ToHexString() + state.Cr[1].ToHexString();
 
             r0TextBox.Text = state.Registers[0].ToHexString();
-            r1TextBox.Text = state.Registers[0].ToHexString();
-            r2TextBox.Text = state.Registers[0].ToHexString();
-            r3TextBox.Text = state.Registers[0].ToHexString();
-            r4TextBox.Text = state.Registers[0].ToHexString();
-            r5TextBox.Text = state.Registers[0].ToHexString();
-            r6TextBox.Text = state.Registers[0].ToHexString();
-            r7TextBox.Text = state.Registers[0].ToHexString();
+            r1TextBox.Text = state.Registers[1].ToHexString();
+            r2TextBox.Text = state.Registers[2].ToHexString();
+            r3TextBox.Text = state.Registers[3].ToHexString();
+            r4TextBox.Text = state.Registers[4].ToHexString();
+            r5TextBox.Text = state.Registers[5].ToHexString();
+            r6TextBox.Text = state.Registers[6].ToHexString();
+            r7TextBox.Text = state.Registers[7].ToHexString();
         }
 
         private void SetupPswGridView() {
@@ -59,7 +62,6 @@ namespace _8bitVonNeiman.Cpu.View {
             for (int i = 0; i < pswDataGridView.Columns.Count; i++) {
                 pswDataGridView.Columns[i].Width = 30;
             }
-            //pswDataGridView.Rows.Add();
         }
 
         private void SetupSrGridView() {
@@ -69,7 +71,14 @@ namespace _8bitVonNeiman.Cpu.View {
             for (int i = 0; i < srDataGridView.Columns.Count; i++) {
                 srDataGridView.Columns[i].Width = 30;
             }
-            //srDataGridView.Rows.Add();
+        }
+
+        private void resetButton_Click(object sender, EventArgs e) {
+            Output?.ResetButtonTapped();
+        }
+
+        private void CpuForm_FormClosed(object sender, FormClosedEventArgs e) {
+            Output?.FormClosed();
         }
     }
 }

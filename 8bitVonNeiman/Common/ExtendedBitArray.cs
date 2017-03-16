@@ -59,12 +59,19 @@ namespace _8bitVonNeiman.Common {
         }
 
         /// <summary>
-        /// Прибавляет значение передаваемого слова к текущему слову. Генерирует <see cref="OverflowException"/> при переполнении.
+        /// Прибавляет значение передаваемого слова к текущему слову.
         /// </summary>
         /// <param name="array">Байт, значение которого прибавляется к текущему.</param>
-        public void Add(ExtendedBitArray array) {
-            checked {
+        /// <returns>true, если переполнение произошло, false в ином случае.</returns>
+        public bool Add(ExtendedBitArray array) {
+            try {
+                checked {
+                    _data += array._data;
+                }
+                return false;
+            } catch {
                 _data += array._data;
+                return true;
             }
         }
 
@@ -76,6 +83,69 @@ namespace _8bitVonNeiman.Common {
             checked {
                 _data += (byte)num;
             }
+        }
+
+        /// <summary>
+        /// Вычитает значение передаваемого слова из текущего слова.
+        /// </summary>
+        /// <param name="array">Байт, значение которого прибавляется к текущему.</param>
+        /// <returns>true, если переполнение произошло, false в ином случае.</returns>
+        public bool Sub(ExtendedBitArray array) {
+            try {
+                checked {
+                    _data -= array._data;
+                }
+                return false;
+            } catch {
+                _data -= array._data;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Умножает слово на значение передаваемого слова.
+        /// </summary>
+        /// <param name="array">Байт, на значение которого умножается текущий.</param>
+        /// <returns>true, если переполнение произошло, false в ином случае.</returns>
+        public bool Mul(ExtendedBitArray array) {
+            try {
+                checked {
+                    _data *= array._data;
+                }
+                return false;
+            } catch {
+                _data *= array._data;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Делим слово на значение передаваемого слова. Генерирует <see cref="OverflowException"/> при переполнении.
+        /// </summary>
+        /// <param name="array">Байт, на значение которого умножается текущий.</param>
+        public void Div(ExtendedBitArray array) {
+            _data /= array._data;
+        }
+
+        /// <summary>
+        /// Применяет операцию логического И к словам.
+        /// </summary>
+        public void And(ExtendedBitArray array) {
+            _data &= array._data;
+        }
+
+        /// <summary>
+        /// Применяет операцию логического ИЛИ к словам.
+        /// </summary>
+        public void Or(ExtendedBitArray array) {
+            _data |= array._data;
+        }
+
+        /// <summary>
+        /// Применяет операцию xor к словам.
+        /// </summary>
+        public void Xor(ExtendedBitArray array) {
+            _data ^= array._data;
         }
 
         /// <summary>
@@ -103,18 +173,18 @@ namespace _8bitVonNeiman.Common {
             }
         }
         
-        /// Увеличивает значение слова на 1. При переполнении вызывает <see cref="OverflowException"/>
-        public void Inc() {
-            checked {
-                _data++;
-            }
+        /// Увеличивает значение слова на 1.
+        /// <returns>true, если произошло переполнение, false в ином случае.</returns>
+        public bool Inc() {
+            _data++;
+            return _data == 0;
         }
 
-        /// Уменьшает значение слова на 1. При переполнении вызывает <see cref="OverflowException"/>
-        public void Dec() {
-            checked {
-                _data--;
-            }
+        /// Уменьшает значение слова на 1.
+        /// <returns>true, если произошло переполнение, false в ином случае.</returns>
+        public bool Dec() {
+            _data--;
+            return _data == byte.MaxValue;
         }
 
         /// Инвертирует все биты слова.
@@ -125,6 +195,10 @@ namespace _8bitVonNeiman.Common {
         /// Возвращает числовую интерпретацию слова
         public int NumValue() {
             return _data;
+        }
+
+        public override string ToString() {
+            return $"Dec: {_data}, Bin: {ToBinString()}, Hex: {ToHexString()}";
         }
     }
 }
