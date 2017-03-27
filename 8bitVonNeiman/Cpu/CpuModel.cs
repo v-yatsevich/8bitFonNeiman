@@ -140,15 +140,14 @@ namespace _8bitVonNeiman.Cpu {
             var highHex = _cr[1].ToHexString();
             var lowBin = _cr[0].ToBinString();
             var lowHex = _cr[0].ToHexString();
-            //RET
-            if (highHex == "00" && lowHex == "01") {
-                //Do nothing
-                return;
-            }
             //Регистровые
-            if (highHex[0] == '5' || highHex == "F0" || highHex == "F1") {
+            if (highHex[0] == '5' || highHex == "F0" || highHex == "F1") { 
                 //MOV
                 if (highHex[1] == 'F') {
+                    _y46();
+                    _y2();
+                    _y47();
+                    _y5();
                     return;
                 }
                 //POP
@@ -288,6 +287,131 @@ namespace _8bitVonNeiman.Cpu {
                     }
                     //TODO: установить регистры
                     ModifyRegister(lowHex);
+                    return;
+                }
+            }
+
+            //ОЗУ
+            if (highBin.StartsWith("011")) {
+                //WR
+                if (highHex[1] == 'A') {
+                    _y44();
+                    _y49();
+                    _y4();
+                    //TODO: установить флаги
+                    return;
+                }
+
+                if (highBin[4] == '0') {
+                    // Константы
+                    _y61();
+                } else {
+                    //прямая
+                    _y44();
+                    _y1();
+                }
+
+                //NOT
+                if (highHex[1] == '0') {
+                    _y52();
+                    _y4();
+                    //TODO: установить флаги
+                    return;
+                }
+                //ADD
+                if (highHex[1] == '1') {
+                    var overflow = _acc.Add(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //SUB
+                if (highHex[1] == '2') {
+                    var overflow = _acc.Sub(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //MUL
+                if (highHex[1] == '3') {
+                    var overflow = _acc.Mul(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //DIV
+                if (highHex[1] == '4') {
+                    _acc.Div(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //AND
+                if (highHex[1] == '5') {
+                    _acc.And(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //OR
+                if (highHex[1] == '6') {
+                    _acc.Or(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //XOR
+                if (highHex[1] == '7') {
+                    _acc.Xor(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //CMP
+                if (highHex[1] == '8') {
+                    var temp = new ExtendedBitArray(_rdb);
+                    bool overflow = temp.Sub(_acc);
+                    //TODO: установить флаги
+                    return;
+                }
+                //RD
+                if (highHex[1] == '9') {
+                    _acc = new ExtendedBitArray(_rdb);
+                    //TODO: установить флаги
+                    return;
+                }
+                //INC
+                if (highHex[1] == 'B') {
+                    _y50();
+                    _y4();
+                    //TODO: установить флаги
+                    return;
+                }
+                //DEC A
+                if (highHex[1] == 'C') {
+                    _y51();
+                    _y4();
+                    //TODO: установить флаги
+                    return;
+                }
+                //ADC A
+                if (highHex[1] == 'D') {
+                    var overflow = _acc.Add(_rdb);
+                    if (FC) {
+                        overflow |= _acc.Inc();
+                    }
+                    //TODO: установить флаги
+                    return;
+                }
+                //SUBB A
+                if (highHex[1] == 'D') {
+                    var overflow = _acc.Add(_rdb);
+                    if (FC) {
+                        overflow |= _acc.Inc();
+                    }
+                    //TODO: установить флаги
+                    return;
+                }
+                //XCH A
+                if (highHex[1] == 'D') {
+                    var temp = new ExtendedBitArray(_acc);
+                    _acc = new ExtendedBitArray(_rdb);
+                    _rdb = temp;
+                    _y4();
+                    //TODO: установить флаги
                     return;
                 }
             }
@@ -656,6 +780,10 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y60() {
             _rab = _rdb.NumValue() + (_ds << Constants.WordSize);
+        }
+
+        private void _y61() {
+            _rdb = new ExtendedBitArray(_cr[0]);
         }
 
         #endregion
