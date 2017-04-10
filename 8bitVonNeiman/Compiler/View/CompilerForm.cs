@@ -26,6 +26,15 @@ namespace _8bitVonNeiman.Compiler.View {
             MessageBox.Show(message);
         }
 
+        public void ShowSaveDialog() {
+            var status = saveFileDialog.ShowDialog();
+            if (status == DialogResult.OK || status == DialogResult.Yes) {
+                string path = saveFileDialog.FileName;
+                _output.SaveDialogEnded(path);
+            }
+            saveFileDialog.FileName = null;
+        }
+
         private void CompilerForm_FormClosed(object sender, FormClosedEventArgs e) {
             _output.FormClosed(scintilla.Text);
         }
@@ -73,12 +82,7 @@ namespace _8bitVonNeiman.Compiler.View {
         }
 
         private void saveButton_Click(object sender, EventArgs e) {
-            var status = saveFileDialog.ShowDialog();
-            if (status == DialogResult.OK || status == DialogResult.Yes) {
-                string path = saveFileDialog.FileName;
-                _output.Save(scintilla.Text, path);
-            }
-            saveFileDialog.FileName = null;
+            _output.SaveButtonClicked(scintilla.Text);
         }
 
         private void loadButton_Click(object sender, EventArgs e) {
@@ -88,6 +92,10 @@ namespace _8bitVonNeiman.Compiler.View {
                 _output.Load(path);
             }
             openFileDialog.FileName = null;
+        }
+
+        private void saveAsButton_Click(object sender, EventArgs e) {
+            _output.SaveAsButtonClicked(scintilla.Text);
         }
     }
 }

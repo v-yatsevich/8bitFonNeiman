@@ -311,7 +311,7 @@ namespace _8bitVonNeiman.Cpu {
                 return;
             }
 
-            if (highBin[4] == '0') {
+            if (highBin[4] == '1') {
                 // Константы
                 _y61();
             } else {

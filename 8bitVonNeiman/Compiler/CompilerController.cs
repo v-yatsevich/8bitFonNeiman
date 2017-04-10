@@ -9,6 +9,7 @@ namespace _8bitVonNeiman.Compiler {
         private CompilerModel _compilerModel;
         private ICompilerControllerOutput _output;
         private string _code = "";
+        private string _filePath = null;
 
         public CompilerController(ICompilerControllerOutput output) {
             _output = output;
@@ -66,14 +67,23 @@ namespace _8bitVonNeiman.Compiler {
             _form.AddLineToOutput($"Ошибка компиляции: {e.ErrorMessage} в строке {e.LineNumber + 1}");
         }
 
-        public void Save(string code, string path) {
-            try {
-                using (var sw = new StreamWriter(new FileStream(path, FileMode.Create, FileAccess.Write))) {
-                    sw.Write(code);
-                }
-            } catch {
-                _form.ShowMessage("В процессе записи файла возникла ошибка.");
+        public void SaveButtonClicked(string code) {
+            _code = code;
+            if (_filePath == null) {
+                _form.ShowSaveDialog();
+            } else {
+                SaveCode();
             }
+        }
+
+        public void SaveAsButtonClicked(string code) {
+            _code = code;
+            _form.ShowSaveDialog();
+        }
+
+        public void SaveDialogEnded(string path) {
+            _filePath = path;
+            SaveCode();
         }
 
         public void Load(string path) {
@@ -84,6 +94,16 @@ namespace _8bitVonNeiman.Compiler {
                 }
             } catch {
                 _form.ShowMessage("В процессе открытия файла возникла ошибка.");
+            }
+        }
+
+        private void SaveCode() {
+            try {
+                using (var sw = new StreamWriter(new FileStream(_filePath, FileMode.Create, FileAccess.Write))) {
+                    sw.Write(_code);
+                }
+            } catch {
+                _form.ShowMessage("В процессе записи файла возникла ошибка.");
             }
         }
     }

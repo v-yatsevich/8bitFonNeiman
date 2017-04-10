@@ -32,6 +32,7 @@
             this.loadButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.saveAsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // outputRichTextBox
@@ -61,7 +62,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 31);
+            this.label2.Location = new System.Drawing.Point(12, 61);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 3;
@@ -83,9 +84,9 @@
             this.scintilla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.scintilla.Location = new System.Drawing.Point(12, 47);
+            this.scintilla.Location = new System.Drawing.Point(12, 77);
             this.scintilla.Name = "scintilla";
-            this.scintilla.Size = new System.Drawing.Size(306, 426);
+            this.scintilla.Size = new System.Drawing.Size(306, 396);
             this.scintilla.TabIndex = 1;
             this.scintilla.Text = "ADD R4\nSUB R4\nMUL R4\nDIV R4\nAND R4\nOR R4\nXOR R4\nCMP R4\nRD R4\nWP R4\nINC R4\n";
             this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
@@ -103,7 +104,7 @@
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(94, 5);
+            this.loadButton.Location = new System.Drawing.Point(12, 34);
             this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(75, 23);
             this.loadButton.TabIndex = 6;
@@ -125,11 +126,22 @@
             this.saveFileDialog.SupportMultiDottedExtensions = true;
             this.saveFileDialog.Title = "Сохранить файл";
             // 
+            // saveAsButton
+            // 
+            this.saveAsButton.Location = new System.Drawing.Point(93, 5);
+            this.saveAsButton.Name = "saveAsButton";
+            this.saveAsButton.Size = new System.Drawing.Size(107, 23);
+            this.saveAsButton.TabIndex = 7;
+            this.saveAsButton.Text = "Сохранить как";
+            this.saveAsButton.UseVisualStyleBackColor = true;
+            this.saveAsButton.Click += new System.EventHandler(this.saveAsButton_Click);
+            // 
             // CompilerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(330, 587);
+            this.Controls.Add(this.saveAsButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.scintilla);
@@ -155,5 +167,6 @@
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.Button saveAsButton;
     }
 }

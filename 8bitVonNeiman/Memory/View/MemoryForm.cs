@@ -16,10 +16,10 @@ namespace _8bitVonNeiman.Memory.View {
             memoryDataGridView.ColumnCount = ColumnCount;
             memoryDataGridView.RowHeadersWidth = 60;
             for (int i = 0; i < RowCount; i++) {
-                memoryDataGridView.Rows[i].HeaderCell.Value = (i << 4).ToString();
+                memoryDataGridView.Rows[i].HeaderCell.Value = (i << 4).ToString("X");
             }
             for (int i = 0; i < ColumnCount; i++) {
-                memoryDataGridView.Columns[i].HeaderCell.Value = i.ToString();
+                memoryDataGridView.Columns[i].HeaderCell.Value = i.ToString("X");
                 memoryDataGridView.Columns[i].Width = 25;
             }
         }

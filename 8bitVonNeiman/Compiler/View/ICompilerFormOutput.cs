@@ -3,7 +3,9 @@
         void FormClosed(string code);
         void Compile(string code);
 
-        void Save(string code, string path);
+        void SaveButtonClicked(string code);
+        void SaveAsButtonClicked(string code);
+        void SaveDialogEnded(string path);
         void Load(string path);
     }
 }
