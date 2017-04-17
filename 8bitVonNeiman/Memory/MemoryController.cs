@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Memory.View;
@@ -16,7 +17,7 @@ namespace _8bitVonNeiman.Memory {
         }
 
         public void SetMemory(Dictionary<int, ExtendedBitArray> memory) {
-            _memory = memory;
+            memory.ToList().ForEach(x => _memory.Add(x.Key, x.Value));
             if (_form != null) {
                 ShowMemory();
             }
@@ -75,9 +76,9 @@ namespace _8bitVonNeiman.Memory {
                 _form.SetMemory(row, collumn, MemoryHex(row, collumn));
                 return;
             }
-            var ExtendedBitArray = new ExtendedBitArray();
-            CompilerSupport.FillBitArray(null, ExtendedBitArray, num, 8);
-            _memory[row * MemoryForm.ColumnCount + collumn] = ExtendedBitArray;
+            var bitArray = new ExtendedBitArray();
+            CompilerSupport.FillBitArray(null, bitArray, num, 8);
+            _memory[row * MemoryForm.ColumnCount + collumn] = bitArray;
             if (s.Length == 1) {
                 s = "0" + s;
             }
