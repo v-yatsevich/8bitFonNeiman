@@ -58,11 +58,18 @@ namespace _8bitVonNeiman.Cpu {
         //TODO: Сделать через интерфейс
         private CpuForm _view;
 
-        /// Аллиас регистра перенома
+        /// Аллиас регистра переноса
         // ReSharper disable once InconsistentNaming
         private bool FC {
             get { return _psw[4]; }
             set { _psw[4] = value; }
+        }
+
+        /// Аллиас регистра нуля
+        // ReSharper disable once InconsistentNaming
+        private bool FZ {
+            get { return _psw[0]; }
+            set { _psw[0] = value; }
         }
 
         public CpuModel(ICpuModelOutput output, GetView viewDelegate) {
@@ -468,6 +475,33 @@ namespace _8bitVonNeiman.Cpu {
                 _y2();
                 _y51();
                 _y5();
+            }
+        }
+
+        /// <summary>
+        /// Формирует флаги. Единицы в двоичной записи аргумента обозначают какие флаги нужно формировать:
+        /// 0: z - acc = 0
+        /// 1: n - acc < 0
+        /// 2: o - переполнение со знаком
+        /// 3: a - перенос из третьего в четвертый
+        /// 4: c - перенос
+        /// </summary>
+        /// <param name="mask">Аргумент, который обозначает, какие флаги нужно формировать</param>
+        private void FormFlags(int mask) {
+            if ((mask & 1) != 0) {
+                FZ = _acc.NumValue() == 0;
+            }
+            if ((mask & 1) != 1) {
+                FZ = _acc.NumValue() == 0;
+            }
+            if ((mask & 1) != 2) {
+                FZ = _acc.NumValue() == 0;
+            }
+            if ((mask & 1) != 3) {
+                FZ = _acc.NumValue() == 0;
+            }
+            if ((mask & 1) != 4) {
+                FC = _acc.NumValue() == 0;
             }
         }
 
