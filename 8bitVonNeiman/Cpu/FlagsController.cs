@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _8bitVonNeiman.Common;
+﻿using _8bitVonNeiman.Common;
 
 namespace _8bitVonNeiman.Cpu {
     ///Класс: имплементирующий работу с флагами процессора
     public class FlagsController {
+
         public ExtendedBitArray Flags { get; private set; } = new ExtendedBitArray();
         private ExtendedBitArray _state = null;
 
@@ -46,7 +42,50 @@ namespace _8bitVonNeiman.Cpu {
         }
 
         public void UpdateFlags(ExtendedBitArray newState, string command, bool? overflow = null) {
-            
+            var mask = 0;
+            switch (command.ToLower()) {
+            case "add":
+            case "sub":
+            case "mul":
+            case "div":
+            case "cmp":
+            case "adc":
+            case "subb":
+                mask = 1 + 2 + 4 + 8 + 16;
+                break;
+            case "and":
+            case "or":
+            case "xor":
+            case "not":
+                Z = false;
+                N = false;
+                O = false;
+                mask = 8 + 16;
+                break;
+            case "inc":
+            case "dec":
+                mask = 2 + 4 + 8 + 16;
+                break;
+            }
+            FormFlags(newState, mask, overflow);
+        }
+
+        public void FormFlags(ExtendedBitArray newState, int mask, bool? overflow) {
+            if ((mask & 1) != 0) {
+                Z = newState.NumValue() == 0;
+            }
+            if ((mask & 2) != 0) {
+                N = newState[Constants.WordSize - 1];
+            }
+            if ((mask & 4) != 0) {
+                
+            }
+            if ((mask & 8) != 0) {
+                
+            }
+            if ((mask & 16) != 0) {
+                C = overflow.HasValue && overflow.Value;
+            }
         }
     }
 }
