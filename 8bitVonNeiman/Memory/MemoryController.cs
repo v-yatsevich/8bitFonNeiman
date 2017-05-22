@@ -17,7 +17,7 @@ namespace _8bitVonNeiman.Memory {
         }
 
         public void SetMemory(Dictionary<int, ExtendedBitArray> memory) {
-            memory.ToList().ForEach(x => _memory.Add(x.Key, x.Value));
+            memory.ToList().ForEach(x => _memory[x.Key] = x.Value);
             if (_form != null) {
                 ShowMemory();
             }

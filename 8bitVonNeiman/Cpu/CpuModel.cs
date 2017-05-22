@@ -139,7 +139,7 @@ namespace _8bitVonNeiman.Cpu {
 
             //ОЗУ
             if (highBin.StartsWith("011")) {
-                ProcessRamCommand(highHex, lowHex);
+                ProcessRamCommand(highBin, highHex);
             }
         }
 
@@ -311,7 +311,7 @@ namespace _8bitVonNeiman.Cpu {
                 return;
             }
 
-            if (highBin[4] == '1') {
+            if (highBin[3] == '1') {
                 // Константы
                 _y61();
             } else {
