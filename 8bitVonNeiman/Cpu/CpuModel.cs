@@ -40,7 +40,7 @@ namespace _8bitVonNeiman.Cpu {
         private List<ExtendedBitArray> _registers = new List<ExtendedBitArray>();
 
         /// Регистр флагов
-        private ExtendedBitArray _psw = new ExtendedBitArray();
+        private FlagsController _flags = new FlagsController();
 
         /// Регистр временного хранения данных для получения оных из памяти, регистров или устройств
         private ExtendedBitArray _rdb = new ExtendedBitArray();
@@ -51,26 +51,12 @@ namespace _8bitVonNeiman.Cpu {
         /// ???
         private ExtendedBitArray _dr = new ExtendedBitArray();
 
-        /// ???
+        /// Выполняемая команда
         private ExtendedBitArray[] _cr = { new ExtendedBitArray(), new ExtendedBitArray() };
 
         private ICpuModelOutput _output;
         //TODO: Сделать через интерфейс
         private CpuForm _view;
-
-        /// Аллиас регистра переноса
-        // ReSharper disable once InconsistentNaming
-        private bool FC {
-            get { return _psw[4]; }
-            set { _psw[4] = value; }
-        }
-
-        /// Аллиас регистра нуля
-        // ReSharper disable once InconsistentNaming
-        private bool FZ {
-            get { return _psw[0]; }
-            set { _psw[0] = value; }
-        }
 
         public CpuModel(ICpuModelOutput output, GetView viewDelegate) {
             _viewDelegate = viewDelegate;
@@ -102,8 +88,7 @@ namespace _8bitVonNeiman.Cpu {
 
         public void ChangeFormState() {
             if (_view == null) {
-                _view = new CpuForm();
-                _view.Output = this;
+                _view = new CpuForm {Output = this};
                 _view.Show();
                 _view?.ShowState(MakeState());
             } else {
@@ -139,7 +124,7 @@ namespace _8bitVonNeiman.Cpu {
         }
 
         private CpuState MakeState() {
-            return new CpuState(_acc, _dr, _psw, _ss, _ds, _cs, _pcl, _spl, _cr, _registers);
+            return new CpuState(_acc, _dr, _flags.Flags, _ss, _ds, _cs, _pcl, _spl, _cr, _registers);
         }
 
         private void RunCommand() {
@@ -149,16 +134,16 @@ namespace _8bitVonNeiman.Cpu {
             var lowHex = _cr[0].ToHexString();
             //Регистровые
             if (highHex[0] == '5' || highHex == "F0" || highHex == "F1") { 
-                ProcessRegisterCommand(highBin, highHex, lowBin, lowHex);
+                ProcessRegisterCommand(highHex, lowHex);
             }
 
             //ОЗУ
             if (highBin.StartsWith("011")) {
-                ProcessRamCommand(highBin, highHex, lowBin, lowHex);
+                ProcessRamCommand(highHex, lowHex);
             }
         }
 
-        private void ProcessRegisterCommand(string highBin, string highHex, string lowBin, string lowHex) {
+        private void ProcessRegisterCommand(string highHex, string lowHex) {
             //MOV
             if (highHex[1] == 'F') {
                 _y46();
@@ -174,16 +159,14 @@ namespace _8bitVonNeiman.Cpu {
                 _y34();
                 _y47();
                 _y5();
-                //TODO: Установить флаги
                 ModifyRegister(lowHex);
                 return;
             }
-            //WP
+            //WR
             if (highHex[1] == 'A') {
                 _y49();
                 _y47();
                 _y5();
-                //TODO: установить регистры
                 ModifyRegister(lowHex);
                 return;
             }
@@ -191,65 +174,75 @@ namespace _8bitVonNeiman.Cpu {
             LoadRegister(lowHex);
             //NOT
             if (highHex[1] == '0') {
+                _flags.SetPreviousState(_rdb);
                 _y52();
+                _flags.UpdateFlags(_rdb, "not");
                 UnloadRegister(lowHex);
                 ModifyRegister(lowHex);
                 return;
             }
             //ADD
             if (highHex[1] == '1') {
+                _flags.SetPreviousState(_acc);
                 bool overflow = _acc.Add(_rdb);
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "add", overflow);
                 ModifyRegister(lowHex);
                 return;
             }
             //SUB
             if (highHex[1] == '2') {
+                _flags.SetPreviousState(_acc);
                 bool overflow = _acc.Sub(_rdb);
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "sub", overflow);
                 ModifyRegister(lowHex);
                 return;
             }
             //MUL
             if (highHex[1] == '3') {
+                _flags.SetPreviousState(_acc);
                 bool overflow = _acc.Mul(_rdb);
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "mul", overflow);
                 ModifyRegister(lowHex);
                 return;
             }
             //DIV
             if (highHex[1] == '4') {
+                _flags.SetPreviousState(_acc);
                 _acc.Div(_rdb);
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "div");
                 ModifyRegister(lowHex);
                 return;
             }
             //AND
             if (highHex[1] == '5') {
+                _flags.SetPreviousState(_acc);
                 _acc.And(_rdb);
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "and");
                 ModifyRegister(lowHex);
                 return;
             }
             //OR
             if (highHex[1] == '6') {
+                _flags.SetPreviousState(_acc);
                 _acc.Or(_rdb);
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "or");
                 ModifyRegister(lowHex);
                 return;
             }
             //XOR
             if (highHex[1] == '7') {
+                _flags.SetPreviousState(_acc);
                 _acc.Xor(_rdb);
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "xor");
                 ModifyRegister(lowHex);
                 return;
             }
             //CMP
             if (highHex[1] == '8') {
                 var temp = new ExtendedBitArray(_rdb);
+                _flags.SetPreviousState(temp);
                 bool overflow = temp.Sub(_acc);
-                //TODO: установить регистры
+                _flags.UpdateFlags(temp, "cmp", overflow);
                 UnloadRegister(lowHex);
                 ModifyRegister(lowHex);
                 return;
@@ -257,22 +250,23 @@ namespace _8bitVonNeiman.Cpu {
             //RD
             if (highHex[1] == '9') {
                 _acc = new ExtendedBitArray(_rdb);
-                //TODO: установить регистры
                 ModifyRegister(lowHex);
                 return;
             }
             //INC
             if (highHex[1] == 'B') {
-                _rdb.Inc();
-                //TODO: Установить флаги
+                _flags.SetPreviousState(_rdb);
+                var overflow = _rdb.Inc();
+                _flags.UpdateFlags(_rdb, "inc", overflow);
                 UnloadRegister(lowHex);
                 ModifyRegister(lowHex);
                 return;
             }
             //DEC
             if (highHex[1] == 'C') {
-                _rdb.Dec();
-                //TODO: Установить флаги
+                _flags.SetPreviousState(_rdb);
+                var overflow = _rdb.Dec();
+                _flags.UpdateFlags(_rdb, "dec", overflow);
                 UnloadRegister(lowHex);
                 ModifyRegister(lowHex);
                 return;
@@ -282,39 +276,38 @@ namespace _8bitVonNeiman.Cpu {
                 _y35();
                 _y45();
                 _y4();
-                //TODO: Установить флаги
                 ModifyRegister(lowHex);
                 return;
             }
             //ADC
             if (highHex == "F0") {
+                _flags.SetPreviousState(_acc);
                 var overflow = _acc.Add(_rdb);
-                if (FC) {
+                if (_flags.C) {
                     overflow |= _acc.Inc();
                 }
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "adc", overflow);
                 ModifyRegister(lowHex);
                 return;
             }
             //SUBB
             if (highHex == "F1") {
+                _flags.SetPreviousState(_acc);
                 var overflow = _acc.Sub(_rdb);
-                if (FC) {
+                if (_flags.C) {
                     overflow |= _acc.Dec();
                 }
-                //TODO: установить регистры
+                _flags.UpdateFlags(_acc, "subb", overflow);
                 ModifyRegister(lowHex);
-                return;
             }
         }
 
-        private void ProcessRamCommand(string highBin, string highHex, string lowBin, string lowHex) {
+        private void ProcessRamCommand(string highBin, string highHex) {
             //WR
             if (highHex[1] == 'A') {
                 _y44();
                 _y49();
                 _y4();
-                //TODO: установить флаги
                 return;
             }
 
@@ -329,96 +322,108 @@ namespace _8bitVonNeiman.Cpu {
 
             //NOT
             if (highHex[1] == '0') {
+                _flags.SetPreviousState(_rdb);
                 _y52();
+                _flags.UpdateFlags(_rdb, "not");
                 _y4();
-                //TODO: установить флаги
                 return;
             }
             //ADD
             if (highHex[1] == '1') {
+                _flags.SetPreviousState(_acc);
                 var overflow = _acc.Add(_rdb);
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "add", overflow);
                 return;
             }
             //SUB
             if (highHex[1] == '2') {
+                _flags.SetPreviousState(_acc);
                 var overflow = _acc.Sub(_rdb);
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "sub", overflow);
                 return;
             }
             //MUL
             if (highHex[1] == '3') {
+                _flags.SetPreviousState(_acc);
                 var overflow = _acc.Mul(_rdb);
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "mul", overflow);
                 return;
             }
             //DIV
             if (highHex[1] == '4') {
+                _flags.SetPreviousState(_acc);
                 _acc.Div(_rdb);
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "div");
                 return;
             }
             //AND
             if (highHex[1] == '5') {
+                _flags.SetPreviousState(_acc);
                 _acc.And(_rdb);
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "and");
                 return;
             }
             //OR
             if (highHex[1] == '6') {
+                _flags.SetPreviousState(_acc);
                 _acc.Or(_rdb);
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "or");
                 return;
             }
             //XOR
             if (highHex[1] == '7') {
+                _flags.SetPreviousState(_acc);
                 _acc.Xor(_rdb);
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "xor");
                 return;
             }
             //CMP
             if (highHex[1] == '8') {
                 var temp = new ExtendedBitArray(_rdb);
+                _flags.SetPreviousState(_rdb);
                 bool overflow = temp.Sub(_acc);
-                //TODO: установить флаги
+                _flags.UpdateFlags(temp, "cmp", overflow);
                 return;
             }
             //RD
             if (highHex[1] == '9') {
                 _acc = new ExtendedBitArray(_rdb);
-                //TODO: установить флаги
                 return;
             }
             //INC
             if (highHex[1] == 'B') {
-                _y50();
+                _flags.SetPreviousState(_rdb);
+                var overflow = _y50();
                 _y4();
-                //TODO: установить флаги
+                _flags.UpdateFlags(_rdb, "inc", overflow);
                 return;
             }
             //DEC A
             if (highHex[1] == 'C') {
-                _y51();
+                _flags.SetPreviousState(_rdb);
+                var overflow = _y51();
                 _y4();
-                //TODO: установить флаги
+                _flags.UpdateFlags(_rdb, "dec", overflow);
                 return;
             }
             //ADC A
             if (highHex[1] == 'D') {
+                _flags.SetPreviousState(_acc);
                 var overflow = _acc.Add(_rdb);
-                if (FC) {
+                if (_flags.C) {
                     overflow |= _acc.Inc();
                 }
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "adc", overflow);
                 return;
             }
             //SUBB A
             if (highHex[1] == 'D') {
+                _flags.SetPreviousState(_acc);
                 var overflow = _acc.Add(_rdb);
-                if (FC) {
+                if (_flags.C) {
                     overflow |= _acc.Inc();
                 }
-                //TODO: установить флаги
+                _flags.UpdateFlags(_acc, "adc", overflow);
                 return;
             }
             //XCH A
@@ -427,7 +432,6 @@ namespace _8bitVonNeiman.Cpu {
                 _acc = new ExtendedBitArray(_rdb);
                 _rdb = temp;
                 _y4();
-                //TODO: установить флаги
                 return;
             }
         }
@@ -478,33 +482,6 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
-        /// <summary>
-        /// Формирует флаги. Единицы в двоичной записи аргумента обозначают какие флаги нужно формировать:
-        /// 0: z - acc = 0
-        /// 1: n - acc < 0
-        /// 2: o - переполнение со знаком
-        /// 3: a - перенос из третьего в четвертый
-        /// 4: c - перенос
-        /// </summary>
-        /// <param name="mask">Аргумент, который обозначает, какие флаги нужно формировать</param>
-        private void FormFlags(int mask) {
-            if ((mask & 1) != 0) {
-                FZ = _acc.NumValue() == 0;
-            }
-            if ((mask & 1) != 1) {
-                FZ = _acc.NumValue() == 0;
-            }
-            if ((mask & 1) != 2) {
-                FZ = _acc.NumValue() == 0;
-            }
-            if ((mask & 1) != 3) {
-                FZ = _acc.NumValue() == 0;
-            }
-            if ((mask & 1) != 4) {
-                FC = _acc.NumValue() == 0;
-            }
-        }
-
         #region Микрокоманды
 
         private void _y1() {
@@ -551,12 +528,12 @@ namespace _8bitVonNeiman.Cpu {
         }
 
         private void _y11() {
-            FC = _acc[Constants.WordSize - 1];
+            _flags.C = _acc[Constants.WordSize - 1];
             _y13();
         }
 
         private void _y12() {
-            FC = _acc[0];
+            _flags.C = _acc[0];
             _y14();
         }
 
@@ -565,8 +542,8 @@ namespace _8bitVonNeiman.Cpu {
             for (int i = Constants.WordSize - 1; i > 0; i--) {
                 _acc[i] = _acc[i - 1];
             }
-            _acc[0] = FC;
-            FC = temp;
+            _acc[0] = _flags.C;
+            _flags.C = temp;
         }
 
         private void _y14() {
@@ -574,8 +551,8 @@ namespace _8bitVonNeiman.Cpu {
             for (int i = 0; i < Constants.WordSize - 1; i++) {
                 _acc[i] = _acc[i + 1];
             }
-            _acc[Constants.WordSize - 1] = FC;
-            FC = temp;
+            _acc[Constants.WordSize - 1] = _flags.C;
+            _flags.C = temp;
         }
 
         private void _y15() {
@@ -698,24 +675,24 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y37() {
             for (int i = 0; i < 6; i++) {
-                _psw[i] = _rdb[i + 2];
+                //_flags[i] = _rdb[i + 2];
             }
         }
 
         private void _y38() {
-            _psw[5] = false;
+            _flags.Flags[5] = false;
         }
 
         private void _y39() {
-            _psw[5] = true;
+            _flags.Flags[5] = true;
         }
 
         private void _y40() {
-            _psw[5] = false;
+            _flags.Flags[5] = false;
         }
 
         private void _y41() {
-            _psw[5] = true;
+            _flags.Flags[5] = true;
         }
 
         private void _y42() {
@@ -759,20 +736,12 @@ namespace _8bitVonNeiman.Cpu {
             _rdb = new ExtendedBitArray(_acc);
         }
 
-        private void _y50() {
-            try {
-                _rdb.Inc();
-            } catch {
-                //TODO: Переполнение RDB
-            }
+        private bool _y50() {
+            return _rdb.Inc();
         }
 
-        private void _y51() {
-            try {
-                _rdb.Dec();
-            } catch {
-                //TODO: Переполнение RDB
-            }
+        private bool _y51() {
+            return _rdb.Dec();
         }
 
         private void _y52() {
@@ -812,7 +781,7 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y58() {
             for (int i = 0; i < 6; i++) {
-                _rdb[i + 2] = _psw[i];
+                _rdb[i + 2] = _flags.Flags[i];
             }
         }
 

@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="Controller\View\IComponentsFormOutput.cs" />
     <Compile Include="Cpu\CpuModel.cs" />
+    <Compile Include="Cpu\FlagsController.cs" />
     <Compile Include="Cpu\ICpuModelInput.cs" />
     <Compile Include="Cpu\ICpuModelOutput.cs" />
     <Compile Include="Cpu\View\CpuForm.cs">

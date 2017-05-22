@@ -112,11 +112,10 @@ namespace _8bitFonNeimanTest {
         }
 
         [TestMethod]
-        [ExpectedException(typeof(OverflowException))]
         public void AddOverflowMethodTest() {
             var array1 = new ExtendedBitArray("11111111");
             var array2 = new ExtendedBitArray("00000001");
-            array1.Add(array2);
+            Assert.IsTrue(array1.Add(array2));
         }
 
         [TestMethod]
@@ -142,10 +141,9 @@ namespace _8bitFonNeimanTest {
         }
 
         [TestMethod]
-        [ExpectedException(typeof(OverflowException))]
         public void IncOverflowExceptionTest() {
-            var ExtendedBitArray = new ExtendedBitArray("11111111");
-            ExtendedBitArray.Inc();
+            var extendedBitArray = new ExtendedBitArray("11111111");
+            Assert.IsTrue(extendedBitArray.Inc());
         }
 
         [TestMethod]
@@ -171,10 +169,9 @@ namespace _8bitFonNeimanTest {
         }
 
         [TestMethod]
-        [ExpectedException(typeof(OverflowException))]
         public void DecOverflowExceptionTest() {
-            var ExtendedBitArray = new ExtendedBitArray("00000000");
-            ExtendedBitArray.Dec();
+            var extendedBitArray = new ExtendedBitArray("00000000");
+            Assert.IsTrue(extendedBitArray.Dec());
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
 ﻿namespace _8bitVonNeiman.Common {
+
     public static class Constants {
         /// Количество бит в полном адресе (дальнем)
         public const int FarAddressBitsCount = 10;
