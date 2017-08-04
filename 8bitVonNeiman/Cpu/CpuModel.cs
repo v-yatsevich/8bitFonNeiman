@@ -106,7 +106,7 @@ namespace _8bitVonNeiman.Cpu {
             _spl = 0;
             _registers = new List<ExtendedBitArray> {
                 new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(),
-                new ExtendedBitArray("00110011"), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray()
+                new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray()
             };
         }
         

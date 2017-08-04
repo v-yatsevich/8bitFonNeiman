@@ -1,44 +1,45 @@
-﻿using _8bitVonNeiman.Common;
+﻿using System;
+using _8bitVonNeiman.Common;
 
 namespace _8bitVonNeiman.Cpu {
     ///Класс: имплементирующий работу с флагами процессора
     public class FlagsController {
 
-        public ExtendedBitArray Flags { get; private set; } = new ExtendedBitArray();
+        public ExtendedBitArray Flags { get; } = new ExtendedBitArray();
         private ExtendedBitArray _state = null;
+        private ExtendedBitArray _arg = null;
 
         /// Аллиас регистра нуля
         public bool Z {
-            get { return Flags[0]; }
-            set { Flags[0] = value; }
+            get => Flags[0]; set => Flags[0] = value;
         }
 
         /// Аллиас регистра отрицательного числа
         public bool N {
-            get { return Flags[1]; }
-            set { Flags[1] = value; }
+            get => Flags[1];  set => Flags[1] = value;
         }
 
         /// Аллиас регистра переполнения со знаком
         public bool O {
-            get { return Flags[2]; }
-            set { Flags[2] = value; }
+            get => Flags[2]; set => Flags[2] = value;
         }
 
         /// Аллиас регистра переноса из третьего в четвертый
         public bool A {
-            get { return Flags[3]; }
-            set { Flags[3] = value; }
+            get => Flags[3]; set => Flags[3] = value;
         }
 
         /// Аллиас регистра переноса
         public bool C {
-            get { return Flags[4]; }
-            set { Flags[4] = value; }
+            get => Flags[4]; set => Flags[4] = value;
         }
 
         public void SetPreviousState(ExtendedBitArray array) {
             _state = new ExtendedBitArray(array);
+        }
+
+        public void SetArgument(ExtendedBitArray array) {
+            _arg = new ExtendedBitArray(array);
         }
 
         public void UpdateFlags(ExtendedBitArray newState, string command, bool? overflow = null) {
@@ -60,11 +61,11 @@ namespace _8bitVonNeiman.Cpu {
                 Z = false;
                 N = false;
                 O = false;
-                mask = 8 + 16;
+                mask = 0 + 1;
                 break;
             case "inc":
             case "dec":
-                mask = 2 + 4 + 8 + 16;
+                mask = 1 + 2 + 8 + 16;
                 break;
             }
             FormFlags(newState, mask, overflow);
@@ -78,14 +79,20 @@ namespace _8bitVonNeiman.Cpu {
                 N = newState[Constants.WordSize - 1];
             }
             if ((mask & 4) != 0) {
+                if (_state == null|| _arg == null) {
+                    throw new Exception("Формирование флага без задания предыдущего состояния");
+                }
                 
+                O = _state[Constants.WordSize - 1] == _arg[Constants.WordSize - 1] && _arg[Constants.WordSize - 1] != newState[Constants.WordSize - 1];
             }
             if ((mask & 8) != 0) {
-                
+                A = (newState.NumValue() & 240) != 0;
             }
             if ((mask & 16) != 0) {
                 C = overflow.HasValue && overflow.Value;
             }
+            _state = null;
+            _arg = null;
         }
     }
 }
