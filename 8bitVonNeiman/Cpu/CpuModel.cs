@@ -155,11 +155,10 @@ namespace _8bitVonNeiman.Cpu {
             //POP
             if (highHex[1] == 'D') {
                 _y45();
-                _y2();
+                _y1();
                 _y34();
                 _y47();
                 _y5();
-                ModifyRegister(lowHex);
                 return;
             }
             //WR
@@ -167,7 +166,6 @@ namespace _8bitVonNeiman.Cpu {
                 _y49();
                 _y47();
                 _y5();
-                ModifyRegister(lowHex);
                 return;
             }
 
@@ -184,6 +182,7 @@ namespace _8bitVonNeiman.Cpu {
             //ADD
             if (highHex[1] == '1') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 bool overflow = _acc.Add(_rdb);
                 _flags.UpdateFlags(_acc, "add", overflow);
                 ModifyRegister(lowHex);
@@ -192,6 +191,7 @@ namespace _8bitVonNeiman.Cpu {
             //SUB
             if (highHex[1] == '2') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 bool overflow = _acc.Sub(_rdb);
                 _flags.UpdateFlags(_acc, "sub", overflow);
                 ModifyRegister(lowHex);
@@ -200,6 +200,7 @@ namespace _8bitVonNeiman.Cpu {
             //MUL
             if (highHex[1] == '3') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 bool overflow = _acc.Mul(_rdb);
                 _flags.UpdateFlags(_acc, "mul", overflow);
                 ModifyRegister(lowHex);
@@ -208,6 +209,7 @@ namespace _8bitVonNeiman.Cpu {
             //DIV
             if (highHex[1] == '4') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 _acc.Div(_rdb);
                 _flags.UpdateFlags(_acc, "div");
                 ModifyRegister(lowHex);
@@ -241,6 +243,7 @@ namespace _8bitVonNeiman.Cpu {
             if (highHex[1] == '8') {
                 var temp = new ExtendedBitArray(_rdb);
                 _flags.SetPreviousState(temp);
+                _flags.SetArgument(_rdb);
                 bool overflow = temp.Sub(_acc);
                 _flags.UpdateFlags(temp, "cmp", overflow);
                 UnloadRegister(lowHex);
@@ -282,6 +285,7 @@ namespace _8bitVonNeiman.Cpu {
             //ADC
             if (highHex == "F0") {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 var overflow = _acc.Add(_rdb);
                 if (_flags.C) {
                     overflow |= _acc.Inc();
@@ -293,6 +297,7 @@ namespace _8bitVonNeiman.Cpu {
             //SUBB
             if (highHex == "F1") {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 var overflow = _acc.Sub(_rdb);
                 if (_flags.C) {
                     overflow |= _acc.Dec();
@@ -331,6 +336,7 @@ namespace _8bitVonNeiman.Cpu {
             //ADD
             if (highHex[1] == '1') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 var overflow = _acc.Add(_rdb);
                 _flags.UpdateFlags(_acc, "add", overflow);
                 return;
@@ -338,6 +344,7 @@ namespace _8bitVonNeiman.Cpu {
             //SUB
             if (highHex[1] == '2') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 var overflow = _acc.Sub(_rdb);
                 _flags.UpdateFlags(_acc, "sub", overflow);
                 return;
@@ -345,6 +352,7 @@ namespace _8bitVonNeiman.Cpu {
             //MUL
             if (highHex[1] == '3') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 var overflow = _acc.Mul(_rdb);
                 _flags.UpdateFlags(_acc, "mul", overflow);
                 return;
@@ -352,6 +360,7 @@ namespace _8bitVonNeiman.Cpu {
             //DIV
             if (highHex[1] == '4') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 _acc.Div(_rdb);
                 _flags.UpdateFlags(_acc, "div");
                 return;
@@ -380,6 +389,7 @@ namespace _8bitVonNeiman.Cpu {
             //CMP
             if (highHex[1] == '8') {
                 var temp = new ExtendedBitArray(_rdb);
+                _flags.SetArgument(_rdb);
                 _flags.SetPreviousState(_rdb);
                 bool overflow = temp.Sub(_acc);
                 _flags.UpdateFlags(temp, "cmp", overflow);
@@ -409,6 +419,7 @@ namespace _8bitVonNeiman.Cpu {
             //ADC A
             if (highHex[1] == 'D') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 var overflow = _acc.Add(_rdb);
                 if (_flags.C) {
                     overflow |= _acc.Inc();
@@ -419,6 +430,7 @@ namespace _8bitVonNeiman.Cpu {
             //SUBB A
             if (highHex[1] == 'D') {
                 _flags.SetPreviousState(_acc);
+                _flags.SetArgument(_rdb);
                 var overflow = _acc.Add(_rdb);
                 if (_flags.C) {
                     overflow |= _acc.Inc();

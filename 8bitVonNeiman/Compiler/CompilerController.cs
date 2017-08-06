@@ -91,6 +91,7 @@ namespace _8bitVonNeiman.Compiler {
                 using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read))) {
                     var text = sr.ReadToEnd();
                     _form.SetCode(text);
+                    _filePath = path;
                 }
             } catch {
                 _form.ShowMessage("В процессе открытия файла возникла ошибка.");

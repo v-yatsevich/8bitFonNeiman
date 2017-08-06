@@ -37,7 +37,7 @@ namespace _8bitVonNeiman.Memory {
             _memory[address] = memory;
             int i = address / MemoryForm.ColumnCount;
             int j = address % MemoryForm.ColumnCount;
-            _form.SetMemory(i, j, MemoryHex(i, j));
+            _form?.SetMemory(i, j, MemoryHex(i, j));
         }
 
         public ExtendedBitArray GetMemory(int address) {
