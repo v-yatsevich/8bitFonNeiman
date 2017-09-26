@@ -78,7 +78,9 @@
             this.Controls.Add(this.cpuButton);
             this.Controls.Add(this.memoryButton);
             this.Controls.Add(this.editorButton);
+            this.Location = new System.Drawing.Point(80, 40);
             this.Name = "ComponentsForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ComponentsForm_FormClosed);
             this.ResumeLayout(false);

@@ -141,6 +141,11 @@ namespace _8bitVonNeiman.Cpu {
             if (highBin.StartsWith("011")) {
                 ProcessRamCommand(highBin, highHex);
             }
+
+            //Переходы
+            if (highBin.StartsWith("0100") || highBin.StartsWith("001")) {
+                ProcessJumpCommand(highBin, highHex, lowBin, lowHex);
+            }
         }
 
         private void ProcessRegisterCommand(string highHex, string lowHex) {
@@ -448,6 +453,81 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
+        private void ProcessJumpCommand(string highBin, string highHex, string lowBin, string lowHex) {
+
+            //JMP
+            if (highBin.StartsWith("010000")) {
+                Jump();
+            }
+            //CALL
+            if (highBin.StartsWith("010000")) {
+                _y62();
+
+                _y32();
+                _y30();
+            }
+            //INT
+            if (highBin.StartsWith("010000")) {
+
+            }
+            //JZ
+            if (highBin.StartsWith("001100")) {
+                if (_flags.Z) {
+                    Jump();
+                }
+                return;
+            }
+            //JNZ
+            if (highBin.StartsWith("001000")) {
+                if (!_flags.Z) {
+                    Jump();
+                }
+                return;
+            }
+            //JC
+            if (highBin.StartsWith("001101")) {
+                if (_flags.C) {
+                    Jump();
+                }
+                return;
+            }
+            //JNC
+            if (highBin.StartsWith("001001")) {
+                if (!_flags.Z) {
+                    Jump();
+                }
+                return;
+            }
+            //JN
+            if (highBin.StartsWith("001110")) {
+                if (_flags.N) {
+                    Jump();
+                }
+                return;
+            }
+            //JNN
+            if (highBin.StartsWith("001010")) {
+                if (!_flags.N) {
+                    Jump();
+                }
+                return;
+            }
+            //JO
+            if (highBin.StartsWith("001111")) {
+                if (_flags.O) {
+                    Jump();
+                }
+                return;
+            }
+            //JNO
+            if (highBin.StartsWith("001011")) {
+                if (!_flags.O) {
+                    Jump();
+                }
+                return;
+            }
+        }
+
         private void LoadRegister(string lowHex) {
             _y47();
             _y2();
@@ -492,6 +572,11 @@ namespace _8bitVonNeiman.Cpu {
                 _y51();
                 _y5();
             }
+        }
+
+        private void Jump() {
+            _y32();
+            _y30();
         }
 
         #region Микрокоманды
@@ -807,6 +892,10 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y61() {
             _rdb = new ExtendedBitArray(_cr[0]);
+        }
+
+        private void _y62() {
+            _rdb = new ExtendedBitArray(_pcl);
         }
 
         #endregion

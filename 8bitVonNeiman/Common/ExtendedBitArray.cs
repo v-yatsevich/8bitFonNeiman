@@ -37,6 +37,17 @@ namespace _8bitVonNeiman.Common {
         }
 
         /// <summary>
+        /// Конствуктов, принимающий на вход значение байта. Если значение выходит за диапозон байта, генерируется исключение
+        /// </summary>
+        public ExtendedBitArray(int num) {
+            try {
+                _data = Convert.ToByte(num);
+            } catch (Exception e)  {
+                throw new ArgumentException($"Выход за пределы диапозона ({num})", e);
+            }
+        }
+
+        /// <summary>
         /// Возвращает информацию байта в виде двоичной строки.
         /// </summary>
         /// <returns>Информация, хранимая в байте в виде двоичной строки.</returns>

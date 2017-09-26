@@ -44,7 +44,7 @@
             this.outputRichTextBox.Location = new System.Drawing.Point(12, 495);
             this.outputRichTextBox.Name = "outputRichTextBox";
             this.outputRichTextBox.ReadOnly = true;
-            this.outputRichTextBox.Size = new System.Drawing.Size(306, 80);
+            this.outputRichTextBox.Size = new System.Drawing.Size(260, 80);
             this.outputRichTextBox.TabIndex = 2;
             this.outputRichTextBox.Text = "";
             // 
@@ -71,7 +71,7 @@
             // compileButton
             // 
             this.compileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.compileButton.Location = new System.Drawing.Point(207, 5);
+            this.compileButton.Location = new System.Drawing.Point(47, 34);
             this.compileButton.Name = "compileButton";
             this.compileButton.Size = new System.Drawing.Size(111, 23);
             this.compileButton.TabIndex = 4;
@@ -86,7 +86,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.scintilla.Location = new System.Drawing.Point(12, 77);
             this.scintilla.Name = "scintilla";
-            this.scintilla.Size = new System.Drawing.Size(306, 396);
+            this.scintilla.Size = new System.Drawing.Size(260, 396);
             this.scintilla.TabIndex = 1;
             this.scintilla.Text = "ADD R4\nSUB R4\nMUL R4\nDIV R4\nAND R4\nOR R4\nXOR R4\nCMP R4\nRD R4\nWP R4\nINC R4\n";
             this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
@@ -130,7 +130,7 @@
             // 
             this.saveAsButton.Location = new System.Drawing.Point(93, 5);
             this.saveAsButton.Name = "saveAsButton";
-            this.saveAsButton.Size = new System.Drawing.Size(107, 23);
+            this.saveAsButton.Size = new System.Drawing.Size(111, 23);
             this.saveAsButton.TabIndex = 7;
             this.saveAsButton.Text = "Сохранить как";
             this.saveAsButton.UseVisualStyleBackColor = true;
@@ -140,7 +140,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(330, 587);
+            this.ClientSize = new System.Drawing.Size(284, 587);
             this.Controls.Add(this.saveAsButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
@@ -149,7 +149,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.outputRichTextBox);
+            this.Location = new System.Drawing.Point(80, 350);
             this.Name = "CompilerForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Компилятор";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CompilerForm_FormClosed);
             this.ResumeLayout(false);

@@ -52,8 +52,27 @@ namespace _8bitFonNeimanTest {
         public void ConstructorTest() {
             var array = new List<string> { "00001100", "01110111", "00011100", "01010101", "01010001" };
             foreach (var code in array) {
-                var ExtendedBitArray = new ExtendedBitArray(code);
-                Assert.AreEqual(ExtendedBitArray.ToBinString(), code);
+                var extendedBitArray = new ExtendedBitArray(code);
+                Assert.AreEqual(extendedBitArray.ToBinString(), code);
+            }
+        }
+
+        [TestMethod]
+        public void IntConstructorTest() {
+            var array = new List<int> { 0, 15, 255 };
+            var codes = new List<string> {"00000000", "00001111", "11111111"};
+            for (var i = 0; i < array.Count; i++) {
+                var extendedBitArray = new ExtendedBitArray(array[i]);
+                Assert.AreEqual(extendedBitArray.ToBinString(), codes[i]);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void IntConstructorTestFail() {
+            var array = new List<int> { -1, 256, 5000 };
+            foreach (var code in array) {
+                var extendedBitArray = new ExtendedBitArray(code);
             }
         }
 

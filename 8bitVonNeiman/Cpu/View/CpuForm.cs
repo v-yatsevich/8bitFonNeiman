@@ -80,5 +80,9 @@ namespace _8bitVonNeiman.Cpu.View {
         private void CpuForm_FormClosed(object sender, FormClosedEventArgs e) {
             Output?.FormClosed();
         }
+
+        private void tickButton_Click(object sender, EventArgs e) {
+            Output.Tick();
+        }
     }
 }
