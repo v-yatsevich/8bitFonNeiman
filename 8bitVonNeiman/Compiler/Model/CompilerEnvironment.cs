@@ -151,8 +151,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             foreach (var memoryForLabel in _memoryForLabels[label]) {
                 CompilerSupport.FillBitArray(memoryForLabel.HighBitArray, memoryForLabel.LowBitArray,
                 _currentAddress, Constants.FarAddressBitsCount);
-                _memory[memoryForLabel.Address] = memoryForLabel.HighBitArray;
-                _memory[memoryForLabel.Address + 1] = memoryForLabel.LowBitArray;
+                _memory[memoryForLabel.Address] = memoryForLabel.LowBitArray;
+                _memory[memoryForLabel.Address + 1] = memoryForLabel.HighBitArray; 
             }
             _memoryForLabels.Remove(label);
         }

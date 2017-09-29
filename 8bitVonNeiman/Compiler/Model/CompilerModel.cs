@@ -100,6 +100,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             string command;
             string[] args;
 
+            line = line.Trim();
+
             int firstSpaceIndex = line.IndexOf(" ");
             if (firstSpaceIndex == -1) {
                 command = line;
