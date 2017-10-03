@@ -146,6 +146,19 @@ namespace _8bitVonNeiman.Cpu {
             if (highBin.StartsWith("0100") || highBin.StartsWith("001")) {
                 ProcessJumpCommand(highBin);
             }
+
+            //DJRNZ
+            if (highBin.StartsWith("0001")) {
+                _y63();
+                _y2();
+                _flags.SetPreviousState(_rdb);
+                var overflow = _rdb.Dec();
+                _flags.UpdateFlags(_rdb, "dec", overflow);
+                if (!_flags.Z) {
+                    Jump();
+                }
+                _y5();
+            }
         }
 
         private void ProcessRegisterCommand(string highHex, string lowHex) {
@@ -894,6 +907,13 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y62() {
             _rdb = new ExtendedBitArray(_pcl);
+        }
+
+        private void _y63() {
+            _rab = 0;
+            for (int i = 2; i < 4; i++) {
+                _rab += _cr[1][i] ? 1 << (i - 2) : 0;
+            }
         }
 
         #endregion
