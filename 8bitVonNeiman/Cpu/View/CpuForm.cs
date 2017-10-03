@@ -32,8 +32,8 @@ namespace _8bitVonNeiman.Cpu.View {
             }
 
             srDataGridView[0, 0].Value = state.Ss;
-            srDataGridView[0, 0].Value = state.Ds;
-            srDataGridView[0, 0].Value = state.Cs;
+            srDataGridView[1, 0].Value = state.Ds;
+            srDataGridView[2, 0].Value = state.Cs;
 
             pclTextBox.Text = state.Pcl.ToString("X2");
             splTextBox.Text = state.Spl.ToString("X2");

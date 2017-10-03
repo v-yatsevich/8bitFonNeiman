@@ -144,7 +144,7 @@ namespace _8bitVonNeiman.Cpu {
 
             //Переходы
             if (highBin.StartsWith("0100") || highBin.StartsWith("001")) {
-                ProcessJumpCommand(highBin, highHex, lowBin, lowHex);
+                ProcessJumpCommand(highBin);
             }
         }
 
@@ -449,11 +449,10 @@ namespace _8bitVonNeiman.Cpu {
                 _acc = new ExtendedBitArray(_rdb);
                 _rdb = temp;
                 _y4();
-                return;
             }
         }
 
-        private void ProcessJumpCommand(string highBin, string highHex, string lowBin, string lowHex) {
+        private void ProcessJumpCommand(string highBin) {
 
             //JMP
             if (highBin.StartsWith("010000")) {
@@ -524,7 +523,6 @@ namespace _8bitVonNeiman.Cpu {
                 if (!_flags.O) {
                     Jump();
                 }
-                return;
             }
         }
 

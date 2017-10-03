@@ -18,8 +18,13 @@ namespace _8bitVonNeiman.Compiler.View {
             scintilla.Text = code;
         }
 
+        public void ClearOutput() {
+            outputRichTextBox.Text = "";
+        }
+
         public void AddLineToOutput(string line) {
             outputRichTextBox.Text = outputRichTextBox.Text + line + Environment.NewLine;
+            outputRichTextBox.ScrollToCaret();
         }
 
         public void ShowMessage(string message) {
@@ -33,6 +38,10 @@ namespace _8bitVonNeiman.Compiler.View {
                 _output.SaveDialogEnded(path);
             }
             saveFileDialog.FileName = null;
+        }
+
+        public void SetFilename(string filename) {
+            filenameLabel.Text = filename;
         }
 
         private void CompilerForm_FormClosed(object sender, FormClosedEventArgs e) {

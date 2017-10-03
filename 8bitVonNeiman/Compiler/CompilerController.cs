@@ -11,6 +11,15 @@ namespace _8bitVonNeiman.Compiler {
         private string _code = "";
         private string _filePath = null;
 
+        private string filePath {
+            get => _filePath;
+            set {
+                _filePath = value;
+                var index = _filePath.LastIndexOf('\\') + 1;
+                _form.SetFilename("Имя файла: " + _filePath.Substring(index));
+            }
+        }
+
         public CompilerController(ICompilerControllerOutput output) {
             _output = output;
         }
@@ -46,6 +55,7 @@ namespace _8bitVonNeiman.Compiler {
         /// </summary>
         /// <param name="code">Код программы.</param>
         public void Compile(string code) {
+            _form.ClearOutput();
             _form.AddLineToOutput("Начало компиляции...");
             _compilerModel.Compile(code);
         }
@@ -69,7 +79,7 @@ namespace _8bitVonNeiman.Compiler {
 
         public void SaveButtonClicked(string code) {
             _code = code;
-            if (_filePath == null) {
+            if (filePath == null) {
                 _form.ShowSaveDialog();
             } else {
                 SaveCode();
@@ -82,7 +92,7 @@ namespace _8bitVonNeiman.Compiler {
         }
 
         public void SaveDialogEnded(string path) {
-            _filePath = path;
+            filePath = path;
             SaveCode();
         }
 
@@ -91,7 +101,7 @@ namespace _8bitVonNeiman.Compiler {
                 using (var sr = new StreamReader(new FileStream(path, FileMode.Open, FileAccess.Read))) {
                     var text = sr.ReadToEnd();
                     _form.SetCode(text);
-                    _filePath = path;
+                    filePath = path;
                 }
             } catch {
                 _form.ShowMessage("В процессе открытия файла возникла ошибка.");
@@ -100,7 +110,7 @@ namespace _8bitVonNeiman.Compiler {
 
         private void SaveCode() {
             try {
-                using (var sw = new StreamWriter(new FileStream(_filePath, FileMode.Create, FileAccess.Write))) {
+                using (var sw = new StreamWriter(new FileStream(filePath, FileMode.Create, FileAccess.Write))) {
                     sw.Write(_code);
                 }
             } catch {

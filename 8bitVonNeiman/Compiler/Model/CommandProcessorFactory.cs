@@ -287,11 +287,11 @@ namespace _8bitVonNeiman.Compiler.Model {
                 return new Dictionary<string, CommandProcessor> {
                     ["jnz"] = JNZ,
                     ["jnc"] = JNC,
-                    ["jns"] = JNS,
+                    ["jnn"] = JNN,
                     ["jno"] = JNO,
                     ["jz"] = JZ,
                     ["jc"] = JC,
-                    ["js"] = JS,
+                    ["jn"] = JN,
                     ["jo"] = JO,
                     ["jmp"] = JMP,
                     ["call"] = CALL,
@@ -322,8 +322,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
-            private static void JNS(string[] args, CompilerEnvironment env) {
-                Validate(args, "JNS", env.GetCurrentLine());
+            private static void JNN(string[] args, CompilerEnvironment env) {
+                Validate(args, "JNN", env.GetCurrentLine());
   
                 var lowBitArray = new ExtendedBitArray();
                 var highBitArray = new ExtendedBitArray() {
@@ -372,8 +372,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                 FillAddressAndSetCommand(highBitArray, lowBitArray, args[0], env);
             }
 
-            private static void JS(string[] args, CompilerEnvironment env) {
-                Validate(args, "JS", env.GetCurrentLine());
+            private static void JN(string[] args, CompilerEnvironment env) {
+                Validate(args, "JN", env.GetCurrentLine());
                 
                 var lowBitArray = new ExtendedBitArray();
                 var highBitArray = new ExtendedBitArray() {

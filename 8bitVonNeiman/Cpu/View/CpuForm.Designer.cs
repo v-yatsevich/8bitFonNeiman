@@ -121,6 +121,7 @@
             this.r7TextBox.ReadOnly = true;
             this.r7TextBox.Size = new System.Drawing.Size(36, 26);
             this.r7TextBox.TabIndex = 14;
+            this.r7TextBox.TabStop = false;
             this.r7TextBox.Text = "FF";
             this.r7TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -145,6 +146,7 @@
             this.r6TextBox.ReadOnly = true;
             this.r6TextBox.Size = new System.Drawing.Size(36, 26);
             this.r6TextBox.TabIndex = 12;
+            this.r6TextBox.TabStop = false;
             this.r6TextBox.Text = "FF";
             this.r6TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -169,6 +171,7 @@
             this.r5TextBox.ReadOnly = true;
             this.r5TextBox.Size = new System.Drawing.Size(36, 26);
             this.r5TextBox.TabIndex = 10;
+            this.r5TextBox.TabStop = false;
             this.r5TextBox.Text = "FF";
             this.r5TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -193,6 +196,7 @@
             this.r4TextBox.ReadOnly = true;
             this.r4TextBox.Size = new System.Drawing.Size(36, 26);
             this.r4TextBox.TabIndex = 8;
+            this.r4TextBox.TabStop = false;
             this.r4TextBox.Text = "FF";
             this.r4TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -217,6 +221,7 @@
             this.r3TextBox.ReadOnly = true;
             this.r3TextBox.Size = new System.Drawing.Size(36, 26);
             this.r3TextBox.TabIndex = 6;
+            this.r3TextBox.TabStop = false;
             this.r3TextBox.Text = "FF";
             this.r3TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -241,6 +246,7 @@
             this.r2TextBox.ReadOnly = true;
             this.r2TextBox.Size = new System.Drawing.Size(36, 26);
             this.r2TextBox.TabIndex = 4;
+            this.r2TextBox.TabStop = false;
             this.r2TextBox.Text = "FF";
             this.r2TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -265,6 +271,7 @@
             this.r1TextBox.ReadOnly = true;
             this.r1TextBox.Size = new System.Drawing.Size(36, 26);
             this.r1TextBox.TabIndex = 2;
+            this.r1TextBox.TabStop = false;
             this.r1TextBox.Text = "FF";
             this.r1TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -289,6 +296,7 @@
             this.r0TextBox.ReadOnly = true;
             this.r0TextBox.Size = new System.Drawing.Size(36, 26);
             this.r0TextBox.TabIndex = 0;
+            this.r0TextBox.TabStop = false;
             this.r0TextBox.Text = "FF";
             this.r0TextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -322,6 +330,7 @@
             this.accBinTextBox.ReadOnly = true;
             this.accBinTextBox.Size = new System.Drawing.Size(93, 26);
             this.accBinTextBox.TabIndex = 17;
+            this.accBinTextBox.TabStop = false;
             this.accBinTextBox.Text = "0000 0000";
             this.accBinTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -335,6 +344,7 @@
             this.accHexTextBox.ReadOnly = true;
             this.accHexTextBox.Size = new System.Drawing.Size(93, 26);
             this.accHexTextBox.TabIndex = 16;
+            this.accHexTextBox.TabStop = false;
             this.accHexTextBox.Text = "FF";
             this.accHexTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -368,6 +378,7 @@
             this.drBinTextBox.ReadOnly = true;
             this.drBinTextBox.Size = new System.Drawing.Size(93, 26);
             this.drBinTextBox.TabIndex = 17;
+            this.drBinTextBox.TabStop = false;
             this.drBinTextBox.Text = "0000 0000";
             this.drBinTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -381,6 +392,7 @@
             this.drHexTextBox.ReadOnly = true;
             this.drHexTextBox.Size = new System.Drawing.Size(93, 26);
             this.drHexTextBox.TabIndex = 16;
+            this.drHexTextBox.TabStop = false;
             this.drHexTextBox.Text = "FF";
             this.drHexTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -414,6 +426,7 @@
             this.crBinTextBox.ReadOnly = true;
             this.crBinTextBox.Size = new System.Drawing.Size(184, 26);
             this.crBinTextBox.TabIndex = 17;
+            this.crBinTextBox.TabStop = false;
             this.crBinTextBox.Text = "0000 0000 0000 0000";
             this.crBinTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -427,6 +440,7 @@
             this.crHexTextBox.ReadOnly = true;
             this.crHexTextBox.Size = new System.Drawing.Size(184, 26);
             this.crHexTextBox.TabIndex = 16;
+            this.crHexTextBox.TabStop = false;
             this.crHexTextBox.Text = "FFFF";
             this.crHexTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -456,6 +470,7 @@
             this.pswDataGridView.RowHeadersVisible = false;
             this.pswDataGridView.Size = new System.Drawing.Size(250, 61);
             this.pswDataGridView.TabIndex = 21;
+            this.pswDataGridView.TabStop = false;
             // 
             // label12
             // 
@@ -493,6 +508,7 @@
             this.srDataGridView.RowHeadersVisible = false;
             this.srDataGridView.Size = new System.Drawing.Size(112, 61);
             this.srDataGridView.TabIndex = 23;
+            this.srDataGridView.TabStop = false;
             // 
             // label13
             // 
@@ -525,6 +541,7 @@
             this.pclTextBox.ReadOnly = true;
             this.pclTextBox.Size = new System.Drawing.Size(36, 26);
             this.pclTextBox.TabIndex = 16;
+            this.pclTextBox.TabStop = false;
             this.pclTextBox.Text = "FF";
             this.pclTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -549,6 +566,7 @@
             this.splTextBox.ReadOnly = true;
             this.splTextBox.Size = new System.Drawing.Size(36, 26);
             this.splTextBox.TabIndex = 25;
+            this.splTextBox.TabStop = false;
             this.splTextBox.Text = "FF";
             this.splTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -557,7 +575,7 @@
             this.resetButton.Location = new System.Drawing.Point(340, 370);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(75, 23);
-            this.resetButton.TabIndex = 27;
+            this.resetButton.TabIndex = 2;
             this.resetButton.Text = "Сброс";
             this.resetButton.UseVisualStyleBackColor = true;
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
@@ -567,7 +585,7 @@
             this.tickButton.Location = new System.Drawing.Point(340, 282);
             this.tickButton.Name = "tickButton";
             this.tickButton.Size = new System.Drawing.Size(75, 23);
-            this.tickButton.TabIndex = 28;
+            this.tickButton.TabIndex = 1;
             this.tickButton.Text = "Такт";
             this.tickButton.UseVisualStyleBackColor = true;
             this.tickButton.Click += new System.EventHandler(this.tickButton_Click);
