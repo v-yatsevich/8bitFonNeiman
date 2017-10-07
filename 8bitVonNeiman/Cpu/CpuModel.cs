@@ -159,6 +159,11 @@ namespace _8bitVonNeiman.Cpu {
                 }
                 _y5();
             }
+
+            //безадресные команды
+            if (highBin.StartsWith("0000")) {
+                ProcessNonAddressCommands(lowHex);
+            }
         }
 
         private void ProcessRegisterCommand(string highHex, string lowHex) {
@@ -426,7 +431,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_rdb, "inc", overflow);
                 return;
             }
-            //DEC A
+            //DEC 
             if (highHex[1] == 'C') {
                 _flags.SetPreviousState(_rdb);
                 var overflow = _y51();
@@ -434,7 +439,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_rdb, "dec", overflow);
                 return;
             }
-            //ADC A
+            //ADC 
             if (highHex[1] == 'D') {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
@@ -445,7 +450,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_acc, "adc", overflow);
                 return;
             }
-            //SUBB A
+            //SUBB 
             if (highHex[1] == 'D') {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
@@ -456,7 +461,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_acc, "adc", overflow);
                 return;
             }
-            //XCH A
+            //XCH 
             if (highHex[1] == 'D') {
                 var temp = new ExtendedBitArray(_acc);
                 _acc = new ExtendedBitArray(_rdb);
@@ -471,16 +476,40 @@ namespace _8bitVonNeiman.Cpu {
             if (highBin.StartsWith("010000")) {
                 Jump();
             }
-            //CALL
+            //CALL psl -> cr
             if (highBin.StartsWith("010000")) {
                 _y62();
+
+                _y35();
+                _y45();
+                _y4();
+
+                _y57();
+
+                _y35();
+                _y45();
+                _y4();
 
                 _y32();
                 _y30();
             }
-            //INT
+            //INT psl -> cr+psw
             if (highBin.StartsWith("010000")) {
+                _y62();
 
+                _y35();
+                _y45();
+                _y4();
+
+                _y57();
+                _y58();
+
+                _y35();
+                _y45();
+                _y4();
+
+                _y32();
+                _y30();
             }
             //JZ
             if (highBin.StartsWith("001100")) {
@@ -536,6 +565,129 @@ namespace _8bitVonNeiman.Cpu {
                 if (!_flags.O) {
                     Jump();
                 }
+            }
+        }
+
+        private void ProcessNonAddressCommands(string lowHex) {
+            //NOP
+            if (lowHex == "01") {
+                //Do nothing
+            }
+
+            //RET
+            if (lowHex == "02") {
+                _y45();
+                _y1();
+                _y35();
+                
+                _y29();
+
+                _y45();
+                _y1();
+                _y35();
+
+                _y33();
+            }
+
+            //IRET
+            if (lowHex == "03") {
+                _y45();
+                _y1();
+                _y35();
+
+                _y37();
+                _y29();
+
+                _y45();
+                _y1();
+                _y35();
+
+                _y33();
+            }
+
+            //EI
+            if (lowHex == "04") {
+                _flags.I = true;
+            }
+
+            //DI
+            if (lowHex == "05") {
+                _flags.I = false;
+            }
+
+            //RR
+            if (lowHex == "06") {
+                _y11();
+            }
+
+            //RL
+            if (lowHex == "07") {
+                _y12();
+            }
+
+            //RRC
+            if (lowHex == "08") {
+                _y13();
+            }
+
+            //RLC
+            if (lowHex == "09") {
+                _y14();
+            }
+
+            //HLT
+            if (lowHex == "0A") {
+
+            }
+
+            //INCA
+            if (lowHex == "0B") {
+                _y15();
+            }
+
+            //DECA
+            if (lowHex == "0C") {
+                _y16();
+            }
+
+            //SWAPA
+            if (lowHex == "0D") {
+                _y18();
+            }
+
+            //DAA
+            if (lowHex == "0E") {
+
+            }
+
+            //DSA
+            if (lowHex == "0F") {
+
+            }
+
+            //IN
+            if (lowHex == "10") {
+
+            }
+
+            //OUT
+            if (lowHex == "11") {
+
+            }
+
+            //ES
+            if (lowHex == "12") {
+                _flags.Flags[6] = !_flags.Flags[6];
+            }
+
+            //MOVASR
+            if (lowHex == "13") {
+                _y9();
+            }
+
+            //MOVSRA
+            if (lowHex == "14") {
+                _y28();
             }
         }
 

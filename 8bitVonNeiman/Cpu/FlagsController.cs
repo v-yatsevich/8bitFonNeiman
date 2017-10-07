@@ -34,6 +34,11 @@ namespace _8bitVonNeiman.Cpu {
             get => Flags[4]; set => Flags[4] = value;
         }
 
+        /// Аллиас регистра разрешения прерывания
+        public bool I {
+            get => Flags[5]; set => Flags[5] = value;
+        }
+
         public void SetPreviousState(ExtendedBitArray array) {
             _state = new ExtendedBitArray(array);
         }
