@@ -48,6 +48,13 @@ namespace _8bitVonNeiman.Common {
         }
 
         /// <summary>
+        /// Конствуктов, принимающий на вход значение байта.
+        /// </summary>
+        public ExtendedBitArray(byte num) {
+            _data = num;
+        }
+
+        /// <summary>
         /// Возвращает информацию байта в виде двоичной строки.
         /// </summary>
         /// <returns>Информация, хранимая в байте в виде двоичной строки.</returns>

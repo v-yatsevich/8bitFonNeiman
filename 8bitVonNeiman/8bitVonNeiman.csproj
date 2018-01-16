@@ -102,6 +102,7 @@
     <Compile Include="Cpu\View\ICpuFormOutput.cs" />
     <Compile Include="Memory\IMemoryControllerInput.cs" />
     <Compile Include="Memory\MemoryController.cs" />
+    <Compile Include="Memory\MemoryFileHandler.cs" />
     <Compile Include="Memory\View\IMemoryFormOutput.cs" />
     <Compile Include="Memory\View\MemoryForm.cs">
       <SubType>Form</SubType>

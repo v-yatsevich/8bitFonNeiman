@@ -43,5 +43,21 @@ namespace _8bitVonNeiman.Memory.View {
         private void memoryDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             _output.MemoryChanged(e.RowIndex, e.ColumnIndex, memoryDataGridView[e.ColumnIndex, e.RowIndex].Value.ToString());
         }
+
+        private void loadButton_Click(object sender, EventArgs e) {
+            _output.LoadMemoryClicked();
+        }
+
+        private void saveButton_Click(object sender, EventArgs e) {
+            _output.SaveMemoryClicked();
+        }
+
+        private void saveAsButton_Click(object sender, EventArgs e) {
+            _output.SaveAsMemoryClicked();
+        }
+
+        private void checkButton_Click(object sender, EventArgs e) {
+            _output.CheckMemoryClicked();
+        }
     }
 }

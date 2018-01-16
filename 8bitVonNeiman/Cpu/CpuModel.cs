@@ -64,15 +64,19 @@ namespace _8bitVonNeiman.Cpu {
             Reset();
         }
 
+        /// Вызывается при нажатии кнопки сброса на форме. Сбрасывает состояние и обновляет состояние формы
         public void ResetButtonTapped() {
             Reset();
             _view?.ShowState(MakeState());
         }
 
+        /// Вызывается при закрытии формы. Обнуляет переменную формы для ее нормального дальнейшего открытия
         public void FormClosed() {
             _view = null;
         }
 
+        /// Шаг процессора. Выполняет стандартный набор команд для каждого шага 
+        /// после чего выполняет загруженную команду и обновляет состояние формы
         public void Tick() {
             _y43();
             _y1();
@@ -86,6 +90,7 @@ namespace _8bitVonNeiman.Cpu {
             _view?.ShowState(MakeState());
         }
 
+        /// Открывает форму, если она закрыта и закрывает, если открыта
         public void ChangeFormState() {
             if (_view == null) {
                 _view = new CpuForm {Output = this};
@@ -97,6 +102,7 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
+        /// Сбрасывает состояние процессора
         public void Reset() {
             _cs = _defaultCs;
             _ds = _defaultDs;
@@ -110,23 +116,25 @@ namespace _8bitVonNeiman.Cpu {
             };
         }
         
-        /// Возвращает значение памяти по выбранному адресу. Имплементирует работу с кэшем.
+        /// Возвращает значение памяти по выбранному адресу.
         /// <param name="address">Адрес, из которого получается память.</param>
         private ExtendedBitArray GetMemory(int address) {
             return _output.GetMemory(address);
         }
         
-        /// Устанавливает значение памяти по выбранному адресу. Имплементирует работу с кэшем.
+        /// Устанавливает значение памяти по выбранному адресу.
         /// <param name="data">Значение устанавливаемой памяти.</param>
         /// <param name="address">Адрес, по которому записывается память.</param>
         private void SetMemory(ExtendedBitArray data, int address) {
             _output.SetMemory(data, address);
         }
 
+        /// Формирует объект класса CpuState с текущим состоянием процессора
         private CpuState MakeState() {
             return new CpuState(_acc, _dr, _flags.Flags, _ss, _ds, _cs, _pcl, _spl, _cr, _registers);
         }
 
+        /// Определяет к какой группе относится команда и запускает специфичный обработчик
         private void RunCommand() {
             var highBin = _cr[1].ToBinString();
             var highHex = _cr[1].ToHexString();
@@ -144,28 +152,11 @@ namespace _8bitVonNeiman.Cpu {
 
             //Переходы
             if (highBin.StartsWith("0100") || highBin.StartsWith("001")) {
-                ProcessJumpCommand(highBin);
-            }
-
-            //DJRNZ
-            if (highBin.StartsWith("0001")) {
-                _y63();
-                _y2();
-                _flags.SetPreviousState(_rdb);
-                var overflow = _rdb.Dec();
-                _flags.UpdateFlags(_rdb, "dec", overflow);
-                if (!_flags.Z) {
-                    Jump();
-                }
-                _y5();
-            }
-
-            //безадресные команды
-            if (highBin.StartsWith("0000")) {
-                ProcessNonAddressCommands(lowHex);
+                ProcessJumpCommand(highBin, highHex, lowBin, lowHex);
             }
         }
 
+        /// Обрабатывает регистровые команды
         private void ProcessRegisterCommand(string highHex, string lowHex) {
             //MOV
             if (highHex[1] == 'F') {
@@ -330,6 +321,7 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
+        /// Обрабатывает команды для работы с памятью
         private void ProcessRamCommand(string highBin, string highHex) {
             //WR
             if (highHex[1] == 'A') {
@@ -431,7 +423,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_rdb, "inc", overflow);
                 return;
             }
-            //DEC 
+            //DEC A
             if (highHex[1] == 'C') {
                 _flags.SetPreviousState(_rdb);
                 var overflow = _y51();
@@ -439,7 +431,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_rdb, "dec", overflow);
                 return;
             }
-            //ADC 
+            //ADC A
             if (highHex[1] == 'D') {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
@@ -450,7 +442,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_acc, "adc", overflow);
                 return;
             }
-            //SUBB 
+            //SUBB A
             if (highHex[1] == 'D') {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
@@ -461,55 +453,33 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_acc, "adc", overflow);
                 return;
             }
-            //XCH 
+            //XCH A
             if (highHex[1] == 'D') {
                 var temp = new ExtendedBitArray(_acc);
                 _acc = new ExtendedBitArray(_rdb);
                 _rdb = temp;
                 _y4();
+                return;
             }
         }
 
-        private void ProcessJumpCommand(string highBin) {
+        /// Обрабатывает команды переходов
+        private void ProcessJumpCommand(string highBin, string highHex, string lowBin, string lowHex) {
 
             //JMP
             if (highBin.StartsWith("010000")) {
                 Jump();
             }
-            //CALL psl -> cr
+            //CALL
             if (highBin.StartsWith("010000")) {
                 _y62();
-
-                _y35();
-                _y45();
-                _y4();
-
-                _y57();
-
-                _y35();
-                _y45();
-                _y4();
 
                 _y32();
                 _y30();
             }
-            //INT psl -> cr+psw
+            //INT
             if (highBin.StartsWith("010000")) {
-                _y62();
 
-                _y35();
-                _y45();
-                _y4();
-
-                _y57();
-                _y58();
-
-                _y35();
-                _y45();
-                _y4();
-
-                _y32();
-                _y30();
             }
             //JZ
             if (highBin.StartsWith("001100")) {
@@ -565,132 +535,12 @@ namespace _8bitVonNeiman.Cpu {
                 if (!_flags.O) {
                     Jump();
                 }
+                return;
             }
         }
 
-        private void ProcessNonAddressCommands(string lowHex) {
-            //NOP
-            if (lowHex == "01") {
-                //Do nothing
-            }
-
-            //RET
-            if (lowHex == "02") {
-                _y45();
-                _y1();
-                _y35();
-                
-                _y29();
-
-                _y45();
-                _y1();
-                _y35();
-
-                _y33();
-            }
-
-            //IRET
-            if (lowHex == "03") {
-                _y45();
-                _y1();
-                _y35();
-
-                _y37();
-                _y29();
-
-                _y45();
-                _y1();
-                _y35();
-
-                _y33();
-            }
-
-            //EI
-            if (lowHex == "04") {
-                _flags.I = true;
-            }
-
-            //DI
-            if (lowHex == "05") {
-                _flags.I = false;
-            }
-
-            //RR
-            if (lowHex == "06") {
-                _y11();
-            }
-
-            //RL
-            if (lowHex == "07") {
-                _y12();
-            }
-
-            //RRC
-            if (lowHex == "08") {
-                _y13();
-            }
-
-            //RLC
-            if (lowHex == "09") {
-                _y14();
-            }
-
-            //HLT
-            if (lowHex == "0A") {
-
-            }
-
-            //INCA
-            if (lowHex == "0B") {
-                _y15();
-            }
-
-            //DECA
-            if (lowHex == "0C") {
-                _y16();
-            }
-
-            //SWAPA
-            if (lowHex == "0D") {
-                _y18();
-            }
-
-            //DAA
-            if (lowHex == "0E") {
-
-            }
-
-            //DSA
-            if (lowHex == "0F") {
-
-            }
-
-            //IN
-            if (lowHex == "10") {
-
-            }
-
-            //OUT
-            if (lowHex == "11") {
-
-            }
-
-            //ES
-            if (lowHex == "12") {
-                _flags.Flags[6] = !_flags.Flags[6];
-            }
-
-            //MOVASR
-            if (lowHex == "13") {
-                _y9();
-            }
-
-            //MOVSRA
-            if (lowHex == "14") {
-                _y28();
-            }
-        }
-
+        /// Загружает данные в RDB из регистра или памяти, если адресация косвеннная. 
+        /// Модифицирует регистр перед этим, если этого требует команда.
         private void LoadRegister(string lowHex) {
             _y47();
             _y2();
@@ -711,6 +561,7 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
+        /// Перемещает данные из RDB в регистр
         private void UnloadRegister(string lowHex) {
             if (lowHex[0] == '0') {
                 _y5();
@@ -719,6 +570,7 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
         
+        /// Модифицирует регистр перед выгрузкой его из памяти, если этого требует команда.
         private void ModifyRegister(string lowHex) {
             //@R+ - 001
             if (lowHex[0] == '1') {
@@ -737,6 +589,7 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
+        /// Производит безусловный переход.
         private void Jump() {
             _y32();
             _y30();
@@ -1059,13 +912,6 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y62() {
             _rdb = new ExtendedBitArray(_pcl);
-        }
-
-        private void _y63() {
-            _rab = 0;
-            for (int i = 2; i < 4; i++) {
-                _rab += _cr[1][i] ? 1 << (i - 2) : 0;
-            }
         }
 
         #endregion
