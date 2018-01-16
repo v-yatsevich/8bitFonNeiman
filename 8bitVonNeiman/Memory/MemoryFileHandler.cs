@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using _8bitVonNeiman.Common;
 using System.IO;
 using System.Windows.Forms;
+using _8bitVonNeiman.Cpu.View;
 
 namespace _8bitVonNeiman.Memory {
     class MemoryFileHandler {

@@ -87,6 +87,7 @@
       <DependentUpon>ComponentsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controller\View\IComponentsFormOutput.cs" />
+    <Compile Include="Cpu\CpuFileHandler.cs" />
     <Compile Include="Cpu\CpuModel.cs" />
     <Compile Include="Cpu\FlagsController.cs" />
     <Compile Include="Cpu\ICpuModelInput.cs" />

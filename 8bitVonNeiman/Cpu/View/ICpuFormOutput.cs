@@ -9,5 +9,9 @@ namespace _8bitVonNeiman.Cpu.View {
         void ResetButtonTapped();
         void FormClosed();
         void Tick();
+
+        void CheckButtonClicked();
+        void SaveButtonClicked();
+        void SaveAsButtonClicked();
     }
 }

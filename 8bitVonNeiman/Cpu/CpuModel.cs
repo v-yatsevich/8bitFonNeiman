@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Forms;
 using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Cpu.View;
 
@@ -55,6 +56,8 @@ namespace _8bitVonNeiman.Cpu {
         private ExtendedBitArray[] _cr = { new ExtendedBitArray(), new ExtendedBitArray() };
 
         private ICpuModelOutput _output;
+
+        private CpuFileHandler _fileHandler = new CpuFileHandler();
         //TODO: Сделать через интерфейс
         private CpuForm _view;
 
@@ -88,6 +91,61 @@ namespace _8bitVonNeiman.Cpu {
             _y31();
             RunCommand();
             _view?.ShowState(MakeState());
+        }
+
+        public void CheckButtonClicked() {
+            var state = _fileHandler.LoadState();
+            if (state == null) {
+                return;
+            }
+            var currentState = MakeState();
+            var difference = new List<string>();
+            
+            if (state.Dr != null && state.Dr.NumValue() != currentState.Dr.NumValue()) {
+                difference.Add("dr");
+            }
+            if (state.Psw != null && state.Psw.NumValue() != currentState.Psw.NumValue()) {
+                difference.Add("psw");
+            }
+            if (state.Ss != 0 && state.Ss != currentState.Ss) {
+                difference.Add("ss");
+            }
+            if (state.Ds != 0 && state.Ds != currentState.Ds) {
+                difference.Add("ds");
+            }
+            if (state.Cs != 0 && state.Cs != currentState.Cs) {
+                difference.Add("cs");
+            }
+            if (state.Pcl != 0 && state.Pcl != currentState.Pcl) {
+                difference.Add("pcl");
+            }
+            if (state.Spl != 0 && state.Spl != currentState.Spl) {
+                difference.Add("spl");
+            }
+            if (state.Cr[0] != null && state.Cr[0].NumValue() != currentState.Cr[0].NumValue()) {
+                difference.Add("cr[0]");
+            }
+            if (state.Cr[1] != null && state.Acc.NumValue() != currentState.Acc.NumValue()) {
+                difference.Add("cr[1]");
+            }
+            for (int i = 0; i < 8; i++) {
+                if (state.Registers[i] != null && state.Registers[i].NumValue() != currentState.Registers[i].NumValue()) {
+                    difference.Add($"r{i}");
+                }
+            }
+            if (difference.Count == 0) {
+                MessageBox.Show("Состояние совпадает с эталонным");
+            } else {
+                MessageBox.Show("Состояние отличается в следующих местах: " + string.Join(", ", difference));
+            }
+        }
+
+        public void SaveButtonClicked() {
+            _fileHandler.Save(MakeState());
+        }
+
+        public void SaveAsButtonClicked() {
+            _fileHandler.SaveAs(MakeState());
         }
 
         /// Открывает форму, если она закрыта и закрывает, если открыта

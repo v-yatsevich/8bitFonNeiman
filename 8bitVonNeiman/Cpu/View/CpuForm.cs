@@ -84,5 +84,17 @@ namespace _8bitVonNeiman.Cpu.View {
         private void tickButton_Click(object sender, EventArgs e) {
             Output.Tick();
         }
+
+        private void checkButton_Click(object sender, EventArgs e) {
+            Output.CheckButtonClicked();
+        }
+
+        private void saveButton_Click(object sender, EventArgs e) {
+            Output.SaveButtonClicked();
+        }
+
+        private void saveAsButton_Click(object sender, EventArgs e) {
+            Output.SaveAsButtonClicked();
+        }
     }
 }
