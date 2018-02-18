@@ -210,11 +210,28 @@ namespace _8bitVonNeiman.Cpu {
 
             //Переходы
             if (highBin.StartsWith("0100") || highBin.StartsWith("001")) {
-                ProcessJumpCommand(highBin, highHex, lowBin, lowHex);
+                ProcessJumpCommand(highBin);
+            }
+
+            //DJRNZ
+            if (highBin.StartsWith("0001")) {
+                _y63();
+                _y2();
+                _flags.SetPreviousState(_rdb);
+                var overflow = _rdb.Dec();
+                _flags.UpdateFlags(_rdb, "dec", overflow);
+                if (!_flags.Z) {
+                    Jump();
+                }
+                _y5();
+            }
+
+            //безадресные команды
+            if (highBin.StartsWith("0000")) {
+                ProcessNonAddressCommands(lowHex);
             }
         }
 
-        /// Обрабатывает регистровые команды
         private void ProcessRegisterCommand(string highHex, string lowHex) {
             //MOV
             if (highHex[1] == 'F') {
@@ -511,33 +528,55 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.UpdateFlags(_acc, "adc", overflow);
                 return;
             }
-            //XCH A
+            //XCH 
             if (highHex[1] == 'D') {
                 var temp = new ExtendedBitArray(_acc);
                 _acc = new ExtendedBitArray(_rdb);
                 _rdb = temp;
                 _y4();
-                return;
             }
         }
 
-        /// Обрабатывает команды переходов
-        private void ProcessJumpCommand(string highBin, string highHex, string lowBin, string lowHex) {
+        private void ProcessJumpCommand(string highBin) {
 
             //JMP
             if (highBin.StartsWith("010000")) {
                 Jump();
             }
-            //CALL
+            //CALL psl -> cr
             if (highBin.StartsWith("010000")) {
                 _y62();
+
+                _y35();
+                _y45();
+                _y4();
+
+                _y57();
+
+                _y35();
+                _y45();
+                _y4();
 
                 _y32();
                 _y30();
             }
-            //INT
+            //INT psl -> cr+psw
             if (highBin.StartsWith("010000")) {
+                _y62();
 
+                _y35();
+                _y45();
+                _y4();
+
+                _y57();
+                _y58();
+
+                _y35();
+                _y45();
+                _y4();
+
+                _y32();
+                _y30();
             }
             //JZ
             if (highBin.StartsWith("001100")) {
@@ -593,12 +632,132 @@ namespace _8bitVonNeiman.Cpu {
                 if (!_flags.O) {
                     Jump();
                 }
-                return;
             }
         }
 
-        /// Загружает данные в RDB из регистра или памяти, если адресация косвеннная. 
-        /// Модифицирует регистр перед этим, если этого требует команда.
+        private void ProcessNonAddressCommands(string lowHex) {
+            //NOP
+            if (lowHex == "01") {
+                //Do nothing
+            }
+
+            //RET
+            if (lowHex == "02") {
+                _y45();
+                _y1();
+                _y35();
+                
+                _y29();
+
+                _y45();
+                _y1();
+                _y35();
+
+                _y33();
+            }
+
+            //IRET
+            if (lowHex == "03") {
+                _y45();
+                _y1();
+                _y35();
+
+                _y37();
+                _y29();
+
+                _y45();
+                _y1();
+                _y35();
+
+                _y33();
+            }
+
+            //EI
+            if (lowHex == "04") {
+                _flags.I = true;
+            }
+
+            //DI
+            if (lowHex == "05") {
+                _flags.I = false;
+            }
+
+            //RR
+            if (lowHex == "06") {
+                _y11();
+            }
+
+            //RL
+            if (lowHex == "07") {
+                _y12();
+            }
+
+            //RRC
+            if (lowHex == "08") {
+                _y13();
+            }
+
+            //RLC
+            if (lowHex == "09") {
+                _y14();
+            }
+
+            //HLT
+            if (lowHex == "0A") {
+
+            }
+
+            //INCA
+            if (lowHex == "0B") {
+                _y15();
+            }
+
+            //DECA
+            if (lowHex == "0C") {
+                _y16();
+            }
+
+            //SWAPA
+            if (lowHex == "0D") {
+                _y18();
+            }
+
+            //DAA
+            if (lowHex == "0E") {
+
+            }
+
+            //DSA
+            if (lowHex == "0F") {
+
+            }
+
+            //IN
+            if (lowHex == "10") {
+
+            }
+
+            //OUT
+            if (lowHex == "11") {
+
+            }
+
+            //ES
+            if (lowHex == "12") {
+                _flags.Flags[6] = !_flags.Flags[6];
+            }
+
+            //MOVASR
+            if (lowHex == "13") {
+                _y9();
+            }
+
+            //MOVSRA
+            if (lowHex == "14") {
+                _y28();
+            }
+        }
+
         private void LoadRegister(string lowHex) {
             _y47();
             _y2();
@@ -970,6 +1129,13 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y62() {
             _rdb = new ExtendedBitArray(_pcl);
+        }
+
+        private void _y63() {
+            _rab = 0;
+            for (int i = 2; i < 4; i++) {
+                _rab += _cr[1][i] ? 1 << (i - 2) : 0;
+            }
         }
 
         #endregion
