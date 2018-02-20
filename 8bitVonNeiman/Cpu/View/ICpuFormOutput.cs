@@ -13,5 +13,6 @@ namespace _8bitVonNeiman.Cpu.View {
         void CheckButtonClicked();
         void SaveButtonClicked();
         void SaveAsButtonClicked();
+        void RunButtonClicked();
     }
 }

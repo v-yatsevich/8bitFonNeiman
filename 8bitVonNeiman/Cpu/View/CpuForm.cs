@@ -96,5 +96,9 @@ namespace _8bitVonNeiman.Cpu.View {
         private void saveAsButton_Click(object sender, EventArgs e) {
             Output.SaveAsButtonClicked();
         }
+
+        private void runButton_Click(object sender, EventArgs e) {
+            Output.RunButtonClicked();
+        }
     }
 }

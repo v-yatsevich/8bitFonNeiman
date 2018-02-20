@@ -62,6 +62,8 @@ namespace _8bitVonNeiman.Cpu {
         //TODO: Сделать через интерфейс
         private CpuForm _view;
 
+        private bool _shouldStopRunning = false;
+
         public CpuModel(ICpuModelOutput output, GetView viewDelegate) {
             _viewDelegate = viewDelegate;
             _output = output;
@@ -92,6 +94,7 @@ namespace _8bitVonNeiman.Cpu {
             _y31();
             RunCommand();
             _view?.ShowState(MakeState());
+            _output.commandHasRun();
         }
 
         public void CheckButtonClicked() {
@@ -138,6 +141,13 @@ namespace _8bitVonNeiman.Cpu {
                 MessageBox.Show("Состояние совпадает с эталонным");
             } else {
                 MessageBox.Show("Состояние отличается в следующих местах: " + string.Join(", ", difference));
+            }
+        }
+
+        public void RunButtonClicked() {
+            _shouldStopRunning = false;
+            while (!_shouldStopRunning) {
+                Tick();
             }
         }
 
@@ -235,6 +245,10 @@ namespace _8bitVonNeiman.Cpu {
             //Битовые команды 
             if (highBin.StartsWith("1000") || highBin.StartsWith("1001")) {
                 ProcessBitCommands(highBin, highHex, lowBin, lowHex);
+            }
+
+            if (_cr[0].NumValue() == 0 && _cr[1].NumValue() == 0) {
+                _shouldStopRunning = true;
             }
         }
 
@@ -710,7 +724,7 @@ namespace _8bitVonNeiman.Cpu {
 
             //HLT
             if (lowHex == "0A") {
-
+                _shouldStopRunning = true;
             }
 
             //INCA

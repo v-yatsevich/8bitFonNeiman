@@ -15,5 +15,7 @@ namespace _8bitVonNeiman.Cpu {
         /// <param name="memory">Значение ячейки памяти.</param>
         /// <param name="address">Адрес ячейки памяти.</param>
         void SetMemory(ExtendedBitArray memory, int address);
+
+        void commandHasRun();
     }
 }

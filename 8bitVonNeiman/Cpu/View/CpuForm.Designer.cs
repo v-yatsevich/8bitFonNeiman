@@ -632,6 +632,7 @@
             this.runButton.TabIndex = 30;
             this.runButton.Text = "Запуск";
             this.runButton.UseVisualStyleBackColor = true;
+            this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // CpuForm
             // 

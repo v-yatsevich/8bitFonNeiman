@@ -53,5 +53,9 @@ namespace _8bitVonNeiman.Controller {
         public void SetMemory(ExtendedBitArray memory, int address) {
             _memoryController.SetMemory(memory, address);
         }
+
+        public void commandHasRun() {
+            
+        }
     }
 }
