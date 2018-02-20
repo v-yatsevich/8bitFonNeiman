@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Cpu.View;
@@ -229,6 +230,11 @@ namespace _8bitVonNeiman.Cpu {
             //безадресные команды
             if (highBin.StartsWith("0000")) {
                 ProcessNonAddressCommands(lowHex);
+            }
+
+            //Битовые команды 
+            if (highBin.StartsWith("1000") || highBin.StartsWith("1001")) {
+                ProcessBitCommands(highBin, highHex, lowBin, lowHex);
             }
         }
 
@@ -724,12 +730,24 @@ namespace _8bitVonNeiman.Cpu {
 
             //DAA
             if (lowHex == "0E") {
-
+                var temp = new ExtendedBitArray(_acc);
+                temp.And(new ExtendedBitArray("00001111"));
+                if (temp.NumValue() > 9 && _flags.A) {
+                    _y19();
+                }
+                if (_acc.NumValue() > 143 && _flags.C) {
+                    _y20();
+                }
             }
 
             //DSA
             if (lowHex == "0F") {
-
+                if (_flags.A) {
+                    _y21();
+                }
+                if (_flags.C) {
+                    _y22();
+                }
             }
 
             //IN
@@ -755,6 +773,27 @@ namespace _8bitVonNeiman.Cpu {
             //MOVSRA
             if (lowHex == "14") {
                 _y28();
+            }
+        }
+
+        private void ProcessBitCommands(string highBin, string highHex, string lowBin, string lowHex) {
+            //CB and SB
+            if (highBin.StartsWith("1000")) {
+                _y44();
+                _y1();
+                var index = Convert.ToInt32(highBin.Substring(5, 3), 2);
+                _rdb[index] = highBin[4] == '1';
+                _y4();
+            }
+
+            //SBC and SBS
+            if (highBin.StartsWith("1001")) {
+                _y44();
+                _y1();
+                var index = Convert.ToInt32(highBin.Substring(5, 3), 2);
+                if (_rdb[index] == (highBin[4] == '1')) {
+                    _y31();
+                }
             }
         }
 
