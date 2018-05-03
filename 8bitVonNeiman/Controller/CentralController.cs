@@ -54,7 +54,7 @@ namespace _8bitVonNeiman.Controller {
             _memoryController.SetMemory(memory, address);
         }
 
-        public void commandHasRun() {
+        public void CommandHasRun() {
             
         }
     }

@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Compiler.Model;
 
 namespace _8bitFonNeimanTest {

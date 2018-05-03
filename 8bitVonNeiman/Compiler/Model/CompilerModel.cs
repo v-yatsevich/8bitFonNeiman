@@ -63,6 +63,10 @@ namespace _8bitVonNeiman.Compiler.Model {
                     continue;
                 }
                 string line = HandleLabelAndReturnLine(lines[i], env);
+                if (line.Length == 0) {
+                    env.IncrementLine();
+                    continue;
+                }
                 bool isSuccess = TryToGetVariable(line, env);
                 if (!isSuccess) {
                     HandleCommand(line, env);

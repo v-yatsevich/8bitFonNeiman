@@ -21,11 +21,8 @@ namespace _8bitVonNeiman.Controller {
         }
 
         public static ICpuModelInput GetCpu(ICpuModelOutput output) {
-            return new CpuModel(output, GetView);
+            return new CpuModel(output);
         }
 
-        private static ICpuFormInput GetView() {
-            return new CpuForm();
-        }
     }
 }

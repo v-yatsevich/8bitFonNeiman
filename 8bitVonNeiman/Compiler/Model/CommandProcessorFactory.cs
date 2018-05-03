@@ -49,7 +49,8 @@ namespace _8bitVonNeiman.Compiler.Model {
                     ["dsa"] = DSA,
                     ["es"] = ES,
                     ["movasr"] = MOVASR,
-                    ["movsra"] = MOVSRA
+                    ["movsra"] = MOVSRA,
+                    ["nota"] = NOTA
                 };
             }
 
@@ -221,6 +222,17 @@ namespace _8bitVonNeiman.Compiler.Model {
             private static void MOVSRA(string[] args, CompilerEnvironment env) {
                 ValidateNoAddressCommand(args, "MOVSRA", env.GetCurrentLine());
                 var array = new ExtendedBitArray() {
+                    [2] = true,
+                    [4] = true
+                };
+                env.SetByte(array);
+                env.SetByte(new ExtendedBitArray());
+            }
+
+            private static void NOTA(string[] args, CompilerEnvironment env) {
+                ValidateNoAddressCommand(args, "MOVSRA", env.GetCurrentLine());
+                var array = new ExtendedBitArray() {
+                    [0] = true,
                     [2] = true,
                     [4] = true
                 };
@@ -779,8 +791,8 @@ namespace _8bitVonNeiman.Compiler.Model {
             }
 
             private static DataResponse GetBitArrays(string[] args, string op, CompilerEnvironment env) {
-                if (args.Length < 0 || args.Length > 2) {
-                    throw new CompilationErrorExcepton($"Команда {op} принимает 1 или 2 агрумента.", env.GetCurrentLine());
+                if (args.Length != 1) {
+                    throw new CompilationErrorExcepton($"Команда {op} принимает 1 агрумент.", env.GetCurrentLine());
                 }
                 var dataResponse = new DataResponse {
                     lowBitArray = new ExtendedBitArray(),
@@ -790,9 +802,6 @@ namespace _8bitVonNeiman.Compiler.Model {
                 var r = CompilerSupport.ConvertToRegister(args[0]);
                 if (r.HasValue) {
                     return DataResponseFromRegister(args, op, env, dataResponse, r.Value);
-                }
-                if (args.Length == 2) {
-                    throw new CompilationErrorExcepton($"При работе с оперативной памятью команда {op} принимает только 1 аргумент", env.GetCurrentLine());
                 }
 
                 dataResponse.highBitArray[6] = true;

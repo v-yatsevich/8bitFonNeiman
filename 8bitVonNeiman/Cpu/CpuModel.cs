@@ -6,11 +6,7 @@ using _8bitVonNeiman.Cpu.View;
 
 namespace _8bitVonNeiman.Cpu {
     public class CpuModel: ICpuModelInput, ICpuFormOutput {
-
-        public delegate ICpuFormInput GetView();
-
-        private GetView _viewDelegate;
-
+        
         /// Аккамулятор.
         private ExtendedBitArray _acc = new ExtendedBitArray();
 
@@ -18,7 +14,7 @@ namespace _8bitVonNeiman.Cpu {
         private int _pcl;
 
         /// Указатель стека.
-        private int _spl;
+        private byte _spl;
 
         /// Номер сегмента кода.
         private int _cs;
@@ -64,8 +60,7 @@ namespace _8bitVonNeiman.Cpu {
 
         private bool _shouldStopRunning = false;
 
-        public CpuModel(ICpuModelOutput output, GetView viewDelegate) {
-            _viewDelegate = viewDelegate;
+        public CpuModel(ICpuModelOutput output) {
             _output = output;
             Reset();
         }
@@ -94,7 +89,8 @@ namespace _8bitVonNeiman.Cpu {
             _y31();
             RunCommand();
             _view?.ShowState(MakeState());
-            _output.commandHasRun();
+            _view?.ShowState(MakeState());
+            _output.CommandHasRun();
         }
 
         public void CheckButtonClicked() {
@@ -179,6 +175,8 @@ namespace _8bitVonNeiman.Cpu {
             _pcl = Constants.StartAddress;
             _acc = new ExtendedBitArray();
             _spl = 0;
+            _flags.Reset();
+            _cr = new [] { new ExtendedBitArray(), new ExtendedBitArray() };
             _registers = new List<ExtendedBitArray> {
                 new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(),
                 new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray()
@@ -564,7 +562,7 @@ namespace _8bitVonNeiman.Cpu {
                 Jump();
             }
             //CALL psl -> cr
-            if (highBin.StartsWith("010000")) {
+            if (highBin.StartsWith("010010")) {
                 _y62();
 
                 _y35();
@@ -581,7 +579,7 @@ namespace _8bitVonNeiman.Cpu {
                 _y30();
             }
             //INT psl -> cr+psw
-            if (highBin.StartsWith("010000")) {
+            if (highBin.StartsWith("010011")) {
                 _y62();
 
                 _y35();
@@ -788,6 +786,11 @@ namespace _8bitVonNeiman.Cpu {
             if (lowHex == "14") {
                 _y28();
             }
+
+            //NOTA
+            if (lowHex == "15") {
+                _y17();
+            }
         }
 
         private void ProcessBitCommands(string highBin, string highHex, string lowBin, string lowHex) {
@@ -911,30 +914,38 @@ namespace _8bitVonNeiman.Cpu {
         }
 
         private void _y11() {
-            _flags.C = _acc[Constants.WordSize - 1];
-            _y13();
+            var temp = _acc[0];
+            for (int i = 0; i < Constants.WordSize - 1; i++) {
+                _acc[i] = _acc[i + 1];
+            }
+            _acc[Constants.WordSize - 1] = temp;
+            _flags.C = temp;
         }
 
         private void _y12() {
-            _flags.C = _acc[0];
-            _y14();
-        }
-
-        private void _y13() {
             var temp = _acc[Constants.WordSize - 1];
             for (int i = Constants.WordSize - 1; i > 0; i--) {
                 _acc[i] = _acc[i - 1];
             }
-            _acc[0] = _flags.C;
+            _acc[0] = temp;
             _flags.C = temp;
         }
 
-        private void _y14() {
+        private void _y13() {
             var temp = _acc[0];
             for (int i = 0; i < Constants.WordSize - 1; i++) {
                 _acc[i] = _acc[i + 1];
             }
             _acc[Constants.WordSize - 1] = _flags.C;
+            _flags.C = temp;
+        }
+
+        private void _y14() {
+            var temp = _acc[Constants.WordSize - 1];
+            for (int i = Constants.WordSize - 1; i > 0; i--) {
+                _acc[i] = _acc[i - 1];
+            }
+            _acc[0] = _flags.C;
             _flags.C = temp;
         }
 
@@ -1020,7 +1031,7 @@ namespace _8bitVonNeiman.Cpu {
         }
 
         private void _y30() {
-            //TODO: ??????
+            _cs = _cr[1].NumValue() & 3;
         }
 
         private void _y31() {
@@ -1040,25 +1051,19 @@ namespace _8bitVonNeiman.Cpu {
 
         private void _y34() {
             _spl++;
-            if (_spl > (2 ^ Constants.WordSize)) {
-                //TODO: Действие по переполнению стека?
-            }
         }
 
         private void _y35() {
             _spl--;
-            if (_spl < 0) {
-                //TODO: Действие по переполнению стека?
-            }
         }
 
         private void _y36() {
-            _spl = _acc.NumValue();
+            _spl = Convert.ToByte(_acc.NumValue());
         }
 
         private void _y37() {
             for (int i = 0; i < 6; i++) {
-                //_flags[i] = _rdb[i + 2];
+                _flags.Flags[i] = _rdb[i + 2];
             }
         }
 

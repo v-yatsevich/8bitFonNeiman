@@ -5,9 +5,9 @@ namespace _8bitVonNeiman.Cpu {
     ///Класс: имплементирующий работу с флагами процессора
     public class FlagsController {
 
-        public ExtendedBitArray Flags { get; } = new ExtendedBitArray();
-        private ExtendedBitArray _state = null;
-        private ExtendedBitArray _arg = null;
+        public ExtendedBitArray Flags { get; private set; } = new ExtendedBitArray();
+        private ExtendedBitArray _state;
+        private ExtendedBitArray _arg;
 
         /// Аллиас регистра нуля
         public bool Z {
@@ -45,6 +45,12 @@ namespace _8bitVonNeiman.Cpu {
 
         public void SetArgument(ExtendedBitArray array) {
             _arg = new ExtendedBitArray(array);
+        }
+
+        public void Reset() {
+            _state = null;
+            _arg = null;
+            Flags = new ExtendedBitArray();
         }
 
         public void UpdateFlags(ExtendedBitArray newState, string command, bool? overflow = null) {
