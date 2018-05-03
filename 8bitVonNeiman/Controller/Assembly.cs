@@ -1,4 +1,5 @@
-﻿using _8bitVonNeiman.Compiler;
+﻿using _8bitVonNeiman.Auth;
+using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Cpu;
 using _8bitVonNeiman.Cpu.View;
@@ -24,5 +25,8 @@ namespace _8bitVonNeiman.Controller {
             return new CpuModel(output);
         }
 
+        public static IAuthModelInput GetAuthController(IAuthModelOutput output) {
+            return new AuthController(output);
+        }
     }
 }
