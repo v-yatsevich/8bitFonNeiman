@@ -11,6 +11,10 @@ namespace _8bitVonNeiman.Controller.View {
             InitializeComponent();
         }
 
+        public void SetAdminButtonsVisible(bool visible) {
+            studentsButton.Visible = visible;
+        }
+
         private void ComponentsForm_FormClosed(object sender, FormClosedEventArgs e) {
             _output.FormClosed();
         }
@@ -27,8 +31,8 @@ namespace _8bitVonNeiman.Controller.View {
             _output.CpuButtonClicked();
         }
 
-        private void tempTactButton_Click(object sender, EventArgs e) {
-            _output.TactButtonClicked();
+        private void studentsButton_Click(object sender, EventArgs e) {
+            _output.StudentsButtonClicked();
         }
     }
 }

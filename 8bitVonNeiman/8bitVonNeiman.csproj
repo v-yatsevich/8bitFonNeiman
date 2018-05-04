@@ -135,6 +135,7 @@
     <Compile Include="Database\IDatabaseManagerInput.cs" />
     <Compile Include="Database\Models\LoginEntity.cs" />
     <Compile Include="Database\Models\StudentEntity.cs" />
+    <Compile Include="Database\Models\UserEntity.cs" />
     <Compile Include="Debugger\DebuggerModel.cs" />
     <Compile Include="Debugger\IDebuggerModelInput.cs" />
     <Compile Include="Debugger\IDebuggerModelOutput.cs" />
@@ -150,6 +151,21 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Students\IStudentsModuleInput.cs" />
+    <Compile Include="Students\StudentsController.cs" />
+    <Compile Include="Students\View\AddStudentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Students\View\AddStudentForm.Designer.cs">
+      <DependentUpon>AddStudentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Students\View\StudentsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Students\View\StudentsForm.Designer.cs">
+      <DependentUpon>StudentsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Students\View\IStudentsFormOutput.cs" />
     <EmbeddedResource Include="Auth\View\AuthForm.resx">
       <DependentUpon>AuthForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -174,6 +190,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Students\View\AddStudentForm.resx">
+      <DependentUpon>AddStudentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Students\View\StudentsForm.resx">
+      <DependentUpon>StudentsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="database.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

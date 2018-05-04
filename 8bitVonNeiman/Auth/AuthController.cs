@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using _8bitVonNeiman.Auth.View;
 using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Database;
@@ -45,7 +40,6 @@ namespace _8bitVonNeiman.Auth {
             SharedDataManager.Instance.IsAuthorized = true;
             SharedDataManager.Instance.UserId = loginEntity.Id;
             SharedDataManager.Instance.IsAdmin = loginEntity.IsAdmin;
-            MessageBox.Show("Вы успешно авторизовались");
             _output.AuthCompleted();
         }
     }

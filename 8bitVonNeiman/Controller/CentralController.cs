@@ -6,6 +6,7 @@ using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Controller.View;
 using _8bitVonNeiman.Cpu;
 using _8bitVonNeiman.Memory;
+using _8bitVonNeiman.Students;
 
 namespace _8bitVonNeiman.Controller {
     public class CentralController: ApplicationContext, IComponentsFormOutput, ICompilerControllerOutput, ICpuModelOutput, IAuthModelOutput {
@@ -15,6 +16,7 @@ namespace _8bitVonNeiman.Controller {
         private readonly CompilerController _compilerController;
         private readonly ICpuModelInput _cpu;
         private readonly IAuthModelInput _authController;
+        private readonly IStudentsModuleInput _studentsController;
 
         public CentralController() {
             _componentsForm = new ComponentsForm(this);
@@ -22,6 +24,7 @@ namespace _8bitVonNeiman.Controller {
             _memoryController = Assembly.GetMemoryController();
             _authController = Assembly.GetAuthController(this);
             _cpu = Assembly.GetCpu(this);
+            _studentsController = Assembly.GetStudentsController();
 
             _authController.ChangeFormState();
         }
@@ -70,7 +73,12 @@ namespace _8bitVonNeiman.Controller {
 
         public void AuthCompleted() {
             _componentsForm.Show();
+            _componentsForm.SetAdminButtonsVisible(SharedDataManager.Instance.IsAdmin);
             _authController.ChangeFormState();
+        }
+
+        public void StudentsButtonClicked() {
+            _studentsController.ChangeFormState();
         }
     }
 }

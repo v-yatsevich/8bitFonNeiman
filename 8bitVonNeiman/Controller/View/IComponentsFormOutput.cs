@@ -4,6 +4,6 @@
         void EditorButtonClicked();
         void MemoryButtonClicked();
         void CpuButtonClicked();
-        void TactButtonClicked();
+        void StudentsButtonClicked();
     }
 }

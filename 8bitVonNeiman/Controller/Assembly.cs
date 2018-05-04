@@ -2,8 +2,8 @@
 using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Cpu;
-using _8bitVonNeiman.Cpu.View;
 using _8bitVonNeiman.Memory;
+using _8bitVonNeiman.Students;
 
 namespace _8bitVonNeiman.Controller {
     public static class Assembly {
@@ -27,6 +27,10 @@ namespace _8bitVonNeiman.Controller {
 
         public static IAuthModelInput GetAuthController(IAuthModelOutput output) {
             return new AuthController(output);
+        }
+
+        public static IStudentsModuleInput GetStudentsController() {
+            return new StudentsController();
         }
     }
 }
