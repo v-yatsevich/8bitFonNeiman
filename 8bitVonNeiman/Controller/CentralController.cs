@@ -7,6 +7,7 @@ using _8bitVonNeiman.Controller.View;
 using _8bitVonNeiman.Cpu;
 using _8bitVonNeiman.Memory;
 using _8bitVonNeiman.Students;
+using _8bitVonNeiman.Tasks;
 
 namespace _8bitVonNeiman.Controller {
     public class CentralController: ApplicationContext, IComponentsFormOutput, ICompilerControllerOutput, ICpuModelOutput, IAuthModelOutput {
@@ -17,6 +18,7 @@ namespace _8bitVonNeiman.Controller {
         private readonly ICpuModelInput _cpu;
         private readonly IAuthModelInput _authController;
         private readonly IStudentsModuleInput _studentsController;
+        private readonly ITasksModuleInput _tasksController;
 
         public CentralController() {
             _componentsForm = new ComponentsForm(this);
@@ -25,6 +27,7 @@ namespace _8bitVonNeiman.Controller {
             _authController = Assembly.GetAuthController(this);
             _cpu = Assembly.GetCpu(this);
             _studentsController = Assembly.GetStudentsController();
+            _tasksController = Assembly.GetTasksController();
 
             _authController.ChangeFormState();
         }
@@ -79,6 +82,10 @@ namespace _8bitVonNeiman.Controller {
 
         public void StudentsButtonClicked() {
             _studentsController.ChangeFormState();
+        }
+
+        public void TasksButtonClicked() {
+            _tasksController.ChangeFormState();
         }
     }
 }

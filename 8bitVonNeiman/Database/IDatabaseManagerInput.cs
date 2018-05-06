@@ -10,10 +10,19 @@ namespace _8bitVonNeiman.Database {
         /// Возвращает список студентов
         List<StudentEntity> GetStudents();
 
+        /// Возвращает список заданий
+        List<TaskEntity> GetTasks();
+
         /// Добавляет или перезаписывает студента
         bool SetStudent(StudentEntity student);
 
         /// Удаляет студета
         void DeleteStudent(StudentEntity student);
+
+        /// Добавляет или перезаписывает задание
+        void SetTask(TaskEntity task);
+
+        /// Удаляет щадание
+        void DeleteTask(TaskEntity task);
     }
 }

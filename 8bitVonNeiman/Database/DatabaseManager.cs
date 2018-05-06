@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using _8bitVonNeiman.Database.Models;
 
 namespace _8bitVonNeiman.Database {
@@ -133,6 +129,54 @@ namespace _8bitVonNeiman.Database {
                 _command.ExecuteNonQuery();
             } catch (SQLiteException ex) {
                 
+            }
+        }
+
+        /// Возвращает список заданий
+        public List<TaskEntity> GetTasks() {
+            var dTable = new DataTable();
+
+            if (_connection.State != ConnectionState.Open) {
+                return new List<TaskEntity>();
+            }
+
+            try {
+                var sqlQuery = "SELECT * FROM Task";
+                var adapter = new SQLiteDataAdapter(sqlQuery, _connection);
+                adapter.Fill(dTable);
+
+                var tasks = new List<TaskEntity>();
+                for (int i = 0; i < dTable.Rows.Count; i++) {
+                    var id = Convert.ToInt32(dTable.Rows[i].ItemArray[0]);
+                    var name = (string)dTable.Rows[i].ItemArray[1];
+                    var description = (string)dTable.Rows[i].ItemArray[2];
+
+                    tasks.Add(new TaskEntity(id, name, description));
+                }
+
+                return tasks;
+            } catch (SQLiteException ex) {
+                return new List<TaskEntity>();
+            }
+        }
+
+        /// Добавляет или перезаписывает задание
+        public void SetTask(TaskEntity task) {
+            try {
+                var id = task.Id == -1 ? "NULL" : task.Id.ToString();
+                _command.CommandText = $"INSERT OR REPLACE INTO Task ('id', 'name', 'description') values ({id}, '{task.Name}', '{task.Description}');";
+                _command.ExecuteNonQuery();
+            } catch (SQLiteException ex) {
+                // Ignore
+            }
+        }
+
+        public void DeleteTask(TaskEntity task) {
+            try {
+                _command.CommandText = $"DELETE FROM Task WHERE Task.'id' = {task.Id};";
+                _command.ExecuteNonQuery();
+            } catch (SQLiteException ex) {
+
             }
         }
 

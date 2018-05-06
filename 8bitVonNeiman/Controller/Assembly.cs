@@ -4,6 +4,7 @@ using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Cpu;
 using _8bitVonNeiman.Memory;
 using _8bitVonNeiman.Students;
+using _8bitVonNeiman.Tasks;
 
 namespace _8bitVonNeiman.Controller {
     public static class Assembly {
@@ -31,6 +32,10 @@ namespace _8bitVonNeiman.Controller {
 
         public static IStudentsModuleInput GetStudentsController() {
             return new StudentsController();
+        }
+
+        public static ITasksModuleInput GetTasksController() {
+            return new TasksController();
         }
     }
 }

@@ -34,5 +34,9 @@ namespace _8bitVonNeiman.Controller.View {
         private void studentsButton_Click(object sender, EventArgs e) {
             _output.StudentsButtonClicked();
         }
+
+        private void tasksButton_Click(object sender, EventArgs e) {
+            _output.TasksButtonClicked();
+        }
     }
 }

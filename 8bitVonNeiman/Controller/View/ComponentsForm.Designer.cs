@@ -27,6 +27,7 @@
             this.memoryButton = new System.Windows.Forms.Button();
             this.cpuButton = new System.Windows.Forms.Button();
             this.studentsButton = new System.Windows.Forms.Button();
+            this.tasksButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // editorButton
@@ -61,19 +62,30 @@
             // 
             // studentsButton
             // 
-            this.studentsButton.Location = new System.Drawing.Point(12, 192);
+            this.studentsButton.Location = new System.Drawing.Point(12, 180);
             this.studentsButton.Name = "studentsButton";
-            this.studentsButton.Size = new System.Drawing.Size(75, 23);
+            this.studentsButton.Size = new System.Drawing.Size(95, 23);
             this.studentsButton.TabIndex = 4;
             this.studentsButton.Text = "Студенты";
             this.studentsButton.UseVisualStyleBackColor = true;
             this.studentsButton.Click += new System.EventHandler(this.studentsButton_Click);
+            // 
+            // tasksButton
+            // 
+            this.tasksButton.Location = new System.Drawing.Point(12, 210);
+            this.tasksButton.Name = "tasksButton";
+            this.tasksButton.Size = new System.Drawing.Size(95, 23);
+            this.tasksButton.TabIndex = 5;
+            this.tasksButton.Text = "Задания";
+            this.tasksButton.UseVisualStyleBackColor = true;
+            this.tasksButton.Click += new System.EventHandler(this.tasksButton_Click);
             // 
             // ComponentsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.tasksButton);
             this.Controls.Add(this.studentsButton);
             this.Controls.Add(this.cpuButton);
             this.Controls.Add(this.memoryButton);
@@ -81,7 +93,7 @@
             this.Location = new System.Drawing.Point(80, 40);
             this.Name = "ComponentsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Form1";
+            this.Text = "AddTaskForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ComponentsForm_FormClosed);
             this.ResumeLayout(false);
 
@@ -93,6 +105,7 @@
         private System.Windows.Forms.Button memoryButton;
         private System.Windows.Forms.Button cpuButton;
         private System.Windows.Forms.Button studentsButton;
+        private System.Windows.Forms.Button tasksButton;
     }
 }
 

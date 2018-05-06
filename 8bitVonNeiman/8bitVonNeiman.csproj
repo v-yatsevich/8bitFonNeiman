@@ -135,6 +135,7 @@
     <Compile Include="Database\IDatabaseManagerInput.cs" />
     <Compile Include="Database\Models\LoginEntity.cs" />
     <Compile Include="Database\Models\StudentEntity.cs" />
+    <Compile Include="Database\Models\TaskEntity.cs" />
     <Compile Include="Database\Models\UserEntity.cs" />
     <Compile Include="Debugger\DebuggerModel.cs" />
     <Compile Include="Debugger\IDebuggerModelInput.cs" />
@@ -166,6 +167,21 @@
       <DependentUpon>StudentsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Students\View\IStudentsFormOutput.cs" />
+    <Compile Include="Tasks\ITasksModuleInput.cs" />
+    <Compile Include="Tasks\TasksController.cs" />
+    <Compile Include="Tasks\View\AddTaskForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tasks\View\AddTaskForm.Designer.cs">
+      <DependentUpon>AddTaskForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\View\ITaskFormOutput.cs" />
+    <Compile Include="Tasks\View\TasksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tasks\View\TasksForm.Designer.cs">
+      <DependentUpon>TasksForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Auth\View\AuthForm.resx">
       <DependentUpon>AuthForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -195,6 +211,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Students\View\StudentsForm.resx">
       <DependentUpon>StudentsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tasks\View\AddTaskForm.resx">
+      <DependentUpon>AddTaskForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tasks\View\TasksForm.resx">
+      <DependentUpon>TasksForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="database.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
