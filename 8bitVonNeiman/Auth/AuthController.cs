@@ -40,6 +40,7 @@ namespace _8bitVonNeiman.Auth {
             SharedDataManager.Instance.IsAuthorized = true;
             SharedDataManager.Instance.UserId = loginEntity.Id;
             SharedDataManager.Instance.IsAdmin = loginEntity.IsAdmin;
+            SharedDataManager.Instance.StudentId = loginEntity.Student?.Id ?? -1;
             _output.AuthCompleted();
         }
     }

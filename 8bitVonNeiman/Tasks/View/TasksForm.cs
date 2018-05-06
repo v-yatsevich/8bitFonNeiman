@@ -5,7 +5,7 @@ using _8bitVonNeiman.Database.Models;
 namespace _8bitVonNeiman.Tasks.View {
     public partial class TasksForm : Form {
 
-        private ITaskFormOutput _output;
+        private readonly ITaskFormOutput _output;
 
         public TasksForm(ITaskFormOutput output, bool showChange) {
             _output = output;
@@ -21,7 +21,7 @@ namespace _8bitVonNeiman.Tasks.View {
         public void ShowTasks(List<TaskEntity> tasks) {
             dataGridView1.Rows.Clear();
 
-            for (int i = 0; i < tasks.Count; i++) {
+            for (int i = 0; i < tasks.Count; i++) { 
                 dataGridView1.Rows.Add();
                 dataGridView1.Rows[i].Cells[0].Value = tasks[i].Name;
                 dataGridView1.Rows[i].Cells[1].Value = tasks[i].Description;

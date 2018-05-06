@@ -1,6 +1,6 @@
 ﻿namespace _8bitVonNeiman.Database.Models {
     public class TaskEntity {
-        public int Id;
+        public readonly int Id;
         public string Name;
         public string Description;
 
@@ -14,6 +14,10 @@
             Id = id;
             Name = name;
             Description = description;
+        }
+
+        public override string ToString() {
+            return Name ?? "";
         }
     }
 }

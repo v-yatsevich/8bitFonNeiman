@@ -24,5 +24,18 @@ namespace _8bitVonNeiman.Database {
 
         /// Удаляет щадание
         void DeleteTask(TaskEntity task);
+
+        /// <summary>
+        /// Возвращает список оценок.
+        /// </summary>
+        /// <param name="group">Если не null, вернет оценки, принадлежащие студентам переданной группы.</param>
+        /// <param name="studentId">Если не -1, вернет оценки студента с переданным id.</param>
+        List<MarkEntity> GetMarks(string group, int studentId);
+
+        /// Добавляет или перезаписывает оценку
+        void SetMark(MarkEntity entity);
+
+        /// Удаляет оценку
+        void DeleteMark(MarkEntity entity);
     }
 }

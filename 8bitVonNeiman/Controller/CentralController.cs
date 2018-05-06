@@ -5,6 +5,7 @@ using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Controller.View;
 using _8bitVonNeiman.Cpu;
+using _8bitVonNeiman.Marks.View;
 using _8bitVonNeiman.Memory;
 using _8bitVonNeiman.Students;
 using _8bitVonNeiman.Tasks;
@@ -19,6 +20,7 @@ namespace _8bitVonNeiman.Controller {
         private readonly IAuthModelInput _authController;
         private readonly IStudentsModuleInput _studentsController;
         private readonly ITasksModuleInput _tasksController;
+        private readonly IMarksModuleInput _marksController;
 
         public CentralController() {
             _componentsForm = new ComponentsForm(this);
@@ -28,6 +30,7 @@ namespace _8bitVonNeiman.Controller {
             _cpu = Assembly.GetCpu(this);
             _studentsController = Assembly.GetStudentsController();
             _tasksController = Assembly.GetTasksController();
+            _marksController = Assembly.GetMarksController();
 
             _authController.ChangeFormState();
         }
@@ -86,6 +89,10 @@ namespace _8bitVonNeiman.Controller {
 
         public void TasksButtonClicked() {
             _tasksController.ChangeFormState();
+        }
+
+        public void MarksButtonClicked() {
+            _marksController.ChangeFormState();
         }
     }
 }

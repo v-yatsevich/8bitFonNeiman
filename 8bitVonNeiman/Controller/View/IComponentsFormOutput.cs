@@ -6,5 +6,6 @@
         void CpuButtonClicked();
         void StudentsButtonClicked();
         void TasksButtonClicked();
+        void MarksButtonClicked();
     }
 }

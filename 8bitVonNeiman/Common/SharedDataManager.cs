@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace _8bitVonNeiman.Common {
     class SharedDataManager {
         private static SharedDataManager _instance;
@@ -15,5 +10,6 @@ namespace _8bitVonNeiman.Common {
         public bool IsAuthorized = false;
         public int UserId;
         public bool IsAdmin;
+        public int StudentId;
     }
 }

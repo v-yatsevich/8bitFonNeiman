@@ -134,12 +134,28 @@
     <Compile Include="Cpu\View\ICpuFormOutput.cs" />
     <Compile Include="Database\IDatabaseManagerInput.cs" />
     <Compile Include="Database\Models\LoginEntity.cs" />
+    <Compile Include="Database\Models\MarkEntity.cs" />
     <Compile Include="Database\Models\StudentEntity.cs" />
     <Compile Include="Database\Models\TaskEntity.cs" />
     <Compile Include="Database\Models\UserEntity.cs" />
     <Compile Include="Debugger\DebuggerModel.cs" />
     <Compile Include="Debugger\IDebuggerModelInput.cs" />
     <Compile Include="Debugger\IDebuggerModelOutput.cs" />
+    <Compile Include="Marks\IMarksModuleInput.cs" />
+    <Compile Include="Marks\MarksController.cs" />
+    <Compile Include="Marks\View\AddMarkForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Marks\View\AddMarkForm.Designer.cs">
+      <DependentUpon>AddMarkForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Marks\View\IMarkFormOutput.cs" />
+    <Compile Include="Marks\View\MarksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Marks\View\MarksForm.Designer.cs">
+      <DependentUpon>MarksForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Memory\IMemoryControllerInput.cs" />
     <Compile Include="Memory\MemoryController.cs" />
     <Compile Include="Memory\MemoryFileHandler.cs" />
@@ -193,6 +209,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Cpu\View\CpuForm.resx">
       <DependentUpon>CpuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Marks\View\AddMarkForm.resx">
+      <DependentUpon>AddMarkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Marks\View\MarksForm.resx">
+      <DependentUpon>MarksForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Memory\View\MemoryForm.resx">
       <DependentUpon>MemoryForm.cs</DependentUpon>

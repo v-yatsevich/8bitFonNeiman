@@ -28,6 +28,7 @@
             this.cpuButton = new System.Windows.Forms.Button();
             this.studentsButton = new System.Windows.Forms.Button();
             this.tasksButton = new System.Windows.Forms.Button();
+            this.marksButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // editorButton
@@ -62,7 +63,7 @@
             // 
             // studentsButton
             // 
-            this.studentsButton.Location = new System.Drawing.Point(12, 180);
+            this.studentsButton.Location = new System.Drawing.Point(12, 152);
             this.studentsButton.Name = "studentsButton";
             this.studentsButton.Size = new System.Drawing.Size(95, 23);
             this.studentsButton.TabIndex = 4;
@@ -80,11 +81,22 @@
             this.tasksButton.UseVisualStyleBackColor = true;
             this.tasksButton.Click += new System.EventHandler(this.tasksButton_Click);
             // 
+            // marksButton
+            // 
+            this.marksButton.Location = new System.Drawing.Point(12, 181);
+            this.marksButton.Name = "marksButton";
+            this.marksButton.Size = new System.Drawing.Size(95, 23);
+            this.marksButton.TabIndex = 6;
+            this.marksButton.Text = "Оценки";
+            this.marksButton.UseVisualStyleBackColor = true;
+            this.marksButton.Click += new System.EventHandler(this.marksButton_Click);
+            // 
             // ComponentsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.marksButton);
             this.Controls.Add(this.tasksButton);
             this.Controls.Add(this.studentsButton);
             this.Controls.Add(this.cpuButton);
@@ -106,6 +118,7 @@
         private System.Windows.Forms.Button cpuButton;
         private System.Windows.Forms.Button studentsButton;
         private System.Windows.Forms.Button tasksButton;
+        private System.Windows.Forms.Button marksButton;
     }
 }
 

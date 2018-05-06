@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Security.Cryptography;
+using Microsoft.SqlServer.Server;
 using _8bitVonNeiman.Database.Models;
 
 namespace _8bitVonNeiman.Database {
@@ -171,6 +172,71 @@ namespace _8bitVonNeiman.Database {
         public void DeleteTask(TaskEntity task) {
             try {
                 _command.CommandText = $"DELETE FROM Task WHERE Task.'id' = {task.Id};";
+                _command.ExecuteNonQuery();
+            } catch (SQLiteException ex) {
+
+            }
+        }
+
+        public List<MarkEntity> GetMarks(string group, int studentId) {
+            var dTable = new DataTable();
+
+            if (_connection.State != ConnectionState.Open) {
+                return new List<MarkEntity>();
+            }
+
+            try {
+                string condition;
+                if (studentId != -1) {
+                    condition = $"WHERE (student.id = {studentId})";
+                } else if (!string.IsNullOrEmpty(group)) {
+                    condition = $"WHERE (student.student_group = {group})";
+                } else {
+                    condition = "";
+                }
+                var sqlQuery = $"SELECT mark.id, mark.date, mark.description, student.id as student_id, student.name as student_name, student.student_group, task.id as task_id, task.name as task_name, Task.description as task_description FROM Mark as mark LEFT JOIN Student as student ON mark.student_id = student.id LEFT JOIN Task as task ON task.id = mark.task_id {condition};";
+                var adapter = new SQLiteDataAdapter(sqlQuery, _connection);
+                adapter.Fill(dTable);
+                
+                var marks = new List<MarkEntity>();
+                for (int i = 0; i < dTable.Rows.Count; i++) {
+                    var id = Convert.ToInt32(dTable.Rows[i].ItemArray[0]);
+                    var date = DateTime.FromBinary(Convert.ToInt64(dTable.Rows[i].ItemArray[1]));
+                    var description = (string)dTable.Rows[i].ItemArray[2];
+
+                    var currentStudentId = Convert.ToInt32(dTable.Rows[i].ItemArray[3]);
+                    var name = (string)dTable.Rows[i].ItemArray[4];
+                    var currentGroup = (string)dTable.Rows[i].ItemArray[5];
+                    var student = new StudentEntity(currentStudentId, null, name, currentGroup);
+
+                    var taskId = Convert.ToInt32(dTable.Rows[i].ItemArray[6]);
+                    var taskName = (string)dTable.Rows[i].ItemArray[7];
+                    var taskDescription = (string)dTable.Rows[i].ItemArray[8];
+                    var task = new TaskEntity(taskId, taskName, taskDescription);
+
+                    var mark = new MarkEntity(id, date, description, task, student);
+                    marks.Add(mark);
+                }
+
+                return marks;
+            } catch (SQLiteException ex) {
+                return new List<MarkEntity>();
+            }
+        }
+
+        public void SetMark(MarkEntity entity) {
+            try {
+                var id = entity.Id == -1 ? "NULL" : entity.Id.ToString();
+                _command.CommandText = $"INSERT OR REPLACE INTO Mark ('id', 'student_id', 'task_id', 'date', 'description') values ({id}, '{entity.Student.Id}', '{entity.Task.Id}', '{entity.Date.ToBinary()}', '{entity.Description}');";
+                _command.ExecuteNonQuery();
+            } catch (SQLiteException ex) {
+                // Ignore
+            }
+        }
+
+        public void DeleteMark(MarkEntity entity) {
+            try {
+                _command.CommandText = $"DELETE FROM Mark WHERE Mark.'id' = {entity.Id};";
                 _command.ExecuteNonQuery();
             } catch (SQLiteException ex) {
 
