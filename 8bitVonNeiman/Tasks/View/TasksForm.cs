@@ -7,10 +7,15 @@ namespace _8bitVonNeiman.Tasks.View {
 
         private ITaskFormOutput _output;
 
-        public TasksForm(ITaskFormOutput output) {
+        public TasksForm(ITaskFormOutput output, bool showChange) {
             _output = output;
 
             InitializeComponent();
+
+            if (!showChange) {
+                dataGridView1.Columns.RemoveAt(4);
+                dataGridView1.Columns.RemoveAt(3);
+            }
         }
 
         public void ShowTasks(List<TaskEntity> tasks) {
@@ -33,14 +38,14 @@ namespace _8bitVonNeiman.Tasks.View {
                 return;
             }
             if (e.ColumnIndex == 2) {
+                _output.LookButtonClicked((TaskEntity)dataGridView1.Rows[e.RowIndex].Tag);
+            }
+            if (e.ColumnIndex == 3) {
                 _output.DeleteButtonClicked((TaskEntity) dataGridView1.Rows[e.RowIndex].Tag);
                 return;
             }
-            if (e.ColumnIndex == 3) {
-                _output.ChangeButtonClicked((TaskEntity) dataGridView1.Rows[e.RowIndex].Tag);
-            }
             if (e.ColumnIndex == 4) {
-                _output.LookButtonClicked((TaskEntity)dataGridView1.Rows[e.RowIndex].Tag);
+                _output.ChangeButtonClicked((TaskEntity) dataGridView1.Rows[e.RowIndex].Tag);
             }
         }
 

@@ -23,16 +23,16 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.addButton = new System.Windows.Forms.Button();
             this.TaskName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WatchTask = new System.Windows.Forms.DataGridViewButtonColumn();
             this.delete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.change = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.WatchTask = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,9 +47,9 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TaskName,
             this.description,
+            this.WatchTask,
             this.delete,
-            this.change,
-            this.WatchTask});
+            this.change});
             this.dataGridView1.Location = new System.Drawing.Point(12, 12);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -82,11 +82,20 @@
             this.description.ReadOnly = true;
             this.description.Width = 240;
             // 
+            // WatchTask
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = "Посмотреть";
+            this.WatchTask.DefaultCellStyle = dataGridViewCellStyle1;
+            this.WatchTask.HeaderText = "Посмотреть";
+            this.WatchTask.Name = "WatchTask";
+            this.WatchTask.ReadOnly = true;
+            // 
             // delete
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.NullValue = "Удалить";
-            this.delete.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = "Удалить";
+            this.delete.DefaultCellStyle = dataGridViewCellStyle2;
             this.delete.HeaderText = "Удалить";
             this.delete.Name = "delete";
             this.delete.ReadOnly = true;
@@ -96,24 +105,15 @@
             // 
             // change
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.NullValue = "Изменить";
-            this.change.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.NullValue = "Изменить";
+            this.change.DefaultCellStyle = dataGridViewCellStyle3;
             this.change.HeaderText = "Изменить";
             this.change.Name = "change";
             this.change.ReadOnly = true;
             this.change.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.change.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.change.Width = 70;
-            // 
-            // WatchTask
-            // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.NullValue = "Посмотреть";
-            this.WatchTask.DefaultCellStyle = dataGridViewCellStyle9;
-            this.WatchTask.HeaderText = "Посмотреть";
-            this.WatchTask.Name = "WatchTask";
-            this.WatchTask.ReadOnly = true;
             // 
             // TasksForm
             // 
@@ -136,8 +136,8 @@
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn TaskName;
         private System.Windows.Forms.DataGridViewTextBoxColumn description;
+        private System.Windows.Forms.DataGridViewButtonColumn WatchTask;
         private System.Windows.Forms.DataGridViewButtonColumn delete;
         private System.Windows.Forms.DataGridViewButtonColumn change;
-        private System.Windows.Forms.DataGridViewButtonColumn WatchTask;
     }
 }

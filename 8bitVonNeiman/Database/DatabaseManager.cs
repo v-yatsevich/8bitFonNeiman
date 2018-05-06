@@ -47,7 +47,7 @@ namespace _8bitVonNeiman.Database {
                     return null;
                 }
                 var id = Convert.ToInt32(dTable.Rows[0].ItemArray[0]);
-                var role = Convert.ToInt32(dTable.Rows[0].ItemArray[1]);
+                int role = dTable.Rows[0].ItemArray[1] is DBNull ? 0 : Convert.ToInt32(dTable.Rows[0].ItemArray[1]);
                 StudentEntity student = null;
                 if (!(dTable.Rows[0].ItemArray[2] is DBNull) && !(dTable.Rows[0].ItemArray[3] is DBNull)) {
                     var studentId = Convert.ToInt32(dTable.Rows[0].ItemArray[2]);
@@ -58,9 +58,6 @@ namespace _8bitVonNeiman.Database {
                     student = new StudentEntity(studentId, user, name, desc);
                 }
                 return new LoginEntity(id, role == 1, student);
-
-                //for (int i = 0; i < dTable.Rows.Count; i++)
-                //dgvViewer.Rows.Add(dTable.Rows[i].ItemArray);
             } catch (SQLiteException ex) {
                 return null;
             }

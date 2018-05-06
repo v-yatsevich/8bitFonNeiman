@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Database;
 using _8bitVonNeiman.Database.Models;
 using _8bitVonNeiman.Tasks.View;
@@ -13,7 +14,7 @@ namespace _8bitVonNeiman.Tasks {
         /// Открывает форму, если она закрыта или закрывает, если открыта
         public void ChangeFormState() {
             if (_form == null) {
-                _form = new TasksForm(this);
+                _form = new TasksForm(this, SharedDataManager.Instance.IsAdmin);
                 _form.Show();
 
                 ShowTasks();
