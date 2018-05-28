@@ -38,7 +38,7 @@ namespace _8bitVonNeiman.Cpu {
         private List<ExtendedBitArray> _registers = new List<ExtendedBitArray>();
 
         /// Регистр флагов
-        private FlagsController _flags = new FlagsController();
+        private readonly FlagsController _flags = new FlagsController();
 
         /// Регистр временного хранения данных для получения оных из памяти, регистров или устройств
         private ExtendedBitArray _rdb = new ExtendedBitArray();
@@ -52,13 +52,13 @@ namespace _8bitVonNeiman.Cpu {
         /// Выполняемая команда
         private ExtendedBitArray[] _cr = { new ExtendedBitArray(), new ExtendedBitArray() };
 
-        private ICpuModelOutput _output;
+        private readonly ICpuModelOutput _output;
 
-        private CpuFileHandler _fileHandler = new CpuFileHandler();
-        //TODO: Сделать через интерфейс
+        private readonly CpuFileHandler _fileHandler = new CpuFileHandler();
+        
         private CpuForm _view;
 
-        private bool _shouldStopRunning = false;
+        private bool _shouldStopRunning = true;
 
         public CpuModel(ICpuModelOutput output) {
             _output = output;
@@ -89,8 +89,15 @@ namespace _8bitVonNeiman.Cpu {
             _y31();
             RunCommand();
             _view?.ShowState(MakeState());
-            _view?.ShowState(MakeState());
-            _output.CommandHasRun();
+            _output.CommandHasRun(_pcl, _cs, !_shouldStopRunning);
+        }
+
+        public void Stop() {
+            _shouldStopRunning = true;
+        }
+
+        public void StopButtonClicked() {
+            _shouldStopRunning = true;
         }
 
         public void CheckButtonClicked() {
@@ -145,6 +152,7 @@ namespace _8bitVonNeiman.Cpu {
             while (!_shouldStopRunning) {
                 Tick();
             }
+            _output.CommandHasRun(_pcl, _cs, !_shouldStopRunning);
         }
 
         public void SaveButtonClicked() {
@@ -181,6 +189,7 @@ namespace _8bitVonNeiman.Cpu {
                 new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(),
                 new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray(), new ExtendedBitArray()
             };
+            _output.CommandHasRun(_pcl, _cs, false);
         }
         
         /// Возвращает значение памяти по выбранному адресу.

@@ -6,6 +6,8 @@ namespace _8bitVonNeiman.Debug {
         public readonly int Address;
         public readonly string Name;
         public readonly string Command;
+        public bool HasBreakpoint = false;
+        public bool Selected = false;
 
         private ExtendedBitArray _lowCommand;
         private ExtendedBitArray _highCommand;

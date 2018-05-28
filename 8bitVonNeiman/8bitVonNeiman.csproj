@@ -99,15 +99,18 @@
       <DependentUpon>CpuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Cpu\View\CpuState.cs" />
-    <Compile Include="Cpu\View\ICpuFormInput.cs" />
     <Compile Include="Cpu\View\ICpuFormOutput.cs" />
     <Compile Include="Debugger\DebugCommand.cs" />
     <Compile Include="Debugger\DebugController.cs" />
     <Compile Include="Debugger\IDebugModuleInput.cs" />
     <Compile Include="Debugger\IDebugModuleOutput.cs" />
-    <Compile Include="Debugger\Model\DebugModel.cs" />
-    <Compile Include="Debugger\Model\IDebugModelInput.cs" />
-    <Compile Include="Debugger\Model\IDebugModelOutput.cs" />
+    <Compile Include="Debugger\View\DebugForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\View\DebugForm.Designer.cs">
+      <DependentUpon>DebugForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\View\IDebugFormOutput.cs" />
     <Compile Include="Memory\IMemoryControllerInput.cs" />
     <Compile Include="Memory\MemoryController.cs" />
     <Compile Include="Memory\MemoryFileHandler.cs" />
@@ -128,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Cpu\View\CpuForm.resx">
       <DependentUpon>CpuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\View\DebugForm.resx">
+      <DependentUpon>DebugForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Memory\View\MemoryForm.resx">
       <DependentUpon>MemoryForm.cs</DependentUpon>
@@ -167,9 +173,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Debugger\View\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

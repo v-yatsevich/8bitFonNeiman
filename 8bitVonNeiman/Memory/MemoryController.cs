@@ -58,6 +58,19 @@ namespace _8bitVonNeiman.Memory {
             }
         }
 
+        /// Возвращает массив памяти переданного сегмента. Если номер сегмента неходится вне диапазона 0..3 будет возвращен пустой массив.
+        public List<ExtendedBitArray> GetMemoryFromSegment(int segment) {
+            if (segment < 0 || segment > 3) {
+                return new List<ExtendedBitArray>();
+            }
+            var memory = new List<ExtendedBitArray>(256);
+            var offset = segment * 256;
+            for (int i = offset; i < offset + 256; i++) {
+                memory.Add(_memory[i] ?? new ExtendedBitArray());
+            }
+            return memory
+        }
+
         /// <summary>
         /// Функция, вызывающаяся при закрытии формы. Необходима для корректной работы функции ChangeFormState()
         /// </summary>

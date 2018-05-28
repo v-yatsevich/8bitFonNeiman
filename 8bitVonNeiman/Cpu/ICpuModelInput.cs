@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace _8bitVonNeiman.Cpu {
     public interface ICpuModelInput {
-        /// Функция делает "Шаг" процессора
-        void Tick();
-
         void ChangeFormState();
+        void Stop();
     }
 }

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 
 namespace _8bitVonNeiman.Memory {
     public interface IMemoryControllerInput {
-        /// <summary>
         /// Функция, показывающая форму, если она закрыта, и закрывающая ее, если она открыта
-        /// </summary>
         void ChangeFormState();
 
         /// <summary>
@@ -27,5 +25,8 @@ namespace _8bitVonNeiman.Memory {
         /// <param name="address">Адрес ячейки памяти.</param>
         /// <returns>Значение ячейки памяти.</returns>
         ExtendedBitArray GetMemory(int address);
+        
+        /// Возвращает массив памяти переданного сегмента. Если номер сегмента неходится вне диапазона 0..3 будет возвращен пустой массив.
+        List<ExtendedBitArray> GetMemoryFromSegment(int segment);
     }
 }

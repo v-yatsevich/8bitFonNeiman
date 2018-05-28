@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace _8bitVonNeiman.Cpu.View {
-    public partial class CpuForm : Form, ICpuFormInput {
+    public partial class CpuForm : Form {
 
         public ICpuFormOutput Output;
 
@@ -99,6 +99,10 @@ namespace _8bitVonNeiman.Cpu.View {
 
         private void runButton_Click(object sender, EventArgs e) {
             Output.RunButtonClicked();
+        }
+
+        private void stopButton_Click(object sender, EventArgs e) {
+            Output.StopButtonClicked();
         }
     }
 }

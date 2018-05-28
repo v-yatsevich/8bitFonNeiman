@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using _8bitVonNeiman.Common;
 using _8bitVonNeiman.Compiler;
 using _8bitVonNeiman.Controller.View;
 using _8bitVonNeiman.Cpu;
+using _8bitVonNeiman.Debug;
 using _8bitVonNeiman.Memory;
 
 namespace _8bitVonNeiman.Controller {
-    public class CentralController: ApplicationContext, IComponentsFormOutput, ICompilerControllerOutput, ICpuModelOutput {
+    public class CentralController: ApplicationContext, IComponentsFormOutput, ICompilerControllerOutput, ICpuModelOutput, IDebugModuleOutput {
 
         private readonly IMemoryControllerInput _memoryController;
         private readonly ComponentsForm _componentsForm;
         private readonly CompilerController _compilerController;
+        private readonly IDebugModuleInput _debugController;
         private readonly ICpuModelInput _cpu;
 
         public CentralController() {
@@ -19,6 +22,8 @@ namespace _8bitVonNeiman.Controller {
             _componentsForm.Show();
             _compilerController = Assembly.GetCompilerController(this);
             _memoryController = Assembly.GetMemoryController();
+            _debugController = Assembly.GetDebugController(this);
+            // Важно, чтобы CPU создавался после debug'a
             _cpu = Assembly.GetCpu(this);
         }
 
@@ -42,8 +47,8 @@ namespace _8bitVonNeiman.Controller {
             _cpu.ChangeFormState();
         }
 
-        public void TactButtonClicked() {
-            _cpu.Tick();
+        public void DebugButtonClicked() {
+            _debugController.ChangeFormState();
         }
 
         public ExtendedBitArray GetMemory(int address) {
@@ -54,8 +59,12 @@ namespace _8bitVonNeiman.Controller {
             _memoryController.SetMemory(memory, address);
         }
 
-        public void CommandHasRun() {
-            
+        public void StopExecution() {
+            _cpu.Stop();
+        }
+
+        public void CommandHasRun(int pcl, int cs, bool isAutomatic) {
+            _debugController.CommandHasRun(pcl, _memoryController.GetMemoryFromSegment(cs), isAutomatic);
         }
     }
 }

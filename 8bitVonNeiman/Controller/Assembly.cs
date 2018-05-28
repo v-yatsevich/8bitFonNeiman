@@ -2,6 +2,7 @@
 using _8bitVonNeiman.Compiler.Model;
 using _8bitVonNeiman.Cpu;
 using _8bitVonNeiman.Cpu.View;
+using _8bitVonNeiman.Debug;
 using _8bitVonNeiman.Memory;
 
 namespace _8bitVonNeiman.Controller {
@@ -24,5 +25,8 @@ namespace _8bitVonNeiman.Controller {
             return new CpuModel(output);
         }
 
+        public static IDebugModuleInput GetDebugController(IDebugModuleOutput output) {
+            return new DebugController(output);
+        }
     }
 }

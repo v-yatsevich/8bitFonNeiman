@@ -27,8 +27,8 @@ namespace _8bitVonNeiman.Controller.View {
             _output.CpuButtonClicked();
         }
 
-        private void tempTactButton_Click(object sender, EventArgs e) {
-            _output.TactButtonClicked();
+        private void debugButton_Click(object sender, EventArgs e) {
+            _output.DebugButtonClicked();
         }
     }
 }

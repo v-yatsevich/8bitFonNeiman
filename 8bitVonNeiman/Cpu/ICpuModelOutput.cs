@@ -16,6 +16,12 @@ namespace _8bitVonNeiman.Cpu {
         /// <param name="address">Адрес ячейки памяти.</param>
         void SetMemory(ExtendedBitArray memory, int address);
 
-        void CommandHasRun();
+        /// <summary>
+        /// Вызывается после выполнения команды. Предназначена для обеспечения работы отладчика.
+        /// </summary>
+        /// <param name="pcl">Новый адрес памяти</param>
+        /// <param name="cs">Новый сегмент памяти</param>
+        /// <param name="isAutomatic">true если команда выполнена в автоматическом режиме, false - если через "шаг"</param>
+        void CommandHasRun(int pcl, int cs, bool isAutomatic);
     }
 }
