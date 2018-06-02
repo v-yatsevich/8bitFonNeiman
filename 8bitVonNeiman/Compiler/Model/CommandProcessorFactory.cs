@@ -1058,7 +1058,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     env.SetByte(new ExtendedBitArray());
                     return;
                 }
-                if (args.Length > 0) {
+                if (args.Length > 1) {
                     throw new CompilationErrorExcepton("Команда IN не может принимать более 1 аргумента.", env.GetCurrentLine());
                 }
 
@@ -1078,7 +1078,7 @@ namespace _8bitVonNeiman.Compiler.Model {
                     env.SetByte(new ExtendedBitArray());
                     return;
                 }
-                if (args.Length > 0) {
+                if (args.Length > 1) {
                     throw new CompilationErrorExcepton("Команда OUT не может принимать более 1 аргумента.", env.GetCurrentLine());
                 }
                 var dataResponse = GetBitArrays(args, env);

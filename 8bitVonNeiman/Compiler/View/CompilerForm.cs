@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using ScintillaNET;
 
 namespace _8bitVonNeiman.Compiler.View {
     public partial class CompilerForm : Form {
@@ -10,8 +11,9 @@ namespace _8bitVonNeiman.Compiler.View {
         public CompilerForm(ICompilerFormOutput output) {
             InitializeComponent();
             _output = output;
-            //ResizeLinesCount();
-            scintilla.Font = new Font("Consolas", 10);
+            ResizeLinesCount();
+            scintilla.Styles[Style.Default].Font = "Consolas";
+            scintilla.Styles[Style.Default].Size = 10;
         }
 
         public void SetCode(string code) {
@@ -54,11 +56,10 @@ namespace _8bitVonNeiman.Compiler.View {
 
         private int _maxLineNumberCharLength;
         private void scintilla_TextChanged(object sender, EventArgs e) {
-            //ResizeLinesCount();
+            ResizeLinesCount();
         }
-
-        //TODO: Переписать отступы
-        /*private void ResizeLinesCount() {
+        
+        private void ResizeLinesCount() {
             // Did the number of characters in the line number display change?
             // i.e. nnn VS nn, or nnnn VS nn, etc...
             var maxLineNumberCharLength = scintilla.Lines.Count.ToString().Length;
@@ -71,10 +72,15 @@ namespace _8bitVonNeiman.Compiler.View {
             const int padding = 2;
             scintilla.Margins[0].Width = scintilla.TextWidth(Style.LineNumber, new string('9', maxLineNumberCharLength + 1)) + padding;
             _maxLineNumberCharLength = maxLineNumberCharLength;
-        }*/
+        }
 
         private void scintilla_KeyDown(object sender, KeyEventArgs e) {
-            /*if (e.KeyCode == Keys.Enter) {
+            if (e.Control && e.KeyCode == Keys.S) {
+                _output.SaveButtonClicked(scintilla.Text);
+                e.SuppressKeyPress = true;
+                return;
+            }
+            if (e.KeyCode == Keys.Enter) {
                 int line = scintilla.LineFromPosition(scintilla.CurrentPosition);
                 int count = 0;
                 while (scintilla.Lines[line].Length != count && scintilla.Lines[line].Text[count] == ' ') {
@@ -87,7 +93,7 @@ namespace _8bitVonNeiman.Compiler.View {
                 scintilla.InsertText(scintilla.CurrentPosition, Environment.NewLine + spaces);
                 scintilla.GotoPosition(scintilla.CurrentPosition + count + Environment.NewLine.Length);
                 e.SuppressKeyPress = true;
-            }*/
+            }
         }
 
         private void saveButton_Click(object sender, EventArgs e) {

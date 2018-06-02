@@ -66,9 +66,10 @@ namespace _8bitVonNeiman.Memory {
             var memory = new List<ExtendedBitArray>(256);
             var offset = segment * 256;
             for (int i = offset; i < offset + 256; i++) {
-                memory.Add(_memory[i] ?? new ExtendedBitArray());
+                memory.Add(_memory.ContainsKey(i) ? _memory[i] : new ExtendedBitArray());
             }
-            return memory
+
+            return memory;
         }
 
         /// <summary>

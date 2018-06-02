@@ -81,7 +81,7 @@
             this.Location = new System.Drawing.Point(80, 40);
             this.Name = "ComponentsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Form1";
+            this.Text = "ЭВМ";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ComponentsForm_FormClosed);
             this.ResumeLayout(false);
 

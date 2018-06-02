@@ -17,7 +17,7 @@ namespace _8bitVonNeiman.Debug {
             _lowCommand = lowCommand;
             _highCommand = highCommand;
 
-            Command = new string(lowCommand.ToBinString().Reverse().ToArray()) + new string(highCommand.ToBinString().Reverse().ToArray());
+            Command = new string(lowCommand.ToBinString().Reverse().ToArray()) + ' ' + new string(highCommand.ToBinString().Reverse().ToArray());
             Name = GetCommandName(lowCommand, highCommand);
         }
 
@@ -63,13 +63,13 @@ namespace _8bitVonNeiman.Debug {
                     return "HLT";
                 }
                 if (lowHex == "0B") {
-                    return "INC";
+                    return "INCA";
                 }
                 if (lowHex == "0C") {
-                    return "DEC";
+                    return "DECA";
                 }
                 if (lowHex == "0D") {
-                    return "SWAP";
+                    return "SWAPA";
                 }
                 if (lowHex == "0E") {
                     return "DAA";
@@ -242,10 +242,10 @@ namespace _8bitVonNeiman.Debug {
                 if (highHex[1] == 'D') {
                     return "ADC";
                 }
-                if (highHex[1] == 'D') {
+                if (highHex[1] == 'E') {
                     return "SUBB";
                 }
-                if (highHex[1] == 'D') {
+                if (highHex[1] == 'F') {
                     return "XCH";
                 }
             }
@@ -262,6 +262,32 @@ namespace _8bitVonNeiman.Debug {
             }
             if (highBin.StartsWith("10011")) {
                 return "SBS";
+            }
+            if (highBin.StartsWith("10100") && lowBin[0] == '1') {
+                return "CBI";
+            }
+            if (highBin.StartsWith("10101") && lowBin[0] == '0') {
+                return "SBI";
+            }
+            if (highBin.StartsWith("10101") && lowBin[0] == '1') {
+                return "NBI";
+            }
+            if (highBin.StartsWith("10110") && lowBin[0] == '0') {
+                return "SBIC";
+            }
+            if (highBin.StartsWith("10110") && lowBin[0] == '1') {
+                return "SBIS";
+            }
+            if (highBin.StartsWith("10111") && lowBin[0] == '0') {
+                return "SBISC";
+            }
+
+            // Команды ввода-вывода
+            if (highBin == "11000000") {
+                return "IN";
+            }
+            if (highBin == "11000001") {
+                return "OUT";
             }
 
             return "ERROR";

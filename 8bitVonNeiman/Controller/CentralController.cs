@@ -17,6 +17,9 @@ namespace _8bitVonNeiman.Controller {
         private readonly IDebugModuleInput _debugController;
         private readonly ICpuModelInput _cpu;
 
+        private int _lastPcl;
+        private int _lastCs;
+
         public CentralController() {
             _componentsForm = new ComponentsForm(this);
             _componentsForm.Show();
@@ -33,6 +36,7 @@ namespace _8bitVonNeiman.Controller {
 
         public void MemoryFormed(Dictionary<int, ExtendedBitArray> memory) {
             _memoryController.SetMemory(memory);
+            _debugController.CommandHasRun(_lastPcl, _memoryController.GetMemoryFromSegment(_lastCs), false);
         }
 
         public void EditorButtonClicked() {
@@ -64,6 +68,8 @@ namespace _8bitVonNeiman.Controller {
         }
 
         public void CommandHasRun(int pcl, int cs, bool isAutomatic) {
+            _lastPcl = pcl;
+            _lastCs = cs;
             _debugController.CommandHasRun(pcl, _memoryController.GetMemoryFromSegment(cs), isAutomatic);
         }
     }

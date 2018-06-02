@@ -1,4 +1,6 @@
-﻿namespace _8bitVonNeiman.Compiler.View {
+﻿using ScintillaNET;
+
+namespace _8bitVonNeiman.Compiler.View {
     partial class CompilerForm {
         /// <summary>
         /// Required designer variable.
@@ -27,13 +29,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.compileButton = new System.Windows.Forms.Button();
-            this.scintilla = new System.Windows.Forms.RichTextBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.saveAsButton = new System.Windows.Forms.Button();
             this.filenameLabel = new System.Windows.Forms.Label();
+            this.scintilla = new ScintillaNET.Scintilla();
             this.SuspendLayout();
             // 
             // outputRichTextBox
@@ -79,19 +81,6 @@
             this.compileButton.Text = "Скомпилировать";
             this.compileButton.UseVisualStyleBackColor = true;
             this.compileButton.Click += new System.EventHandler(this.compileButton_Click);
-            // 
-            // scintilla
-            // 
-            this.scintilla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.scintilla.Location = new System.Drawing.Point(12, 108);
-            this.scintilla.Name = "scintilla";
-            this.scintilla.Size = new System.Drawing.Size(260, 365);
-            this.scintilla.TabIndex = 1;
-            this.scintilla.Text = "ADD R4\nSUB R4\nMUL R4\nDIV R4\nAND R4\nOR R4\nXOR R4\nCMP R4\nRD R4\nWP R4\nINC R4\n";
-            this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
-            this.scintilla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.scintilla_KeyDown);
             // 
             // saveButton
             // 
@@ -148,16 +137,27 @@
             this.filenameLabel.TabIndex = 8;
             this.filenameLabel.Text = "Имя файла:";
             // 
+            // scintilla
+            // 
+            this.scintilla.Location = new System.Drawing.Point(16, 108);
+            this.scintilla.Name = "scintilla";
+            this.scintilla.Size = new System.Drawing.Size(256, 363);
+            this.scintilla.TabIndex = 1000;
+            this.scintilla.WrapMode = ScintillaNET.WrapMode.Word;
+            this.scintilla.WrapStartIndent = 4;
+            this.scintilla.TextChanged += new System.EventHandler(this.scintilla_TextChanged);
+            this.scintilla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.scintilla_KeyDown);
+            // 
             // CompilerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 587);
+            this.Controls.Add(this.scintilla);
             this.Controls.Add(this.filenameLabel);
             this.Controls.Add(this.saveAsButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
-            this.Controls.Add(this.scintilla);
             this.Controls.Add(this.compileButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -177,12 +177,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button compileButton;
-        private System.Windows.Forms.RichTextBox scintilla;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.Button saveAsButton;
         private System.Windows.Forms.Label filenameLabel;
+        private Scintilla scintilla;
     }
 }
