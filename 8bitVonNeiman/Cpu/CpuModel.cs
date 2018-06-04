@@ -218,7 +218,7 @@ namespace _8bitVonNeiman.Cpu {
             var lowHex = _cr[0].ToHexString();
             //Регистровые
             if (highHex[0] == '5' || highHex == "F0" || highHex == "F1") { 
-                ProcessRegisterCommand(highHex, lowHex);
+                ProcessRegisterCommand(highHex, lowBin);
             }
 
             //ОЗУ
@@ -259,7 +259,7 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
-        private void ProcessRegisterCommand(string highHex, string lowHex) {
+        private void ProcessRegisterCommand(string highHex, string lowBin) {
             //MOV
             if (highHex[1] == 'F') {
                 _y46();
@@ -279,20 +279,28 @@ namespace _8bitVonNeiman.Cpu {
             }
             //WR
             if (highHex[1] == 'A') {
-                _y49();
-                _y47();
-                _y5();
+                if (lowBin[1] != '0' || lowBin[2] != '0' || lowBin[3] != '0') {
+                    LoadRegister(lowBin);
+                    _y49();
+                    _y4();
+                    ModifyRegister(lowBin);
+                } else {
+                    // Прямая адресация
+                    _y49();
+                    _y47();
+                    _y5();
+                }
                 return;
             }
 
-            LoadRegister(lowHex);
+            LoadRegister(lowBin);
             //NOT
             if (highHex[1] == '0') {
                 _flags.SetPreviousState(_rdb);
                 _y52();
                 _flags.UpdateFlags(_rdb, "not");
-                UnloadRegister(lowHex);
-                ModifyRegister(lowHex);
+                UnloadRegister(lowBin);
+                ModifyRegister(lowBin);
                 return;
             }
             //ADD
@@ -301,7 +309,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetArgument(_rdb);
                 bool overflow = _acc.Add(_rdb);
                 _flags.UpdateFlags(_acc, "add", overflow);
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //SUB
@@ -310,7 +318,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetArgument(_rdb);
                 bool overflow = _acc.Sub(_rdb);
                 _flags.UpdateFlags(_acc, "sub", overflow);
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //MUL
@@ -319,7 +327,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetArgument(_rdb);
                 bool overflow = _acc.Mul(_rdb);
                 _flags.UpdateFlags(_acc, "mul", overflow);
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //DIV
@@ -328,7 +336,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetArgument(_rdb);
                 _acc.Div(_rdb);
                 _flags.UpdateFlags(_acc, "div");
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //AND
@@ -336,7 +344,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 _acc.And(_rdb);
                 _flags.UpdateFlags(_acc, "and");
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //OR
@@ -344,7 +352,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 _acc.Or(_rdb);
                 _flags.UpdateFlags(_acc, "or");
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //XOR
@@ -352,7 +360,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 _acc.Xor(_rdb);
                 _flags.UpdateFlags(_acc, "xor");
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //CMP
@@ -362,14 +370,14 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetArgument(_rdb);
                 bool overflow = temp.Sub(_acc);
                 _flags.UpdateFlags(temp, "cmp", overflow);
-                UnloadRegister(lowHex);
-                ModifyRegister(lowHex);
+                UnloadRegister(lowBin);
+                ModifyRegister(lowBin);
                 return;
             }
             //RD
             if (highHex[1] == '9') {
                 _acc = new ExtendedBitArray(_rdb);
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //INC
@@ -377,8 +385,8 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_rdb);
                 var overflow = _rdb.Inc();
                 _flags.UpdateFlags(_rdb, "inc", overflow);
-                UnloadRegister(lowHex);
-                ModifyRegister(lowHex);
+                UnloadRegister(lowBin);
+                ModifyRegister(lowBin);
                 return;
             }
             //DEC
@@ -386,8 +394,8 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_rdb);
                 var overflow = _rdb.Dec();
                 _flags.UpdateFlags(_rdb, "dec", overflow);
-                UnloadRegister(lowHex);
-                ModifyRegister(lowHex);
+                UnloadRegister(lowBin);
+                ModifyRegister(lowBin);
                 return;
             }
             //PUSH
@@ -395,7 +403,7 @@ namespace _8bitVonNeiman.Cpu {
                 _y35();
                 _y45();
                 _y4();
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //ADC
@@ -407,7 +415,7 @@ namespace _8bitVonNeiman.Cpu {
                     overflow |= _acc.Inc();
                 }
                 _flags.UpdateFlags(_acc, "adc", overflow);
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
                 return;
             }
             //SUBB
@@ -419,7 +427,7 @@ namespace _8bitVonNeiman.Cpu {
                     overflow |= _acc.Dec();
                 }
                 _flags.UpdateFlags(_acc, "subb", overflow);
-                ModifyRegister(lowHex);
+                ModifyRegister(lowBin);
             }
         }
 
@@ -826,29 +834,29 @@ namespace _8bitVonNeiman.Cpu {
             }
         }
 
-        private void LoadRegister(string lowHex) {
+        private void LoadRegister(string lowBin) {
             _y47();
             _y2();
-            if (lowHex[0] != '0') {
+            if (lowBin[3] != '0' || lowBin[2] != '0' || lowBin[1] != '0') {
                 //+@R    - 101
-                if (lowHex[0] == '5') {
+                if (lowBin[3] == '1' && lowBin[2] == '0' && lowBin[1] == '1') {
                     _y50();
                     _y5();
-                } 
-                else
-                //-@R    - 111
-                if (lowHex[0] == '7') {
+                } else
+                    //-@R    - 111
+                if (lowBin[3] == '1' && lowBin[2] == '1' && lowBin[1] == '1') {
                     _y51();
                     _y5();
                 }
+                //@R
                 _y60();
                 _y1();
             }
         }
 
         /// Перемещает данные из RDB в регистр
-        private void UnloadRegister(string lowHex) {
-            if (lowHex[0] == '0') {
+        private void UnloadRegister(string lowBin) {
+            if (lowBin[1] == '0' && lowBin[2] == '0' && lowBin[3] == '0') {
                 _y5();
             } else {
                 _y4();
@@ -856,9 +864,9 @@ namespace _8bitVonNeiman.Cpu {
         }
         
         /// Модифицирует регистр перед выгрузкой его из памяти, если этого требует команда.
-        private void ModifyRegister(string lowHex) {
-            //@R+ - 001
-            if (lowHex[0] == '1') {
+        private void ModifyRegister(string lowBin) {
+            //@R+    - 001
+            if (lowBin[1] == '1' && lowBin[2] == '0' && lowBin[3] == '0') {
                 _y47();
                 _y2();
                 _y50();
@@ -866,7 +874,7 @@ namespace _8bitVonNeiman.Cpu {
                 return;
             }
             //@R- - 011
-            if (lowHex[0] == '3') {
+            if (lowBin[1] == '1' && lowBin[2] == '1' && lowBin[3] == '0') {
                 _y47();
                 _y2();
                 _y51();
@@ -1008,7 +1016,7 @@ namespace _8bitVonNeiman.Cpu {
         private void _y23() {
             var temp = _acc;
             _acc = _rdb;
-            _rdb = _acc;
+            _rdb = temp;
         }
 
         private void _y24() {
