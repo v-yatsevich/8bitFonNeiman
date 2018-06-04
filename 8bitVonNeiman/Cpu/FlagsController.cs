@@ -76,7 +76,9 @@ namespace _8bitVonNeiman.Cpu {
                 break;
             case "inc":
             case "dec":
-                mask = 1 + 2 + 8 + 16;
+            case "daa":
+            case "dsa":
+                    mask = 1 + 2 + 8 + 16;
                 break;
             }
             FormFlags(newState, mask, overflow);

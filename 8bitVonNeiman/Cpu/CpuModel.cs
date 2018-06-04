@@ -586,7 +586,7 @@ namespace _8bitVonNeiman.Cpu {
                 _y45();
                 _y4();
 
-                _rdb.Clear();
+                _rdb = new ExtendedBitArray();
                 _y57();
 
                 _y35();
@@ -604,7 +604,7 @@ namespace _8bitVonNeiman.Cpu {
                 _y45();
                 _y4();
 
-                _rdb.Clear();
+                _rdb = new ExtendedBitArray();
                 _y57();
                 _y58();
 
@@ -747,12 +747,16 @@ namespace _8bitVonNeiman.Cpu {
 
             //INCA
             if (lowHex == "0B") {
-                _y15();
+                _flags.SetPreviousState(_acc);
+                var overflow = _acc.Inc();
+                _flags.UpdateFlags(_acc, "inc", overflow);
             }
 
             //DECA
             if (lowHex == "0C") {
-                _y16();
+                _flags.SetPreviousState(_acc);
+                var overflow = _acc.Dec();
+                _flags.UpdateFlags(_acc, "dec", overflow);
             }
 
             //SWAPA
@@ -762,6 +766,7 @@ namespace _8bitVonNeiman.Cpu {
 
             //DAA
             if (lowHex == "0E") {
+                _flags.SetPreviousState(_acc);
                 var temp = new ExtendedBitArray(_acc);
                 temp.And(new ExtendedBitArray("00001111"));
                 if (temp.NumValue() > 9 && _flags.A) {
@@ -770,16 +775,19 @@ namespace _8bitVonNeiman.Cpu {
                 if (_acc.NumValue() > 143 && _flags.C) {
                     _y20();
                 }
+                
             }
 
             //DSA
             if (lowHex == "0F") {
+                _flags.SetPreviousState(_acc);
                 if (_flags.A) {
                     _y21();
                 }
                 if (_flags.C) {
                     _y22();
                 }
+                _flags.UpdateFlags(_acc, "dsa");
             }
 
             //IN
@@ -809,7 +817,9 @@ namespace _8bitVonNeiman.Cpu {
 
             //NOTA
             if (lowHex == "15") {
+                _flags.SetPreviousState(_acc);
                 _y17();
+                _flags.UpdateFlags(_acc, "not");
             }
         }
 

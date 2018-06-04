@@ -215,10 +215,6 @@ namespace _8bitVonNeiman.Common {
             return _data;
         }
 
-        public void Clear() {
-            _data = 0;
-        }
-
         public override string ToString() {
             return $"Dec: {_data}, Bin: {ToBinString()}, Hex: {ToHexString()}";
         }
