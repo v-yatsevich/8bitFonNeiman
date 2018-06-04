@@ -578,6 +578,7 @@ namespace _8bitVonNeiman.Cpu {
                 _y45();
                 _y4();
 
+                _rdb.Clear();
                 _y57();
 
                 _y35();
@@ -595,6 +596,7 @@ namespace _8bitVonNeiman.Cpu {
                 _y45();
                 _y4();
 
+                _rdb.Clear();
                 _y57();
                 _y58();
 
@@ -604,6 +606,7 @@ namespace _8bitVonNeiman.Cpu {
 
                 _y32();
                 _y30();
+                _flags.I = false;
             }
             //JZ
             if (highBin.StartsWith("001100")) {
@@ -672,13 +675,13 @@ namespace _8bitVonNeiman.Cpu {
             if (lowHex == "02") {
                 _y45();
                 _y1();
-                _y35();
+                _y34();
                 
                 _y29();
 
                 _y45();
                 _y1();
-                _y35();
+                _y34();
 
                 _y33();
             }
@@ -687,14 +690,14 @@ namespace _8bitVonNeiman.Cpu {
             if (lowHex == "03") {
                 _y45();
                 _y1();
-                _y35();
+                _y34();
 
                 _y37();
                 _y29();
 
                 _y45();
                 _y1();
-                _y35();
+                _y34();
 
                 _y33();
             }
@@ -1036,7 +1039,7 @@ namespace _8bitVonNeiman.Cpu {
         }
 
         private void _y29() {
-            //TODO: ??????
+            _cs = (_rdb[0] ? 1 : 0) + (_rdb[1] ? 2 : 0);
         }
 
         private void _y30() {
