@@ -564,7 +564,7 @@ namespace _8bitVonNeiman.Cpu {
                 return;
             }
             //XCH 
-            if (highHex[1] == 'D') {
+            if (highHex[1] == 'F') {
                 var temp = new ExtendedBitArray(_acc);
                 _acc = new ExtendedBitArray(_rdb);
                 _rdb = temp;
