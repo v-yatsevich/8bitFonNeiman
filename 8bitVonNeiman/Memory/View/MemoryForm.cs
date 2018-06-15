@@ -37,7 +37,7 @@ namespace _8bitVonNeiman.Memory.View {
         }
 
         private void MemoryForm_FormClosed(object sender, FormClosedEventArgs e) {
-            _output.FormClosed();
+            _output.FormClosed(this);
         }
 
         private void memoryDataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
@@ -58,6 +58,10 @@ namespace _8bitVonNeiman.Memory.View {
 
         private void checkButton_Click(object sender, EventArgs e) {
             _output.CheckMemoryClicked();
+        }
+
+        private void formButton_Click(object sender, EventArgs e) {
+            _output.FormButtonClicked();
         }
     }
 }

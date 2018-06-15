@@ -53,7 +53,7 @@ namespace _8bitVonNeiman.Cpu {
             Flags = new ExtendedBitArray();
         }
 
-        public void UpdateFlags(ExtendedBitArray newState, string command, bool? overflow = null) {
+        public void UpdateFlags(ExtendedBitArray newState, string command, bool? overflow = null, ExtendedBitArray arg = null) {
             var mask = 0;
             switch (command.ToLower()) {
             case "add":
@@ -81,10 +81,10 @@ namespace _8bitVonNeiman.Cpu {
                     mask = 1 + 2 + 8 + 16;
                 break;
             }
-            FormFlags(newState, mask, overflow);
+            FormFlags(newState, mask, overflow, command, arg);
         }
 
-        public void FormFlags(ExtendedBitArray newState, int mask, bool? overflow) {
+        public void FormFlags(ExtendedBitArray newState, int mask, bool? overflow, string command, ExtendedBitArray arg) {
             if ((mask & 1) != 0) {
                 Z = newState.NumValue() == 0;
             }
@@ -99,7 +99,24 @@ namespace _8bitVonNeiman.Cpu {
                 O = _state[Constants.WordSize - 1] == _arg[Constants.WordSize - 1] && _arg[Constants.WordSize - 1] != newState[Constants.WordSize - 1];
             }
             if ((mask & 8) != 0) {
-                A = (newState.NumValue() & 240) != 0;
+                int oldLow = _state.NumValue() & 15;
+                int argLow = arg?.NumValue() ?? 0 & 15;
+                int newLow = newState.NumValue() & 15;
+                if (command == "add") {
+                    A = oldLow + argLow > 15;
+                } else if (command == "adc") {
+                    A = oldLow + argLow + (C ? 1 : 0) > 15;
+                } else if (command == "inc") {
+                    A = oldLow == 15;
+                } else if (command == "daa" || command == "dsa") {
+                    A = oldLow != newLow;
+                } else if (command == "dec") {
+                    A = oldLow == 0;
+                } else if (command == "cmp" || command == "sub") {
+                    A = oldLow - argLow < 0;
+                } else if (command == "subb") {
+                    A = oldLow - argLow - (C ? 1 : 0) < 0;
+                }
             }
             if ((mask & 16) != 0) {
                 C = overflow.HasValue && overflow.Value;

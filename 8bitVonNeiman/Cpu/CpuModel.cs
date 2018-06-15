@@ -308,7 +308,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
                 bool overflow = _acc.Add(_rdb);
-                _flags.UpdateFlags(_acc, "add", overflow);
+                _flags.UpdateFlags(_acc, "add", overflow, _rdb);
                 ModifyRegister(lowBin);
                 return;
             }
@@ -317,7 +317,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
                 bool overflow = _acc.Sub(_rdb);
-                _flags.UpdateFlags(_acc, "sub", overflow);
+                _flags.UpdateFlags(_acc, "sub", overflow, _rdb);
                 ModifyRegister(lowBin);
                 return;
             }
@@ -369,7 +369,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(temp);
                 _flags.SetArgument(_rdb);
                 bool overflow = temp.Sub(_acc);
-                _flags.UpdateFlags(temp, "cmp", overflow);
+                _flags.UpdateFlags(temp, "cmp", overflow, _rdb);
                 UnloadRegister(lowBin);
                 ModifyRegister(lowBin);
                 return;
@@ -414,7 +414,7 @@ namespace _8bitVonNeiman.Cpu {
                 if (_flags.C) {
                     overflow |= _acc.Inc();
                 }
-                _flags.UpdateFlags(_acc, "adc", overflow);
+                _flags.UpdateFlags(_acc, "adc", overflow, _rdb);
                 ModifyRegister(lowBin);
                 return;
             }
@@ -426,7 +426,7 @@ namespace _8bitVonNeiman.Cpu {
                 if (_flags.C) {
                     overflow |= _acc.Dec();
                 }
-                _flags.UpdateFlags(_acc, "subb", overflow);
+                _flags.UpdateFlags(_acc, "subb", overflow, _rdb);
                 ModifyRegister(lowBin);
             }
         }
@@ -463,7 +463,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
                 var overflow = _acc.Add(_rdb);
-                _flags.UpdateFlags(_acc, "add", overflow);
+                _flags.UpdateFlags(_acc, "add", overflow, _rdb);
                 return;
             }
             //SUB
@@ -471,7 +471,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 _flags.SetArgument(_rdb);
                 var overflow = _acc.Sub(_rdb);
-                _flags.UpdateFlags(_acc, "sub", overflow);
+                _flags.UpdateFlags(_acc, "sub", overflow, _rdb);
                 return;
             }
             //MUL
@@ -517,7 +517,7 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetArgument(_rdb);
                 _flags.SetPreviousState(_rdb);
                 bool overflow = temp.Sub(_acc);
-                _flags.UpdateFlags(temp, "cmp", overflow);
+                _flags.UpdateFlags(temp, "cmp", overflow, _rdb);
                 return;
             }
             //RD
@@ -549,7 +549,7 @@ namespace _8bitVonNeiman.Cpu {
                 if (_flags.C) {
                     overflow |= _acc.Inc();
                 }
-                _flags.UpdateFlags(_acc, "adc", overflow);
+                _flags.UpdateFlags(_acc, "adc", overflow, _rdb);
                 return;
             }
             //SUBB A
@@ -560,7 +560,7 @@ namespace _8bitVonNeiman.Cpu {
                 if (_flags.C) {
                     overflow |= _acc.Inc();
                 }
-                _flags.UpdateFlags(_acc, "adc", overflow);
+                _flags.UpdateFlags(_acc, "subb", overflow, _rdb);
                 return;
             }
             //XCH 
@@ -769,13 +769,13 @@ namespace _8bitVonNeiman.Cpu {
                 _flags.SetPreviousState(_acc);
                 var temp = new ExtendedBitArray(_acc);
                 temp.And(new ExtendedBitArray("00001111"));
-                if (temp.NumValue() > 9 && _flags.A) {
+                if (temp.NumValue() > 9 || _flags.A) {
                     _y19();
                 }
-                if (_acc.NumValue() > 143 && _flags.C) {
+                if (temp.NumValue() > 144 || _flags.C) {
                     _y20();
                 }
-                
+                _flags.UpdateFlags(_acc, "daa");
             }
 
             //DSA

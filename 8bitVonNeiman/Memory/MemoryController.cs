@@ -10,7 +10,7 @@ using _8bitVonNeiman.Memory.View;
 namespace _8bitVonNeiman.Memory {
     public class MemoryController : IMemoryControllerInput, IMemoryFormOutput {
 
-        private MemoryForm _form;
+        private List<MemoryForm> _forms = new List<MemoryForm>();
         private Dictionary<int, ExtendedBitArray> _memory;
         private MemoryFileHandler _fileHandler = new MemoryFileHandler();
 
@@ -21,19 +21,17 @@ namespace _8bitVonNeiman.Memory {
         /// Добавляет переданную память к текущей
         public void SetMemory(Dictionary<int, ExtendedBitArray> memory) {
             memory.ToList().ForEach(x => _memory[x.Key] = x.Value);
-            if (_form != null) {
-                ShowMemory();
-            }
+            
+            ShowMemory();
         }
         
         /// Открывает форму, если она закрыта или закрывает, если открыта
         public void ChangeFormState() {
-            if (_form == null) {
-                _form = new MemoryForm(this);
-                _form.Show();
+            if (_forms.Count == 0) {
+                var form =  new MemoryForm(this);
+                form.Show();
+                _forms.Add(form);
                 ShowMemory();
-            } else {
-                _form.Close();
             }
         }
 
@@ -42,7 +40,7 @@ namespace _8bitVonNeiman.Memory {
             _memory[address] = memory;
             int i = address / MemoryForm.ColumnCount;
             int j = address % MemoryForm.ColumnCount;
-            _form?.SetMemory(i, j, MemoryHex(i, j));
+            _forms.ForEach(x => x.SetMemory(i, j, MemoryHex(i, j)));
         }
 
         /// <summary>
@@ -75,8 +73,8 @@ namespace _8bitVonNeiman.Memory {
         /// <summary>
         /// Функция, вызывающаяся при закрытии формы. Необходима для корректной работы функции ChangeFormState()
         /// </summary>
-        public void FormClosed() {
-            _form = null;
+        public void FormClosed(MemoryForm form) {
+            _forms.Remove(form);
         }
 
         /// <summary>
@@ -91,13 +89,13 @@ namespace _8bitVonNeiman.Memory {
             try {
                 num = Convert.ToInt32(s, 16);
                 if (num > 255 || num < 0) {
-                    _form.ShowMessage("Число должно быть от 0 до FF");
-                    _form.SetMemory(row, collumn, MemoryHex(row, collumn));
+                    _forms.First()?.ShowMessage("Число должно быть от 0 до FF");
+                    _forms.ForEach(x => x.SetMemory(row, collumn, MemoryHex(row, collumn)));
                     return;
                 }
             } catch {
-                _form.ShowMessage("Введено некорректное число");
-                _form.SetMemory(row, collumn, MemoryHex(row, collumn));
+                _forms.First()?.ShowMessage("Введено некорректное число");
+                _forms.ForEach(x => x.SetMemory(row, collumn, MemoryHex(row, collumn)));
                 return;
             }
             var bitArray = new ExtendedBitArray();
@@ -107,7 +105,7 @@ namespace _8bitVonNeiman.Memory {
                 s = "0" + s;
             }
             s = s.ToUpper();
-            _form.SetMemory(row, collumn, s);
+            _forms.ForEach(x => x.SetMemory(row, collumn, s));
         }
 
         /// Очищает память.
@@ -149,11 +147,18 @@ namespace _8bitVonNeiman.Memory {
             }
         }
 
+        public void FormButtonClicked() {
+            var form = new MemoryForm(this);
+            form.Show();
+            _forms.Add(form);
+            ShowMemory();
+        }
+
         /// Обновляет состояние формы в соответствии с текущим состоянием памяти
         private void ShowMemory() {
             for (int i = 0; i < MemoryForm.RowCount; i++)
             for (int j = 0; j < MemoryForm.ColumnCount; j++) {
-                _form.SetMemory(i, j, MemoryHex(i, j));
+                _forms.ForEach(x => x.SetMemory(i, j, MemoryHex(i, j)));
             }
         }
 

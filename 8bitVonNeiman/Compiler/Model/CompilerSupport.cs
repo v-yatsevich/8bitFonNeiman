@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Text.RegularExpressions;
 using _8bitVonNeiman.Common;
-using _8bitVonNeiman.Controller;
 
 namespace _8bitVonNeiman.Compiler.Model {
     public static class CompilerSupport {

@@ -29,6 +29,7 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.checkButton = new System.Windows.Forms.Button();
+            this.formButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.memoryDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,11 +101,22 @@
             this.checkButton.UseVisualStyleBackColor = true;
             this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
             // 
+            // formButton
+            // 
+            this.formButton.Location = new System.Drawing.Point(134, 13);
+            this.formButton.Name = "formButton";
+            this.formButton.Size = new System.Drawing.Size(75, 23);
+            this.formButton.TabIndex = 6;
+            this.formButton.Text = "Форма";
+            this.formButton.UseVisualStyleBackColor = true;
+            this.formButton.Click += new System.EventHandler(this.formButton_Click);
+            // 
             // MemoryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(573, 399);
+            this.Controls.Add(this.formButton);
             this.Controls.Add(this.checkButton);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
@@ -114,7 +126,7 @@
             this.Location = new System.Drawing.Point(390, 592);
             this.Name = "MemoryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "MemoryView";
+            this.Text = "Память";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MemoryForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.memoryDataGridView)).EndInit();
             this.ResumeLayout(false);
@@ -129,5 +141,6 @@
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
         private System.Windows.Forms.Button checkButton;
+        private System.Windows.Forms.Button formButton;
     }
 }

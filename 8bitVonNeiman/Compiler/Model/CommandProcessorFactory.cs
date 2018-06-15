@@ -542,6 +542,9 @@ namespace _8bitVonNeiman.Compiler.Model {
                     throw new CompilationErrorExcepton("Аргументом должен быть регистр.", env.GetCurrentLine());
                 }
                 var registr = r.Value;
+                if (registr.Number > 7) {
+                    throw new CompilationErrorExcepton($"Номер регистра не может быть больше 7.", env.GetCurrentLine());
+                }
                 if (!registr.IsDirect) {
                     throw new CompilationErrorExcepton("Адресация регистра должна быть прямой.", env.GetCurrentLine());
                 }
@@ -801,6 +804,9 @@ namespace _8bitVonNeiman.Compiler.Model {
 
                 var r = CompilerSupport.ConvertToRegister(args[0]);
                 if (r.HasValue) {
+                    if (r.Value.Number > 7) {
+                        throw new CompilationErrorExcepton($"Номер регистра не может быть больше 7.", env.GetCurrentLine());
+                    }
                     return DataResponseFromRegister(args, op, env, dataResponse, r.Value);
                 }
 

@@ -1,7 +1,7 @@
 ﻿namespace _8bitVonNeiman.Memory.View {
 
     public interface IMemoryFormOutput {
-        void FormClosed();
+        void FormClosed(MemoryForm form);
         void ClearMemoryClicked();
         void MemoryChanged(int row, int collumn, string s);
 
@@ -9,5 +9,6 @@
         void SaveMemoryClicked();
         void SaveAsMemoryClicked();
         void CheckMemoryClicked();
+        void FormButtonClicked();
     }
 }
