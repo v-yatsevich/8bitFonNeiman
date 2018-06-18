@@ -139,6 +139,9 @@ namespace _8bitVonNeiman.Compiler.View {
             // 
             // scintilla
             // 
+            this.scintilla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.scintilla.Location = new System.Drawing.Point(16, 108);
             this.scintilla.Name = "scintilla";
             this.scintilla.Size = new System.Drawing.Size(256, 363);

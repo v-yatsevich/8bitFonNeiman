@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace _8bitVonNeiman.Memory {
     public interface IMemoryControllerInput {
-        /// Функция, показывающая форму, если она закрыта, и закрывающая ее, если она открыта
+        /// Функция, показывающая форму, если она закрыта
         void ChangeFormState();
 
         /// <summary>

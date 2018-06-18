@@ -26,6 +26,13 @@ namespace _8bitVonNeiman.Debug {
             }
         }
 
+        /// <summary>
+        /// Вызывается после выполения команды или другого действия, после которого обновляется сегмент кода
+        /// или pcl
+        /// </summary>
+        /// <param name="pcl">Регистр pcl</param>
+        /// <param name="memory">Массив памяти сегмета кода</param>
+        /// <param name="isAutomatic">Если true, состояние формы обновляться не будет</param>
         public void CommandHasRun(int pcl, List<ExtendedBitArray> memory, bool isAutomatic) {
             FormCommands(pcl, memory);
             if (!isAutomatic) {
@@ -40,6 +47,7 @@ namespace _8bitVonNeiman.Debug {
             _form = null;
         }
 
+        /// Устанавливает точку останова по переданному адресу, если ее нет, или убирает, если она есть
         public void ToggleBreakpoint(int address) {
             if (!_breakpoints.Remove(address * 2)) {
                 _breakpoints.Add(address * 2);
